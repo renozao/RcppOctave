@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>ostart. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Low-level Function Interfacing with Octave</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>ostart(verbose = FALSE)
+
+oend()
+
+overbose(value)
+
+oconfig(varname, verbose = FALSE, warn = TRUE)
+
+omodules(verbose = getOption("verbose"))</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>verbose</dt>
+      <dd>logical value used as the inital verbosity
+  status.</dd>
+      <dt>value</dt>
+      <dd>logical value to toggle verbosity</dd>
+      <dt>varname</dt>
+      <dd>Name (as a character string) of the Octave
+  configuration variable to retrieve. It is used in
+  following system call <span class = "samp">octave-config -p <varname></span>.
+  This function is vectorised and returns a character
+  vector of the same length as its argument.</dd>
+      <dt>warn</dt>
+      <dd>logical that indicates if a warning should be
+  thrown when a variable is returned empty, which generally
+  means that <code>x</code> is not a valid config variable name.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p><code>ostart</code> Initialize an Octave session.</p>
+  
+      <p><code>oend</code> clears and terminates the current Octave
+  session.</p>
+  
+      <p><code>overbose</code> toggles the verbosity of RcppOctave
+  calls: messages tracks any function call, or conversion
+  of objects between R and Octave (e.g. arguments and
+  results).</p>
+  
+      <p><code>oconfig</code> retrieves Octave configuration variables.</p>
+  
+      <p><code>omodules</code> add the Octave modules shipped with
+  RcppOctave to Octave path.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>oconfig</li><li>oend</li><li>omodules</li><li>ostart</li><li>overbose</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  OctaveConfig
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

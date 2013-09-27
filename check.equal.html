@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>check.equal. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Compare Lists or Environments</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>check.equal(x, y, msg)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>a <code>list</code> or an <code>environment</code></dd>
+      <dt>y</dt>
+      <dd>a <code>list</code> or an <code>environment</code></dd>
+      <dt>msg</dt>
+      <dd>a character string used (if not missing) in a
+  message that is printed before the comparison. It is
+  useful for separating multiple sequential comparisons.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>No value is returned, but prints out: <ul>
+<li> the
+  element/variable names of each input list or environment,
+  </li>
+<li> the result of the comparison of the elements in
+  <code>x</code> and the corresponding element in <code>y</code> -- if
+  present. </li>
+</ul></p>
+  
+      <p></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function compares two lists or environments. It is
+  useful for comparing results obtained in R and Octave.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>X <- matrix(1:64, 8)
+</div><div class='input'>ref <- svd(X)
+</div><div class='input'>res <- .O$svd(X, argout=3)
+</div><div class='input'></div><div class='input'>check.equal(ref, res, "R and Octave function 'svd'")
+</div>
+<strong class='message'>check.equal: R and Octave function 'svd'</strong>
+<div class='output'>x:  d u v 
+y:  
+d :OK0 | u :NULL | v :NULL | 
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>check.equal</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_help. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Accessing Octave Help and Documentation Pages</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_help(NAME, character.only = FALSE, show = interactive(), format = c("plain", "rd", 
+  "txt", "latex", "HTML"))
+
+o_doc(FUNCTION_NAME)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>NAME</dt>
+      <dd>Octave symbol (e.g. command, function,
+  operator) passed to Octave function <code>help</code> to
+  retrieve the related documentation.</dd>
+      <dt>character.only</dt>
+      <dd>a logical indicating whether
+  <code>NAME</code> can be assumed to be a character string
+  (<code>TRUE</code>) or should be substituted with
+  <code><a href='http://www.inside-r.org/r-doc/base/substitute'>substitute</a></code> before using them (default).</dd>
+      <dt>show</dt>
+      <dd>logical that specifies if the help page
+  should be shown using the as R documentation file
+  (default), e.g. using a pager, or only returned as a
+  single string. Note that when <code>show=TRUE</code>, the
+  string is still returned but invisibly.</dd>
+      <dt>format</dt>
+      <dd>a specification of the output format. If
+  <code>TRUE</code> or <code>'rd'</code>, the result is Rd code that
+  wraps the Octave documentation string and is suitable for
+  inclusion into Rd files. If one of the strings
+  <code>'txt', 'latex'</code> or <code>'HTML'</code>, then the result
+  is formated using the corresponding Rd conversion
+  function from the <span class = "pkg">tools</span> package
+  <code>Rd2txt</code>, <code>Rd2latex</code> or
+  <code>Rd2HTML</code>.</dd>
+      <dt>FUNCTION_NAME</dt>
+      <dd>the name of the function from which
+  to show the documentation. See the relevant <em>Octave
+  Documentation</em> section below.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>this function is usually called for its side effect of
+  printing the help page on standard output (argument
+  <code>show=TRUE</code>), but it invisibly returns the help page
+  as a single character string.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p><code>o_help</code> retrieves the Octave help page associated
+  with a given symbol. By default the page is printed out,
+  but may also be silently retrieved or formatted for
+  direct inclusion in R documentation files (i.e. Rd
+  files).</p>
+  
+      <p><code>o_doc</code> displays documentation for the function
+  FUNCTION_NAME directly from an on-line version of the
+  printed manual, using the GNU Info browser. Type `q` to
+  quit the browser.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;help&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;help&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command:  help NAME
+ -- Command:  help `--list'
+     Display the help text for NAME.   For example, the command `help
+     help' prints a short message describing the `help' command.
+
+     Given the single argument `--list', list all operators, keywords,
+     built-in functions, and loadable functions available in the
+     current session of Octave.
+
+     If invoked without any arguments, `help' display instructions on
+     how to access help from the command line.
+
+     The help command can give you information about operators, but not
+     the comma and semicolons that are used as command separators.  To
+     get help for those, you must type `help comma' or `help semicolon'.
+
+     See also: doc, lookfor, which
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:51:58
+]</em></p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;doc&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;doc&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command:  doc FUNCTION_NAME
+     Display documentation for the function FUNCTION_NAME directly from
+     an online version of the printed manual, using the GNU Info
+     browser.  If invoked without any arguments, the manual is shown
+     from the beginning.
+
+     For example, the command `doc rand' starts the GNU Info browser at
+     the `rand' node in the online version of the manual.
+
+     Once the GNU Info browser is running, help for using it is
+     available using the command `C-h'.
+
+     See also: help
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:51:58
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'></div><div class='input'></div><div class='input'>o_help(print)
+</div><div class='input'>o_help(rand)
+</div><div class='input'># or equivalently</div><div class='input'>o_help('rand')
+</div><div class='input'></div><div class='input'># to include in Rd files, use argument rd=TRUE in an \Sexpr:</div><div class='input'>## <strong>Not run</strong>: </div><div class='input'>#  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(rand, format='rd')}</div><div class='input'># ## <strong>End(Not run)</strong></div><div class='input'></div><div class='input'># to see the included Rd code</div><div class='input'>o_help(rand, format=TRUE)
+</div>
+<div class='output'>[1] "\\if{html}{\\out{<pre>USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function 'runif' -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n</pre>}}\n\\if{text}{\\preformatted{USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function 'runif' -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n}}\n\\if{latex}{\\out{\\begin{verbatim}USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function 'runif' -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n\\end{verbatim}}}\n"
+</div><div class='input'>o_help(rand, format='HTML')
+</div><div class='input'>o_help(rand, format='latex')
+</div><div class='input'>o_doc(text)
+</div><div class='input'># or equivalently</div><div class='input'>o_doc('text')
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_doc</li><li>o_help</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

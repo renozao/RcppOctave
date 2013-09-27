@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>OctaveConfig. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Cached RcppOctave Configuration Paths</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>OctaveConfig(name, ..., reset = FALSE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>name</dt>
+      <dd>Name of an RcppOctave path variable</dd>
+      <dt>...</dt>
+      <dd>extra names to be concatenated to the result
+  with <code><a href='http://www.inside-r.org/r-doc/base/file.path'>file.path</a></code>. Only used when <code>name</code>
+  is not missing.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>a list (if <code>name is missing</code>) or a single character
+  string.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Cached RcppOctave Configuration Paths</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>OctaveConfig()
+</div>
+<div class='output'>$lib
+                                LIBDIR                              OCTLIBDIR 
+             "/usr/lib/i386-linux-gnu" "/usr/lib/i386-linux-gnu/octave/3.6.4" 
+
+$include
+                        INCLUDEDIR                      OCTINCLUDEDIR 
+                    "/usr/include" "/usr/include/octave-3.6.4/octave" 
+
+$modules
+[1] "/tmp/RtmpWU2WQd/file466c34fe7f66/RcppOctave/modules"
+
+</div><div class='input'>OctaveConfig('lib')
+</div>
+<div class='output'>[1] "/usr/lib/i386-linux-gnu"              "/usr/lib/i386-linux-gnu/octave/3.6.4"
+</div><div class='input'>OctaveConfig('include')
+</div>
+<div class='output'>[1] "/usr/include"                     "/usr/include/octave-3.6.4/octave"
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>OctaveConfig</li>
+    </ul>
+    <ul>
+      <li>internal</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

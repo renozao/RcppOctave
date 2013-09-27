@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_who. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Listing Octave Variables</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_who(..., options, rm.ans = FALSE, unique = TRUE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>filtering patterns or extra arguments passed
+  to <code>o_who</code> and <code>o_whos</code>. Only names matching
+  any of the patterns are returned.</dd>
+      <dt>rm.ans</dt>
+      <dd>a logical that indicates if the automatic
+  Octave variable <code>ans</code> should be included in the
+  result (<code>FALSE</code>) or removed (<code>TRUE</code>).</dd>
+      <dt>options</dt>
+      <dd>options passed to Octave function
+  <code>who</code>. See section <em>Octave Documentation</em>.</dd>
+      <dt>unique</dt>
+      <dd>a logical that indicates whether unique
+  names should be returned. This argument is relevant in
+  the case multiple patterns are specified in <code>...</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>None</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Lists currently defined variables in Octave global
+  context.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;who&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;who&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command:  who
+ -- Command:  who pattern ...
+ -- Command:  who option pattern ...
+ -- Command: C = who ("pattern", ...)
+     List currently defined variables matching the given patterns.
+     Valid pattern syntax is the same as described for the `clear'
+     command.  If no patterns are supplied, all variables are listed.
+     By default, only variables visible in the local scope are
+     displayed.
+
+     The following are valid options but may not be combined.
+
+    `global'
+          List variables in the global scope rather than the current
+          scope.
+
+    `-regexp'
+          The patterns are considered to be regular expressions when
+          matching the variables to display.  The same pattern syntax
+          accepted by the `regexp' function is used.
+
+    `-file'
+          The next argument is treated as a filename.  All variables
+          found within the specified file are listed.  No patterns are
+          accepted when reading variables from a file.
+
+     If called as a function, return a cell array of defined variable
+     names matching the given patterns.
+
+     See also: whos, isglobal, isvarname, exist, regexp
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:52:04
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'></div><div class='input'>o_who()
+</div>
+<div class='output'>[1] "a" "b" "c" "d"
+</div><div class='input'>l <- as.list(setNames(1:10, letters[1:10]))
+</div><div class='input'>o_assign(l)
+</div><div class='input'>o_who()
+</div>
+<div class='output'> [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
+</div><div class='input'></div><div class='input'></div><div class='input'>prefnames <- paste('pref', letters[1:10], sep='')
+</div><div class='input'>o_assign( setNames(l, prefnames) )
+</div><div class='input'>o_who()
+</div>
+<div class='output'> [1] "a"     "b"     "c"     "d"     "e"     "f"     "g"     "h"     "i"     "j"     "prefa" "prefb" "prefc" "prefd" "prefe" "preff" "prefg"
+[18] "prefh" "prefi" "prefj"
+</div><div class='input'>o_who('pref*')
+</div>
+<div class='output'> [1] "prefa" "prefb" "prefc" "prefd" "prefe" "preff" "prefg" "prefh" "prefi" "prefj"
+</div><div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_who</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other listoct: <code><a href='o_ls.html'>o_ls</a></code>, <code><a href='o_whos.html'>o_whos</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

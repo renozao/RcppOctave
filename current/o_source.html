@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_source. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Sourcing Octave/Matlab Files</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_source(file = "", text = NULL, sep = ";\n")</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>file</dt>
+      <dd>the path to the Octave/Matlab source file --
+  typically with extension ".m".</dd>
+      <dt>text</dt>
+      <dd>a character vector containing <em>Octave</em>
+  statements, that are concatenated in a temporary file,
+  which is then sourced. This argument typically enables
+  the evaluation of multiple statements, as opposed to
+  single statement evaluation performed by
+  <code><a href='o_eval.html'>o_eval</a></code>.</dd>
+      <dt>sep</dt>
+      <dd>single character string added as suffix to
+  each element of <code>text</code>. The concatenation of all
+  suffixed element should form a valid <em>Octave</em>
+  block.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>None</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function sources an Octave file within the current
+  Octave session. The loaded functions are accessible by
+  subsequent calls of <code><a href='dot-CallOctave.html'>.CallOctave</a></code>.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;source&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;source&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Built-in Function:  source (FILE)
+     Parse and execute the contents of FILE.  This is equivalent to
+     executing commands from a script file, but without requiring the
+     file to be named `FILE.m'.
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:52:04
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'></div><div class='input'></div><div class='input'># source file</div><div class='input'>mfile <- system.file("scripts/ex_source.m", package='RcppOctave')
+</div><div class='input'>o_source(mfile)
+</div><div class='input'></div><div class='input'># pass multiple statements</div><div class='input'>o_source(text="a=1;b=3;c=randn(1,5);")
+</div><div class='input'>o_get('a','b','c')
+</div>
+<div class='output'>$a
+[1] 1
+
+$b
+[1] 3
+
+$c
+[1] -1.2650612 -0.6868529 -0.4456620  1.2240818  0.3598138
+
+</div><div class='input'></div><div class='input'># also works with a character vector of statements</div><div class='input'>o_source(text=c("a=10;b=30;", "c=randn(1,5)", "d=4"))
+</div><div class='input'>o_get('a','b','c', 'd')
+</div>
+<div class='output'>$a
+[1] 10
+
+$b
+[1] 30
+
+$c
+[1]  0.4007715  0.1106827 -0.5558411  1.7869131  0.4978505
+
+$d
+[1] 4
+
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_source</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other Octave_files: <code><a href='o_addpath.html'>o_addpath</a></code>,
+  <code><a href='o_addpath.html'>o_inpath</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

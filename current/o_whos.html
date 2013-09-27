@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_whos. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Detailed Listing of Octave Variables</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_whos(..., options, rm.ans = FALSE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>filtering patterns or extra arguments passed
+  to <code>o_who</code> and <code>o_whos</code>. Only names matching
+  any of the patterns are returned.</dd>
+      <dt>options</dt>
+      <dd>options passed to Octave function
+  <code>who</code>. See section <em>Octave Documentation</em>.</dd>
+      <dt>rm.ans</dt>
+      <dd>a logical that indicates if the automatic
+  Octave variable <code>ans</code> should be included in the
+  result (<code>FALSE</code>) or removed (<code>TRUE</code>).</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>The function <code>o_whos</code> returns a detailed description
+  of the variables defined in the current Octave session.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;whos&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;whos&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command:  whos
+ -- Command:  whos pattern ...
+ -- Command:  whos option pattern ...
+ -- Command: S = whos ("pattern", ...)
+     Provide detailed information on currently defined variables
+     matching the given patterns.  Options and pattern syntax are the
+     same as for the `who' command.  Extended information about each
+     variable is summarized in a table with the following default
+     entries.
+
+    Attr
+          Attributes of the listed variable.  Possible attributes are:
+         blank
+               Variable in local scope
+
+         `a'
+               Automatic variable.  An automatic variable is one
+               created by the interpreter, for example `argn'.
+
+         `c'
+               Variable of complex type.
+
+         `f'
+               Formal parameter (function argument).
+
+         `g'
+               Variable with global scope.
+
+         `p'
+               Persistent variable.
+
+    Name
+          The name of the variable.
+
+    Size
+          The logical size of the variable.  A scalar is 1x1, a vector
+          is 1xN or Nx1, a 2-D matrix is MxN.
+
+    Bytes
+          The amount of memory currently used to store the variable.
+
+    Class
+          The class of the variable.  Examples include double, single,
+          char, uint16, cell, and struct.
+
+     The table can be customized to display more or less information
+     through the function `whos_line_format'.
+
+     If `whos' is called as a function, return a struct array of defined
+     variable names matching the given patterns.  Fields in the
+     structure describing each variable are: name, size, bytes, class,
+     global, sparse, complex, nesting, persistent.
+
+     See also: who, whos_line_format
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:52:04
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'></div><div class='input'></div><div class='input'>.O$a <- 1
+</div><div class='input'>.O$b <- 10
+</div><div class='input'>o_whos()
+</div>
+<div class='output'> <Octave session: 20 object(s)>
+  name size bytes  class global sparse complex nesting persistent
+     a  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+     b  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+     c  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     d  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     e  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     f  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     g  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     h  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     i  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     j  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefa  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefb  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefc  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefd  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefe  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ preff  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefg  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefh  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefi  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefj  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+</div><div class='input'></div><div class='input'>o_eval("sqrt(2)")
+</div>
+<div class='output'>[1] 1.414214
+</div><div class='input'>o_whos()
+</div>
+<div class='output'> <Octave session: 21 object(s)>
+  name size bytes  class global sparse complex nesting persistent
+     a  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+   ans  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+     b  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+     c  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     d  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     e  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     f  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     g  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     h  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     i  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+     j  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefa  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefb  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefc  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefd  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefe  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ preff  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefg  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefh  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefi  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+ prefj  1x1     4  int32  FALSE  FALSE   FALSE       1      FALSE
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_whos</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other listoct: <code><a href='o_ls.html'>o_ls</a></code>, <code><a href='o_who.html'>o_who</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

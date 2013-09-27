@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_rgamma. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Drawing from R Gamma Distribution in Octave</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_rgamma(n, p = n, shape = 1, scale = 1)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>shape</dt>
+      <dd>Mean of the Gamma distribution</dd>
+      <dt>scale</dt>
+      <dd>Scale of the Gamma distribution</dd>
+      <dt>n</dt>
+      <dd>number of output rows</dd>
+      <dt>p</dt>
+      <dd>number of output columns (default to <code>n</code>)</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function wraps a call to the standard Octave
+  function <code>randg</code>, which is redefined by
+  <code>RcppOctave</code> to call the R base function
+  <code><a href='http://www.inside-r.org/r-doc/stats/GammaDist'>rgamma</a></code>. This enables to exactly
+  reproduce stochastic computations in R and Octave,
+  without changing the original Octave/Matlab code. See
+  <code><a href='o_runif.html'>o_runif</a></code> for more details.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;randg&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;randg&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre>USAGE: E = randg(shape, [n, p, scale])
+
+Generates Gamma random variates as R function 'rgamma' -- using the current RNG from R.
+
+Possible calls:
+randg(shape)				returns a single draw from G(shape, 1)
+randg(shape, n) 			returns n*n matrix with uncorrelated G(shape, 1) deviates drawn in columns
+randg(shape, n, p) 		returns n*p matrix with uncorrelated G(shape, 1) deviates drawn in columns
+randg(shape, n, p, scale) 	returns n*p matrix with uncorrelated G(shape, scale) deviates drawn in columns
+
+
+NOTE:
+This function substitutes Octave original function in calls from RcppOctave
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:52:03
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Draw random gamma values (in vector form)</div><div class='input'>set.seed(123)
+</div><div class='input'>o_rgamma(1)
+</div>
+<div class='output'>[1] 0.1822171
+</div><div class='input'>o_rgamma(1, 10)
+</div>
+<div class='output'> [1] 1.69575113 1.62088019 2.44809606 0.87902791 2.66731861 3.88592535 0.96364683 0.68262832 0.03336475 0.91399722
+</div><div class='input'></div><div class='input'># Draw random gamma values (in matrix form)</div><div class='input'>set.seed(123)
+</div><div class='input'>o_rgamma(2)
+</div>
+<div class='output'>          [,1]     [,2]
+[1,] 0.1822171 1.620880
+[2,] 1.6957511 2.448096
+</div><div class='input'>o_rgamma(2, 5)
+</div>
+<div class='output'>          [,1]      [,2]       [,3]      [,4]      [,5]
+[1,] 0.8790279 3.8859253 0.68262832 0.9139972 0.2912226
+[2,] 2.6673186 0.9636468 0.03336475 0.2522172 0.1174167
+</div><div class='input'></div><div class='input'># Draw random gamma values with shape and scale parameters</div><div class='input'>o_rgamma(1, 5, shape=2)
+</div>
+<div class='output'>[1] 3.0977765 1.3272148 1.6937238 0.4299115 1.1336216
+</div><div class='input'>o_rgamma(1, 10, scale=0.5)
+</div>
+<div class='output'> [1] 0.156559874 0.206339803 0.624847211 0.552749272 0.484192560 0.228590037 0.361573978 0.004690038 0.181893841 0.195400821
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_rgamma</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  rgamma
+
+  Other orandom: <code><a href='o_rexp.html'>o_rexp</a></code>,
+  <code><a href='o_rnorm.html'>o_rnorm</a></code>, <code><a href='o_runif.html'>o_runif</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>.O. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Direct Interface to Octave</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>.O
+
+<span class="label label-important">S4</span> (Octave)
+`$`(x, name)
+
+<span class="label label-important">S4</span> (Octave)
+`[[`(x, i, exact = TRUE)
+
+<span class="label label-important">S4</span> (Octave)
+`$`(x, name) <- value</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>exact</dt>
+      <dd>logical not used.</dd>
+      <dt>x</dt>
+      <dd> object from which to extract element(s) or in
+  which to replace element(s).  </dd>
+      <dt>name</dt>
+      <dd> A literal character string or a <a href='http://www.inside-r.org/r-doc/base/name'>name</a>
+  (possibly <a href='http://www.inside-r.org/r-doc/base/Quotes'>backtick</a> quoted).  For extraction, this
+  is normally (see under &#145;Environments&#146;) partially
+  matched to the <code><a href='http://www.inside-r.org/r-doc/base/names'>names</a></code> of the object.  </dd>
+      <dt>i</dt>
+      <dd> indices specifying elements to extract or
+  replace.  Indices are <code>numeric</code> or <code>character</code>
+  vectors or empty (missing) or <code>NULL</code>.  Numeric
+  values are coerced to integer as by
+  <code><a href='http://www.inside-r.org/r-doc/base/integer'>as.integer</a></code> (and hence truncated towards
+  zero).  Character vectors will be matched to the
+  <code><a href='http://www.inside-r.org/r-doc/base/names'>names</a></code> of the object (or for
+  matrices/arrays, the <code><a href='http://www.inside-r.org/r-doc/base/dimnames'>dimnames</a></code>): see
+  &#145;Character indices&#146; below for further details.
+
+  For <code>[</code>-indexing only: <code>i</code>, <code>j</code>,
+  <code>...</code> can be logical vectors, indicating
+  elements/slices to select.  Such vectors are recycled if
+  necessary to match the corresponding extent.  <code>i</code>,
+  <code>j</code>, <code>...</code> can also be negative integers,
+  indicating elements/slices to leave out of the selection.
+
+  When indexing arrays by <code>[</code> a single argument
+  <code>i</code> can be a matrix with as many columns as there
+  are dimensions of <code>x</code>; the result is then a vector
+  with elements corresponding to the sets of indices in
+  each row of <code>i</code>.
+
+  An index value of <code>NULL</code> is treated as if it were
+  <code>integer(0)</code>.  </dd>
+      <dt>value</dt>
+      <dd>typically an array-like <span style="R">R</span> object of a
+  similar class as <code>x</code>.</dd>
+    </dl>
+    
+    <div class="Format">
+      <h2>Format</h2>
+      
+      <p><code>.O</code> is an object of class <code><a href='Octave-class.html'>Octave-class</a></code>.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p><code>RcppOctave</code> provides a simple interface to Octave
+  via the object <code>.O</code>, an instance of class
+  <code>Octave</code>, that allows for direct access to Octave
+  functions and variables using calls such as:
+  <code>.O$svd(matrix(1:9,3))</code>.</p>
+  
+    </div>
+
+    <div class="Methods">
+      <h2>Methods</h2>
+      
+      <p><ol>
+<li>[[<code>signature(x = "Octave")</code>: The method
+  <code>[[</code> provides an alternative way of retrieving
+  Octave objects, and is equivalent to <code>o_get(name)</code>.</p>
+  
+      <p></li>
+<li>$<code>signature(x = "Octave")</code>: The method
+  <code>$</code> provides a direct way of calling Octave
+  functions or retrieving variables from Octave base
+  context, via e.g. <code>.O$svd(x)</code> or <code>.O$a</code>. It is
+  equivalent to <code>o_get(name)</code>.</p>
+  
+      <p></li>
+<li>$<-<code>signature(x = "Octave")</code>: The method
+  <code>$<-</code> allow to directly assign/set Octave variables
+  via e.g. <code>.O$a <- 10</code>.</p>
+  
+      <p></li>
+</ol></p>
+  
+      <p></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>.O
+</div>
+<div class='output'> <Octave Interface>
+ - Use `$x` to call Octave function or get variable x.
+ - Use `$x <- val` to assign a value val to the Octave variable x.
+</div><div class='input'># assign/get Octave variables</div><div class='input'>.O$a <- 10
+</div><div class='input'>.O$a
+</div>
+<div class='output'>[1] 10
+</div><div class='input'></div><div class='input'># call Octave functions</div><div class='input'>.O$help()
+</div>
+<div class='output'><0 x 0 matrix>
+</div><div class='input'>.O$svd(matrix(runif(9), 3))
+</div>
+<div class='output'>          [,1]
+[1,] 1.6021750
+[2,] 0.6991859
+[3,] 0.4258040
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>.O</li><li>[[,Octave-method</li><li>$&lt;-,Octave-method</li><li>$,Octave-method</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>methods</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='o_assign.html'>o_get</a></code>
+
+  <code><a href='o_assign.html'>o_get</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

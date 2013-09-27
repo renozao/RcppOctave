@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_eval. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Evaluate an Octave Expression</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_eval(..., CATCH, unlist = TRUE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>The Octave expression(s) to evaluate, as a
+  character string.</dd>
+      <dt>CATCH</dt>
+      <dd>The Octave expression(s) to evaluate if the
+  evaluation(s) of <code>...</code> fails. See section
+  <em>Octave Documentation</em> for more details.</dd>
+      <dt>unlist</dt>
+      <dd>a logical that specifies it single
+  variables should be returned as a single value (default),
+  or as a list.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>the result of the evaluation</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Evaluates an Octave expression in the current embedded
+  Octave session. The variables assigned in the expression
+  are available for subsequent <code>o_eval</code> calls.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;evalin&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;evalin&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Built-in Function:  evalin (CONTEXT, TRY)
+ -- Built-in Function:  evalin (CONTEXT, TRY, CATCH)
+     Like `eval', except that the expressions are evaluated in the
+     context CONTEXT, which may be either `"caller"' or `"base"'.
+
+     See also: eval, assignin
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:51:47
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># assign some variable</div><div class='input'>o_eval("a=10")
+</div>
+<div class='output'>[1] 10
+</div><div class='input'></div><div class='input'># retrieve its value in a subsequent call</div><div class='input'>o_eval("a")
+</div>
+<div class='output'>[1] 10
+</div><div class='input'></div><div class='input'>o_get('a')
+</div>
+<div class='output'>[1] 10
+</div><div class='input'></div><div class='input'># use its value</div><div class='input'>o_eval("b = a^2")
+</div>
+<div class='output'>[1] 100
+</div><div class='input'></div><div class='input'></div><div class='input'># multiple expression can be evaluated</div><div class='input'>o_eval(a="10^3", singular="svd(rand(4,4))", random="rand(10, 1)")
+</div>
+<div class='output'>$a
+[1] 1000
+
+$singular
+          [,1]
+[1,] 1.8573396
+[2,] 0.7936596
+[3,] 0.2706670
+[4,] 0.1251386
+
+$random
+           [,1]
+ [1,] 0.9694034
+ [2,] 0.1816732
+ [3,] 0.6170109
+ [4,] 0.5484386
+ [5,] 0.9591760
+ [6,] 0.4062065
+ [7,] 0.1675229
+ [8,] 0.3502891
+ [9,] 0.5532194
+[10,] 0.3521757
+
+</div><div class='input'># or from a list</div><div class='input'>l <- list(a="10^3", singular="svd(rand(4,4))", random="rand(10, 1)")
+</div><div class='input'>o_eval(l)
+</div>
+<div class='output'>$a
+[1] 1000
+
+$singular
+            [,1]
+[1,] 1.201493296
+[2,] 0.791173015
+[3,] 0.607953595
+[4,] 0.009160272
+
+$random
+            [,1]
+ [1,] 0.46000486
+ [2,] 0.53193728
+ [3,] 0.94226401
+ [4,] 0.76783567
+ [5,] 0.65050581
+ [6,] 0.58148021
+ [7,] 0.24443935
+ [8,] 0.49374022
+ [9,] 0.45909267
+[10,] 0.09249128
+
+</div><div class='input'></div><div class='input'># if the evaluation fails then an error is thrown</div><div class='input'>## <strong>Not run</strong>:  o_eval("a=svd()") </div><div class='input'></div><div class='input'># except if argument CATCH is provided</div><div class='input'>o_eval("a=svd()", CATCH="a=2")
+</div>
+<div class='output'>[1] 2
+</div><div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_eval</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

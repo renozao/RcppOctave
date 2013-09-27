@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>RcppOctave. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+  Renaud Gaujoux &lt;a href='mailto:renaud@cbio.uct.ac.za'&gt;renaud@cbio.uct.ac.za&lt;/a&gt;
+
+  Maintainer: Renaud Gaujoux &lt;a href='mailto:renaud@cbio.uct.ac.za'&gt;renaud@cbio.uct.ac.za&lt;/a&gt;
+">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Interfacing R with Octave</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Interfacing R with Octave.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The primary goal is to facilitate the port of
+  Matlab/Octave scripts to R. The package enables to call
+  any Octave functions from R and as well as browsing their
+  documentation, passing variables between R and Octave,
+  using R core RNGs in Octave, which ensure stochastic
+  computations are also reproducible.</p>
+  
+      <p><table><tr><td> Package: </td>
+<td> RcppOctave</td>
+</tr><tr><td> Type: </td>
+<td>
+  Package</td>
+</tr><tr><td> Version: </td>
+<td> 1.0</td>
+</tr><tr><td> Date: </td>
+<td> 2011-11-01</td>
+</tr><tr><td>
+  License: </td>
+<td> GPL (>= 2)</td>
+</tr><tr><td> LazyLoad: </td>
+<td> yes</td>
+</tr></table></p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+      
+      <p>Eaton JW (2002). _GNU Octave Manual_. Network Theory
+  Limited. ISBN 0-9541617-2-6, <URL:
+  http://www.octave.org/>.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>.CallOctave('svd', matrix(1:9, 3))
+</div>
+<div class='output'>             [,1]
+[1,] 1.684810e+01
+[2,] 1.068370e+00
+[3,] 3.356916e-16
+</div><div class='input'>o_help('svd')
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>RcppOctave</li><li>RcppOctave-package</li>
+    </ul>
+    <ul>
+      <li>package</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  See <code><a href='dot-CallOctave.html'>.CallOctave</a></code>, <code><a href='o_source.html'>o_source</a></code>,
+  <code><a href='o_help.html'>o_help</a></code>
+
+    
+    <h2>Author</h2>
+    
+  Renaud Gaujoux <a href='mailto:renaud@cbio.uct.ac.za'>renaud@cbio.uct.ac.za</a>
+
+  Maintainer: Renaud Gaujoux <a href='mailto:renaud@cbio.uct.ac.za'>renaud@cbio.uct.ac.za</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Timing foe RNGs. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Timing foe RNGs</h1><br />
+
+<div class="row"><div class="span8">
+  <pre>
+  <div class='input'></div><div class='input'>library(RcppOctave)
+</div><div class='input'>require(rbenchmark)			# to benchmark examples
+</div>
+<strong class='message'>Loading required package: rbenchmark</strong>
+<strong class='warning'>Warning message:
+there is no package called ‘rbenchmark’</strong><div class='input'></div><div class='input'>## define a Gamma RNG draw function</div><div class='input'>o_source(text="
+  function x = orndg(a, b, n)
+    x = b * randg(a, n, 1);
+  end
+")
+</div><div class='input'></div><div class='input'>## define a Normal RNG draw function</div><div class='input'>o_source(text="
+  function x = orndn(n)
+    x = randn(n,1);
+  end
+")
+</div><div class='input'></div><div class='input'>N <- 500
+</div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>x1 <- c(.O$orndg(9,1,N))
+</div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>y1 <- rgamma(N,9,1)
+</div><div class='input'>stopifnot(all.equal(x1, y1))
+</div><div class='input'></div><div class='input'>res <- benchmark(.O$orndg(9,1,N),
+                 rgamma(N,9,1),
+                 o_rgamma(9,N,1),
+                 columns = c("test", "replications", "elapsed", "relative"),
+                 order="relative",
+                 replications=1000)
+</div>
+<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)
+</div>
+<strong class='error'>Error in print(res): object 'res' not found</strong><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>x1 <- c(.O$orndn(N,1))
+</div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>y1 <- rnorm(N)
+</div><div class='input'>stopifnot(all.equal(x1, y1))
+</div><div class='input'></div><div class='input'>res <- benchmark(.O$orndn(N),
+                 rnorm(N),
+                 o_rnorm(N,1),
+                 columns = c("test", "replications", "elapsed", "relative"),
+                 order="relative",
+                 replications=1000)
+</div>
+<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)</div>
+<strong class='error'>Error in print(res): object 'res' not found</strong>
+  </pre>
+</div></div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

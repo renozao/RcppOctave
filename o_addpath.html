@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_addpath. RcppOctave 0.9.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Manipulating Octave Search Path</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>o_addpath(DIR1, ..., OPTION = "-begin")
+
+o_inpath(...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>DIR1</dt>
+      <dd>path specification to add to Octave search
+  path. See section <em>Octave Documentation</em>.</dd>
+      <dt>...</dt>
+      <dd>other path specifications</dd>
+      <dt>OPTION</dt>
+      <dd>option that specifies how the path should
+  be added. Possible values are: <code>'-begin', 0, '-end',
+  1</code>. See section <em>Octave Documentation</em>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>returns invisibly the old value of search path.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Adds a directory at the beginning of Octave search path.</p>
+  
+      <p><code>o_inpath</code> tells if a directory or files are in
+  Octave path.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The .oct files present in directories from the search
+  path are looked up when an object or function is
+  requested but not loaded in the current session. The
+  files are watched and automatically reloaded in case
+  modification.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;addpath&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;addpath&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Built-in Function:  addpath (DIR1, ...)
+ -- Built-in Function:  addpath (DIR1, ..., OPTION)
+     Add DIR1, ... to the current function search path.  If OPTION is
+     "-begin" or 0 (the default), prepend the directory name to the
+     current path.  If OPTION is "-end" or 1, append the directory name
+     to the current path.  Directories added to the path must exist.
+
+     In addition to accepting individual directory arguments, lists of
+     directory names separated by `pathsep' are also accepted.  For
+     example:
+
+          addpath ("dir1:/dir2:~/dir3");
+
+     See also: path, rmpath, genpath, pathdef, savepath, pathsep
+
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-05-05 11:51:44
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># call an undefined function</div><div class='input'>try(.CallOctave('fun1'))
+</div><div class='input'></div><div class='input'># add to the path a directory with a .oct file that contains a definition for 'fun1'</div><div class='input'>o_addpath(system.file('scripts', package='RcppOctave'))
+</div><div class='input'></div><div class='input'># re-call the function</div><div class='input'>#.CallOctave('fun1')</div><div class='input'></div><div class='input'># change the .oct file</div><div class='input'>o_addpath(tempdir())
+</div><div class='input'>o_inpath(tempdir())
+</div>
+<div class='output'>/tmp/RtmpWU2WQd 
+           TRUE 
+</div><div class='input'>o_inpath(tempfile())
+</div>
+<div class='output'>/tmp/RtmpWU2WQd/file466c520cb7b5 
+                           FALSE 
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_addpath</li><li>o_inpath</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other Octave_files: <code><a href='o_source.html'>o_source</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
