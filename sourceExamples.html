@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>sourceExamples. RcppOctave 0.9.1</title>
+<title>sourceExamples. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,14 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Source an example M-file in the sub-directory
+  &#147;scripts/&#148; of RcppOctave installation.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>sourceExamples(file)</pre>
     
@@ -59,21 +70,19 @@
   missing, the function lists all the m-files from the
   &#147;scripts/&#148; sub-directory.</dd>
     </dl>
-    
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Source an example M-file in the sub-directory
-  &#147;scripts/&#148; of RcppOctave installation.</p>
-  
-    </div>
-    
+        
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>sourceExamples()
-</div>
-<div class='output'>[1] "ex_functions.m" "ex_source.m"   
-</div><div class='input'>sourceExamples('ex_source.m')
-</div></pre>
+    <pre><code class="r">
+sourceExamples()
+</code></pre>
+
+<pre><code>## [1] &quot;ex_functions.m&quot; &quot;ex_source.m&quot;
+</code></pre>
+
+<pre><code class="r">sourceExamples(&#39;ex_source.m&#39;)
+
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -89,7 +98,7 @@
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

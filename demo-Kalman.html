@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Benchmark comparison of Kalman Filter implementations. RcppOctave 0.9.1</title>
+<title>Benchmark comparison of Kalman Filter implementations. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -51,9 +54,7 @@
   <pre>
   <div class='input'></div><div class='input'>## Kalman filter example initiall from</div><div class='input'>## cf http://www.mathworks.com/products/matlab-coder/demos.html?file=/products/demos/shipping/coder/coderdemo_kalman_filter.html</div><div class='input'>## and used by Eddelbuettel and Sanderson in a paper on RcppArmadillo</div><div class='input'>##</div><div class='input'>## Adapted here by focusing on the RcppOctave interface relative to R</div><div class='input'>##</div><div class='input'>## Copyright (C) 2012  Dirk Eddelbuettel</div><div class='input'>##</div><div class='input'>## Released under GNU GPL (>= 2)</div><div class='input'></div><div class='input'></div><div class='input'>require(rbenchmark)			# to benchmark examples
 </div>
-<strong class='message'>Loading required package: rbenchmark</strong>
-<strong class='warning'>Warning message:
-there is no package called ‘rbenchmark’</strong><div class='input'>require(compiler)			# to byte-compile
+<strong class='message'>Loading required package: rbenchmark</strong><div class='input'>require(compiler)			# to byte-compile
 </div>
 <strong class='message'>Loading required package: compiler</strong><div class='input'></div><div class='input'>require(RcppOctave)                     # released to CRAN on 03 Jul 2012
 </div><div class='input'></div><div class='input'></div><div class='input'>## Original Matlab file</div><div class='input'>##</div><div class='input'>## %   Copyright 2010 The MathWorks, Inc.</div><div class='input'>## function y = kalmanfilter(z)</div><div class='input'>## %#codegen</div><div class='input'>## dt=1;</div><div class='input'>## % Initialize state transition matrix</div><div class='input'>## A=[ 1 0 dt 0 0 0;...     % [x  ]</div><div class='input'>##        0 1 0 dt 0 0;...     % [y  ]</div><div class='input'>##        0 0 1 0 dt 0;...     % [Vx]</div><div class='input'>##        0 0 0 1 0 dt;...     % [Vy]</div><div class='input'>##        0 0 0 0 1 0 ;...     % [Ax]</div><div class='input'>##        0 0 0 0 0 1 ];       % [Ay]</div><div class='input'>## H = [ 1 0 0 0 0 0; 0 1 0 0 0 0 ];    % Initialize measurement matrix</div><div class='input'>## Q = eye(6);</div><div class='input'>## R = 1000 * eye(2);</div><div class='input'>## persistent x_est p_est                % Initial state conditions</div><div class='input'>## if isempty(x_est)</div><div class='input'>##     x_est = zeros(6, 1);             % x_est=[x,y,Vx,Vy,Ax,Ay]'</div><div class='input'>##     p_est = zeros(6, 6);</div><div class='input'>## end</div><div class='input'>## % Predicted state and covariance</div><div class='input'>## x_prd = A * x_est;</div><div class='input'>## p_prd = A * p_est * A' + Q;</div><div class='input'>## % Estimation</div><div class='input'>## S = H * p_prd' * H' + R;</div><div class='input'>## B = H * p_prd';</div><div class='input'>## klm_gain = (S \ B)';</div><div class='input'>## % Estimated state and covariance</div><div class='input'>## x_est = x_prd + klm_gain * (z - H * x_prd);</div><div class='input'>## p_est = p_prd - klm_gain * H * p_prd;</div><div class='input'>## % Compute the estimated measurements</div><div class='input'>## y = H * x_est;</div><div class='input'>## end                % of the function</div><div class='input'></div><div class='input'>## Direct translation of Matlab code</div><div class='input'>##</div><div class='input'>FirstKalmanR <- function(pos) {
@@ -561,16 +562,23 @@ end
                  columns = c("test", "replications", "elapsed", "relative"),
                  order="relative",
                  replications=100)
+</div><div class='input'>print(res)
 </div>
-<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)
-</div>
-<strong class='error'>Error in print(res): object 'res' not found</strong><div class='input'></div><div class='input'></div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanCpp(pos), col='green', pch=20)</div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanR(pos), col='green', pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Set1'))</div><div class='input'>#c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")</div><div class='input'>#plot(pos, col='#377EB8', pch=20)</div><div class='input'>#points(KalmanR(pos), col="#E41A1C", pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Paired'))</div><div class='input'>#c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C")</div><div class='input'></div><div class='input'>## doPdfPlot <- function() {</div><div class='input'>##     pdf("../images/kalmanExample.pdf")</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=18,</div><div class='input'>##          main="Object Trajectory and Kalman Filter Estimate")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4DD", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3DD", "#1F78B4DD"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div><div class='input'></div><div class='input'>## doEpsPlot <- function() {</div><div class='input'>##     setEPS()</div><div class='input'>##     postscript("../images/kalmanExample.eps")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3", "#1F78B4"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div>
+<div class='output'>                test replications elapsed relative
+7  KalmanOctave(pos)          100   1.590    1.000
+4   KalmanRfunC(pos)          100   3.362    2.114
+2      KalmanRC(pos)          100   3.406    2.142
+3    KalmanRfun(pos)          100   3.792    2.385
+1       KalmanR(pos)          100   3.839    2.414
+6 FirstKalmanRC(pos)          100   4.096    2.576
+5  FirstKalmanR(pos)          100   4.534    2.852
+</div><div class='input'></div><div class='input'></div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanCpp(pos), col='green', pch=20)</div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanR(pos), col='green', pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Set1'))</div><div class='input'>#c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")</div><div class='input'>#plot(pos, col='#377EB8', pch=20)</div><div class='input'>#points(KalmanR(pos), col="#E41A1C", pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Paired'))</div><div class='input'>#c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C")</div><div class='input'></div><div class='input'>## doPdfPlot <- function() {</div><div class='input'>##     pdf("../images/kalmanExample.pdf")</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=18,</div><div class='input'>##          main="Object Trajectory and Kalman Filter Estimate")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4DD", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3DD", "#1F78B4DD"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div><div class='input'></div><div class='input'>## doEpsPlot <- function() {</div><div class='input'>##     setEPS()</div><div class='input'>##     postscript("../images/kalmanExample.eps")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3", "#1F78B4"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div>
   </pre>
 </div></div>
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

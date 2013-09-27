@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_who. RcppOctave 0.9.1</title>
+<title>o_who. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,14 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Lists currently defined variables in Octave global
+  context.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_who(..., options, rm.ans = FALSE, unique = TRUE)</pre>
     
@@ -75,14 +86,6 @@
       <h2>Value</h2>
       
       <p>None</p>
-  
-    </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Lists currently defined variables in Octave global
-  context.</p>
   
     </div>
 
@@ -130,30 +133,57 @@
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:52:04
+  2013-09-27 16:54:16
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'></div><div class='input'>o_who()
-</div>
-<div class='output'>[1] "a" "b" "c" "d"
-</div><div class='input'>l <- as.list(setNames(1:10, letters[1:10]))
-</div><div class='input'>o_assign(l)
-</div><div class='input'>o_who()
-</div>
-<div class='output'> [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
-</div><div class='input'></div><div class='input'></div><div class='input'>prefnames <- paste('pref', letters[1:10], sep='')
-</div><div class='input'>o_assign( setNames(l, prefnames) )
-</div><div class='input'>o_who()
-</div>
-<div class='output'> [1] "a"     "b"     "c"     "d"     "e"     "f"     "g"     "h"     "i"     "j"     "prefa" "prefb" "prefc" "prefd" "prefe" "preff" "prefg"
-[18] "prefh" "prefi" "prefj"
-</div><div class='input'>o_who('pref*')
-</div>
-<div class='output'> [1] "prefa" "prefb" "prefc" "prefd" "prefe" "preff" "prefg" "prefh" "prefi" "prefj"
-</div><div class='input'></div></pre>
+    <pre><code class="r">
+## Don&#39;t show: 
+ o_clear() 
+## End Don&#39;t show
+o_who()
+</code></pre>
+
+<pre><code>## character(0)
+</code></pre>
+
+<pre><code class="r">l &lt;- as.list(setNames(1:10, letters[1:10]))
+o_assign(l)
+o_who()
+</code></pre>
+
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot;
+</code></pre>
+
+<pre><code class="r">## Don&#39;t show: 
+  stopifnot( identical(o_who(), names(l)) ) 
+## End Don&#39;t show
+
+prefnames &lt;- paste(&#39;pref&#39;, letters[1:10], sep=&#39;&#39;)
+o_assign( setNames(l, prefnames) )
+o_who()
+</code></pre>
+
+<pre><code>##  [1] &quot;a&quot;     &quot;b&quot;     &quot;c&quot;     &quot;d&quot;     &quot;e&quot;     &quot;f&quot;     &quot;g&quot;     &quot;h&quot;    
+##  [9] &quot;i&quot;     &quot;j&quot;     &quot;prefa&quot; &quot;prefb&quot; &quot;prefc&quot; &quot;prefd&quot; &quot;prefe&quot; &quot;preff&quot;
+## [17] &quot;prefg&quot; &quot;prefh&quot; &quot;prefi&quot; &quot;prefj&quot;
+</code></pre>
+
+<pre><code class="r">o_who(&#39;pref*&#39;)
+</code></pre>
+
+<pre><code>##  [1] &quot;prefa&quot; &quot;prefb&quot; &quot;prefc&quot; &quot;prefd&quot; &quot;prefe&quot; &quot;preff&quot; &quot;prefg&quot; &quot;prefh&quot;
+##  [9] &quot;prefi&quot; &quot;prefj&quot;
+</code></pre>
+
+<pre><code class="r">## Don&#39;t show: 
+  stopifnot( identical(o_who(&#39;pref*&#39;), prefnames) ) 
+## End Don&#39;t show
+
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -173,7 +203,7 @@
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

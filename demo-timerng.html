@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Timing foe RNGs. RcppOctave 0.9.1</title>
+<title>Timing foe RNGs. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -51,10 +54,7 @@
   <pre>
   <div class='input'></div><div class='input'>library(RcppOctave)
 </div><div class='input'>require(rbenchmark)			# to benchmark examples
-</div>
-<strong class='message'>Loading required package: rbenchmark</strong>
-<strong class='warning'>Warning message:
-there is no package called ‘rbenchmark’</strong><div class='input'></div><div class='input'>## define a Gamma RNG draw function</div><div class='input'>o_source(text="
+</div><div class='input'></div><div class='input'>## define a Gamma RNG draw function</div><div class='input'>o_source(text="
   function x = orndg(a, b, n)
     x = b * randg(a, n, 1);
   end
@@ -76,10 +76,13 @@ there is no package called ‘rbenchmark’</strong><div class='input'></div><di
                  columns = c("test", "replications", "elapsed", "relative"),
                  order="relative",
                  replications=1000)
+</div><div class='input'>print(res)
 </div>
-<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)
-</div>
-<strong class='error'>Error in print(res): object 'res' not found</strong><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+<div class='output'>               test replications elapsed relative
+2   rgamma(N, 9, 1)         1000   0.074    1.000
+3 o_rgamma(9, N, 1)         1000   0.800   10.811
+1 .O$orndg(9, 1, N)         1000   1.799   24.311
+</div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
 </div><div class='input'>x1 <- c(.O$orndn(N,1))
 </div><div class='input'>set.seed(42)  # reset RNG
 </div><div class='input'>y1 <- rnorm(N)
@@ -90,15 +93,18 @@ there is no package called ‘rbenchmark’</strong><div class='input'></div><di
                  columns = c("test", "replications", "elapsed", "relative"),
                  order="relative",
                  replications=1000)
+</div><div class='input'>print(res)</div>
+<div class='output'>           test replications elapsed relative
+2      rnorm(N)         1000   0.059    1.000
+3 o_rnorm(N, 1)         1000   0.084    1.424
+1   .O$orndn(N)         1000   1.734   29.390
 </div>
-<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)</div>
-<strong class='error'>Error in print(res): object 'res' not found</strong>
   </pre>
 </div></div>
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

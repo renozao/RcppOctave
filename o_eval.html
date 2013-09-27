@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_eval. RcppOctave 0.9.1</title>
+<title>o_eval. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,15 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Evaluates an Octave expression in the current embedded
+  Octave session. The variables assigned in the expression
+  are available for subsequent <code>o_eval</code> calls.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_eval(..., CATCH, unlist = TRUE)</pre>
     
@@ -74,15 +86,6 @@
   
     </div>
 
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Evaluates an Octave expression in the current embedded
-  Octave session. The variables assigned in the expression
-  are available for subsequent <code>o_eval</code> calls.</p>
-  
-    </div>
-
     <div class="Octave Documentation for &lt;em&gt;evalin&lt;/em&gt;">
       <h2>Octave Documentation for &lt;em&gt;evalin&lt;/em&gt;</h2>
       
@@ -103,79 +106,123 @@
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:51:47
+  2013-09-27 16:54:10
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># assign some variable</div><div class='input'>o_eval("a=10")
-</div>
-<div class='output'>[1] 10
-</div><div class='input'></div><div class='input'># retrieve its value in a subsequent call</div><div class='input'>o_eval("a")
-</div>
-<div class='output'>[1] 10
-</div><div class='input'></div><div class='input'>o_get('a')
-</div>
-<div class='output'>[1] 10
-</div><div class='input'></div><div class='input'># use its value</div><div class='input'>o_eval("b = a^2")
-</div>
-<div class='output'>[1] 100
-</div><div class='input'></div><div class='input'></div><div class='input'># multiple expression can be evaluated</div><div class='input'>o_eval(a="10^3", singular="svd(rand(4,4))", random="rand(10, 1)")
-</div>
-<div class='output'>$a
-[1] 1000
+    <pre><code class="r">
+# assign some variable
+o_eval(&quot;a=10&quot;)
+</code></pre>
 
-$singular
-          [,1]
-[1,] 1.8573396
-[2,] 0.7936596
-[3,] 0.2706670
-[4,] 0.1251386
+<pre><code>## [1] 10
+</code></pre>
 
-$random
-           [,1]
- [1,] 0.9694034
- [2,] 0.1816732
- [3,] 0.6170109
- [4,] 0.5484386
- [5,] 0.9591760
- [6,] 0.4062065
- [7,] 0.1675229
- [8,] 0.3502891
- [9,] 0.5532194
-[10,] 0.3521757
+<pre><code class="r">
+# retrieve its value in a subsequent call
+o_eval(&quot;a&quot;)
+</code></pre>
 
-</div><div class='input'># or from a list</div><div class='input'>l <- list(a="10^3", singular="svd(rand(4,4))", random="rand(10, 1)")
-</div><div class='input'>o_eval(l)
-</div>
-<div class='output'>$a
-[1] 1000
+<pre><code>## [1] 10
+</code></pre>
 
-$singular
-            [,1]
-[1,] 1.201493296
-[2,] 0.791173015
-[3,] 0.607953595
-[4,] 0.009160272
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_eval(&quot;a&quot;), 10) ) 
+## End Don&#39;t show
+o_get(&#39;a&#39;)
+</code></pre>
 
-$random
-            [,1]
- [1,] 0.46000486
- [2,] 0.53193728
- [3,] 0.94226401
- [4,] 0.76783567
- [5,] 0.65050581
- [6,] 0.58148021
- [7,] 0.24443935
- [8,] 0.49374022
- [9,] 0.45909267
-[10,] 0.09249128
+<pre><code>## [1] 10
+</code></pre>
 
-</div><div class='input'></div><div class='input'># if the evaluation fails then an error is thrown</div><div class='input'>## <strong>Not run</strong>:  o_eval("a=svd()") </div><div class='input'></div><div class='input'># except if argument CATCH is provided</div><div class='input'>o_eval("a=svd()", CATCH="a=2")
-</div>
-<div class='output'>[1] 2
-</div><div class='input'></div></pre>
+<pre><code class="r">
+# use its value
+o_eval(&quot;b = a^2&quot;)
+</code></pre>
+
+<pre><code>## [1] 100
+</code></pre>
+
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_eval(&quot;b = a^2&quot;), 100) ) 
+## End Don&#39;t show
+
+# multiple expression can be evaluated
+o_eval(a=&quot;10^3&quot;, singular=&quot;svd(rand(4,4))&quot;, random=&quot;rand(10, 1)&quot;)
+</code></pre>
+
+<pre><code>## $a
+## [1] 1000
+## 
+## $singular
+##         [,1]
+## [1,] 2.38227
+## [2,] 0.85979
+## [3,] 0.53430
+## [4,] 0.01355
+## 
+## $random
+##          [,1]
+##  [1,] 0.62031
+##  [2,] 0.04422
+##  [3,] 0.62038
+##  [4,] 0.99240
+##  [5,] 0.40571
+##  [6,] 0.05469
+##  [7,] 0.58083
+##  [8,] 0.43070
+##  [9,] 0.33171
+## [10,] 0.54507
+</code></pre>
+
+<pre><code class="r"># or from a list
+l &lt;- list(a=&quot;10^3&quot;, singular=&quot;svd(rand(4,4))&quot;, random=&quot;rand(10, 1)&quot;)
+o_eval(l)
+</code></pre>
+
+<pre><code>## $a
+## [1] 1000
+## 
+## $singular
+##        [,1]
+## [1,] 2.1986
+## [2,] 0.6074
+## [3,] 0.5810
+## [4,] 0.1065
+## 
+## $random
+##         [,1]
+##  [1,] 0.9960
+##  [2,] 0.7680
+##  [3,] 0.9012
+##  [4,] 0.4450
+##  [5,] 0.6422
+##  [6,] 0.3034
+##  [7,] 0.5303
+##  [8,] 0.8663
+##  [9,] 0.6281
+## [10,] 0.5298
+</code></pre>
+
+<pre><code class="r">
+# if the evaluation fails then an error is thrown
+## Not run:  o_eval(&quot;a=svd()&quot;) 
+
+# except if argument CATCH is provided
+o_eval(&quot;a=svd()&quot;, CATCH=&quot;a=2&quot;)
+</code></pre>
+
+<pre><code>## [1] 2
+</code></pre>
+
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_eval(&quot;a&quot;), 2) ) 
+## End Don&#39;t show
+
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -191,7 +238,7 @@ $random
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

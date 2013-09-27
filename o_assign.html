@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_assign. RcppOctave 0.9.1</title>
+<title>o_assign. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,19 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p><code>o_assign</code> assigns a variable in Octave.
+  <code>o_assignin</code> is an alias for <code>o_assign</code>.</p>
+<p><code>o_get</code> fetches Octave variables/functions and
+  possibly rename them on the fly with the provided
+  argument names when present. Functions are returned as
+  objects of class <code><a href='OctaveFunction-class.html'>OctaveFunction-class</a></code>,
+  that can be called subsequently (see the examples).</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_assign(...)
 
@@ -89,20 +105,6 @@ o_get(..., unlist = TRUE, rm.ans = TRUE, pattern)</pre>
   variable/object. If <code>unlist=TRUE</code> and a single --
   not re-named -- variable/object is requested then only
   its value is returned.</p>
-  
-    </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p><code>o_assign</code> assigns a variable in Octave.
-  <code>o_assignin</code> is an alias for <code>o_assign</code>.</p>
-  
-      <p><code>o_get</code> fetches Octave variables/functions and
-  possibly rename them on the fly with the provided
-  argument names when present. Functions are returned as
-  objects of class <code><a href='OctaveFunction-class.html'>OctaveFunction-class</a></code>,
-  that can be called subsequently (see the examples).</p>
   
     </div>
 
@@ -147,296 +149,281 @@ o_get(..., unlist = TRUE, rm.ans = TRUE, pattern)</pre>
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:51:45
+  2013-09-27 16:54:08
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'></div><div class='input'></div><div class='input'>## directly assign variables</div><div class='input'>o_assign(a=1, b=2, c=matrix(1:9, 3))
-</div><div class='input'># retrieve their values</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 1
+    <pre><code class="r">
+## Don&#39;t show: 
+o_clear()
+## End Don&#39;t show
 
-$b
-[1] 2
+## directly assign variables
+o_assign(a=1, b=2, c=matrix(1:9, 3))
+# retrieve their values
+o_get()
+</code></pre>
 
-$c
-     [,1] [,2] [,3]
-[1,]    1    4    7
-[2,]    2    5    8
-[3,]    3    6    9
+<pre><code>## $a
+## [1] 1
+## 
+## $b
+## [1] 2
+## 
+## $c
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+</code></pre>
 
-</div><div class='input'></div><div class='input'></div><div class='input'>## assign a variable for each element in a list</div><div class='input'>x <- list(a=10, b=20, c=matrix(101:109, 3))
-</div><div class='input'>o_assign(x)
-</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_get(), list(a=1, b=2, c=matrix(1:9, 3))) ) 
+## End Don&#39;t show
 
-$b
-[1] 20
+## assign a variable for each element in a list
+x &lt;- list(a=10, b=20, c=matrix(101:109, 3))
+o_assign(x)
+o_get()
+</code></pre>
 
-$c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## $a
+## [1] 10
+## 
+## $b
+## [1] 20
+## 
+## $c
+##      [,1] [,2] [,3]
+## [1,]  101  104  107
+## [2,]  102  105  108
+## [3,]  103  106  109
+</code></pre>
 
-</div><div class='input'></div><div class='input'></div><div class='input'>## assign the content of an environment</div><div class='input'>e <- list2env(setNames(x, paste('env', names(x), sep='_')))
-</div><div class='input'>o_assign(e)
-</div><div class='input'>o_get(pattern="^env_")
-</div>
-<div class='output'>$env_a
-[1] 10
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_get(), x) ) 
+## End Don&#39;t show
 
-$env_b
-[1] 20
+## assign the content of an environment
+e &lt;- list2env(setNames(x, paste(&#39;env&#39;, names(x), sep=&#39;_&#39;)))
+o_assign(e)
+o_get(pattern=&quot;^env_&quot;)
+</code></pre>
 
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## $env_a
+## [1] 10
+## 
+## $env_b
+## [1] 20
+## 
+## $env_c
+##      [,1] [,2] [,3]
+## [1,]  101  104  107
+## [2,]  102  105  108
+## [3,]  103  106  109
+</code></pre>
 
-</div><div class='input'></div><div class='input'></div><div class='input'># get all currently defined variables</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code class="r">## Don&#39;t show: 
+o_clear();
+## End Don&#39;t show
 
-$b
-[1] 20
+# get all currently defined variables
+o_get()
+</code></pre>
 
-$c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## list()
+</code></pre>
 
-$env_a
-[1] 10
+<pre><code class="r">
+# by default, the automatic variable `ans` is not returned but might be there
+# from unstored previous computation
+o_eval(&#39;svd(rand(3,3))&#39;)
+</code></pre>
 
-$env_b
-[1] 20
+<pre><code>##        [,1]
+## [1,] 1.5658
+## [2,] 0.3472
+## [3,] 0.2299
+</code></pre>
 
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code class="r">o_get()
+</code></pre>
 
-</div><div class='input'></div><div class='input'># by default, the automatic variable `ans` is not returned but might be there</div><div class='input'># from unstored previous computation</div><div class='input'>o_eval('svd(rand(3,3))')
-</div>
-<div class='output'>            [,1]
-[1,] 1.559143523
-[2,] 0.887491794
-[3,] 0.003767002
-</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code>## list()
+</code></pre>
 
-$b
-[1] 20
+<pre><code class="r">o_get(rm.ans=FALSE)
+</code></pre>
 
-$c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## $ans
+##        [,1]
+## [1,] 1.5658
+## [2,] 0.3472
+## [3,] 0.2299
+</code></pre>
 
-$env_a
-[1] 10
+<pre><code class="r">
+# load some variables
+x &lt;- list(b=1, c=3, d=matrix(1:9, 3))
+o_assign(x)
 
-$env_b
-[1] 20
+# re-fetch all variables
+o_get()
+</code></pre>
 
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## $b
+## [1] 1
+## 
+## $c
+## [1] 3
+## 
+## $d
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+</code></pre>
 
-</div><div class='input'>o_get(rm.ans=FALSE)
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot( identical(o_get(), x) ) 
+## End Don&#39;t show
 
-$ans
-            [,1]
-[1,] 1.559143523
-[2,] 0.887491794
-[3,] 0.003767002
+# only fetch specific variables
+o_get(&#39;b&#39;)
+</code></pre>
 
-$b
-[1] 20
+<pre><code>## [1] 1
+</code></pre>
 
-$c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code class="r">o_get(&#39;b&#39;, &#39;c&#39;)
+</code></pre>
 
-$env_a
-[1] 10
+<pre><code>## $b
+## [1] 1
+## 
+## $c
+## [1] 3
+</code></pre>
 
-$env_b
-[1] 20
+<pre><code class="r"># one can rename variables on the fly
+o_get(a=&#39;b&#39;, &#39;c&#39;)
+</code></pre>
 
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code>## $a
+## [1] 1
+## 
+## $c
+## [1] 3
+</code></pre>
 
-</div><div class='input'></div><div class='input'># load some variables</div><div class='input'>x <- list(b=1, c=3, d=matrix(1:9, 3))
-</div><div class='input'>o_assign(x)
-</div><div class='input'></div><div class='input'># re-fetch all variables</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code class="r">o_get(c(othername=&#39;b&#39;))
+</code></pre>
 
-$b
-[1] 1
+<pre><code>## $othername
+## [1] 1
+</code></pre>
 
-$c
-[1] 3
+<pre><code class="r">o_get(c(othername=&#39;b&#39;, &#39;c&#39;))
+</code></pre>
 
-$d
-     [,1] [,2] [,3]
-[1,]    1    4    7
-[2,]    2    5    8
-[3,]    3    6    9
+<pre><code>## $othername
+## [1] 1
+## 
+## $c
+## [1] 3
+</code></pre>
 
-$env_a
-[1] 10
+<pre><code class="r">
+# fetching using a regular expression
+o_assign( setNames(1:3, paste(&quot;test&quot;, 1:3, sep=&#39;_&#39;)))
+o_get()
+</code></pre>
 
-$env_b
-[1] 20
+<pre><code>## $b
+## [1] 1
+## 
+## $c
+## [1] 3
+## 
+## $d
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+## 
+## $test_1
+## [1] 1
+## 
+## $test_2
+## [1] 2
+## 
+## $test_3
+## [1] 3
+</code></pre>
 
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
+<pre><code class="r">o_get(pattern=&quot;^test&quot;)
+</code></pre>
 
-</div><div class='input'></div><div class='input'></div><div class='input'># only fetch specific variables</div><div class='input'>o_get('b')
-</div>
-<div class='output'>[1] 1
-</div><div class='input'>o_get('b', 'c')
-</div>
-<div class='output'>$b
-[1] 1
+<pre><code>## $test_1
+## [1] 1
+## 
+## $test_2
+## [1] 2
+## 
+## $test_3
+## [1] 3
+</code></pre>
 
-$c
-[1] 3
+<pre><code class="r">
+# works with functions
+f &lt;- o_get(&#39;svd&#39;)
+f
+</code></pre>
 
-</div><div class='input'># one can rename variables on the fly</div><div class='input'>o_get(a='b', 'c')
-</div>
-<div class='output'>$a
-[1] 1
+<pre><code>## &lt;OctaveFunction::`svd`&gt;
+</code></pre>
 
-$c
-[1] 3
+<pre><code class="r">f(matrix(1:9,3))
+</code></pre>
 
-</div><div class='input'>o_get(c(othername='b'))
-</div>
-<div class='output'>$othername
-[1] 1
+<pre><code>##           [,1]
+## [1,] 1.685e+01
+## [2,] 1.068e+00
+## [3,] 5.543e-16
+</code></pre>
 
-</div><div class='input'>o_get(c(othername='b', 'c'))
-</div>
-<div class='output'>$othername
-[1] 1
+<pre><code class="r">f(matrix(1:9,3), argout=3)
+</code></pre>
 
-$c
-[1] 3
+<pre><code>## [[1]]
+##         [,1]     [,2]    [,3]
+## [1,] -0.4797  0.77669  0.4082
+## [2,] -0.5724  0.07569 -0.8165
+## [3,] -0.6651 -0.62532  0.4082
+## 
+## [[2]]
+##       [,1]  [,2]      [,3]
+## [1,] 16.85 0.000 0.000e+00
+## [2,]  0.00 1.068 0.000e+00
+## [3,]  0.00 0.000 5.543e-16
+## 
+## [[3]]
+##         [,1]    [,2]    [,3]
+## [1,] -0.2148 -0.8872  0.4082
+## [2,] -0.5206 -0.2496 -0.8165
+## [3,] -0.8263  0.3879  0.4082
+</code></pre>
 
-</div><div class='input'></div><div class='input'># fetching using a regular expression</div><div class='input'>o_assign( setNames(1:3, paste("test", 1:3, sep='_')))
-</div><div class='input'>o_get()
-</div>
-<div class='output'>$a
-[1] 10
+<pre><code class="r">
+# an error is thrown in the case of multiple matches (the alternatives are shown)
+o_clear()
+o_assign(aaa=1, ab=2)
+try(o_get(&#39;a&#39;))
 
-$b
-[1] 1
+</code></pre>
 
-$c
-[1] 3
-
-$d
-     [,1] [,2] [,3]
-[1,]    1    4    7
-[2,]    2    5    8
-[3,]    3    6    9
-
-$env_a
-[1] 10
-
-$env_b
-[1] 20
-
-$env_c
-     [,1] [,2] [,3]
-[1,]  101  104  107
-[2,]  102  105  108
-[3,]  103  106  109
-
-$test_1
-[1] 1
-
-$test_2
-[1] 2
-
-$test_3
-[1] 3
-
-</div><div class='input'>o_get(pattern="^test")
-</div>
-<div class='output'>$test_1
-[1] 1
-
-$test_2
-[1] 2
-
-$test_3
-[1] 3
-
-</div><div class='input'></div><div class='input'># works with functions</div><div class='input'>f <- o_get('svd')
-</div><div class='input'>f
-</div>
-<div class='output'><OctaveFunction::`svd`>
-</div><div class='input'>f(matrix(1:9,3))
-</div>
-<div class='output'>             [,1]
-[1,] 1.684810e+01
-[2,] 1.068370e+00
-[3,] 3.356916e-16
-</div><div class='input'>f(matrix(1:9,3), argout=3)
-</div>
-<div class='output'>[[1]]
-           [,1]        [,2]       [,3]
-[1,] -0.4796712  0.77669099  0.4082483
-[2,] -0.5723678  0.07568647 -0.8164966
-[3,] -0.6650644 -0.62531805  0.4082483
-
-[[2]]
-        [,1]    [,2]         [,3]
-[1,] 16.8481 0.00000 0.000000e+00
-[2,]  0.0000 1.06837 0.000000e+00
-[3,]  0.0000 0.00000 3.356916e-16
-
-[[3]]
-           [,1]       [,2]       [,3]
-[1,] -0.2148372 -0.8872307 -0.4082483
-[2,] -0.5205874 -0.2496440  0.8164966
-[3,] -0.8263375  0.3879428 -0.4082483
-
-</div><div class='input'></div><div class='input'># an error is thrown in the case of multiple matches (the alternatives are shown)</div><div class='input'>o_clear()
-</div><div class='input'>o_assign(aaa=1, ab=2)
-</div><div class='input'>try(o_get('a'))
-</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
@@ -452,7 +439,7 @@ $test_3
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

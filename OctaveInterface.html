@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>.O. RcppOctave 0.9.1</title>
+<title>.O. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,17 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p><code>RcppOctave</code> provides a simple interface to Octave
+  via the object <code>.O</code>, an instance of class
+  <code>Octave</code>, that allows for direct access to Octave
+  functions and variables using calls such as:
+  <code>.O$svd(matrix(1:9,3))</code>.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>.O
 
@@ -111,17 +125,6 @@
   
     </div>
 
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p><code>RcppOctave</code> provides a simple interface to Octave
-  via the object <code>.O</code>, an instance of class
-  <code>Octave</code>, that allows for direct access to Octave
-  functions and variables using calls such as:
-  <code>.O$svd(matrix(1:9,3))</code>.</p>
-  
-    </div>
-
     <div class="Methods">
       <h2>Methods</h2>
       
@@ -148,28 +151,7 @@
       <p></p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>.O
-</div>
-<div class='output'> <Octave Interface>
- - Use `$x` to call Octave function or get variable x.
- - Use `$x <- val` to assign a value val to the Octave variable x.
-</div><div class='input'># assign/get Octave variables</div><div class='input'>.O$a <- 10
-</div><div class='input'>.O$a
-</div>
-<div class='output'>[1] 10
-</div><div class='input'></div><div class='input'># call Octave functions</div><div class='input'>.O$help()
-</div>
-<div class='output'><0 x 0 matrix>
-</div><div class='input'>.O$svd(matrix(runif(9), 3))
-</div>
-<div class='output'>          [,1]
-[1,] 1.6021750
-[2,] 0.6991859
-[3,] 0.4258040
-</div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
       <li>.O</li><li>[[,Octave-method</li><li>$&lt;-,Octave-method</li><li>$,Octave-method</li>
@@ -190,7 +172,7 @@
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>
