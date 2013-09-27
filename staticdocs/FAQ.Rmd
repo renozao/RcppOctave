@@ -1,0 +1,33 @@
+# Frequently Asked Questions
+
+## What version of Octave is supported/recommended?
+
+Versions later than 3.2.4 should be supported, however, we recommend to use version 3.6.2 or later.
+See question about the installation error due to library liboctinterp in Octave 3.2.4.
+
+Octave 3.6.2 is on the official Ubuntu Quantal (12.11) repository, but can be installed on Ubuntu Precise LTS (12.04) and older from the ppa __ppa:octave/stable__ :
+
+```
+ sudo add-apt-repository ppa:octave/stable
+ sudo apt-get update
+ sudo apt-get install octave liboctave-dev
+```
+More info: https://launchpad.net/~octave
+
+## Why RcppOctave does not install correctly with Octave 3.2.4 due to liboctinterp.so?
+
+We don't really know what suddenly caused this issue, which comes from the fact that liboctinterp.so is not found when loading RcppOctave's own library.
+
+The following work around seems to work for most users: 
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`octave-config -p OCTLIBDIR`
+Rscript -e "install.packages('RcppOctave')"
+```
+<small>Thanks to Cheng Zhang: http://jchain.github.com/blog/2013/01/28/install-rcppoctave-if-octave/</small>
+
+Otherwise the latest version on R-forge (>= 0.8.17) should work out of the box in Octave 3.2.4:
+
+```{r rforge, eval=FALSE}
+install.pacakges('RcppOctave', repos=c(getOption('repos'), 'http://r-forge.r-project.org'))
+```
+

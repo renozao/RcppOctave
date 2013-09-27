@@ -1,0 +1,37 @@
+## Process this file with autoconf to produce a configure script.
+##
+## configure.in for libRrng
+##
+## Borrowed and adapted from the file configure.in for RcppGSL
+## Copyright (C) 2010 Romain Francois and Dirk Eddelbuettel
+## Licensed under GNU GPL 2 or later
+##
+## Copyright (C) 2011 Renaud Gaujoux
+
+# The version set here will propagate to other files from here
+AC_INIT([libRrng], [1.0])
+AC_CONFIG_HEADERS([config.h])
+
+# extra m4 macros
+AC_CONFIG_MACRO_DIR([m4])
+m4_include([m4/R.m4])
+
+# Checks for common programs using default macros
+AC_PROG_CC
+AC_PROG_CXX
+AC_LANG(C++)
+
+AC_CHECK_HEADERS([unistd.h sys/time.h])
+R_FUNC_ISFINITE
+R_IEEE_754
+R_CHECK_FUNCS([gettimeofday utimes], [#include <sys/time.h>])
+## clock_gettime is POSIX 1993, but not on MacOS X
+## Some OSes need -lrt: Linux, Solaris, not FreeBSD.
+## Unsurprising, as POSIX 2008 moved it from its timers section to base.
+R_CHECK_FUNCS([clock_gettime], [#include <time.h>])
+if test "${ac_cv_have_decl_clock_gettime}" = "yes"; then
+AC_CHECK_LIB(rt, clock_gettime)
+fi
+
+
+AC_OUTPUT
