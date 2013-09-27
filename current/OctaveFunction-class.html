@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>OctaveFunction-class. RcppOctave 0.9.1</title>
+<title>OctaveFunction-class. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,18 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Wrapping and Defining Octave Functions from R</p>
+<p><code>OctaveFunction</code> objects can be created from
+  existing Octave function using their name, or directly
+  from their Octave implementation. In this case, the
+  Octave code is parsed to extract and use the name of the
+  first function defined therein.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>OctaveFunction(fun, check = TRUE)
 
@@ -71,19 +86,6 @@
       <dd>Any R object</dd>
     </dl>
     
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Wrapping and Defining Octave Functions from R</p>
-  
-      <p><code>OctaveFunction</code> objects can be created from
-  existing Octave function using their name, or directly
-  from their Octave implementation. In this case, the
-  Octave code is parsed to extract and use the name of the
-  first function defined therein.</p>
-  
-    </div>
-
     <div class="Slots">
       <h2>Slots</h2>
       
@@ -98,41 +100,68 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>osvd <- OctaveFunction('svd')
-</div><div class='input'>osvd
-</div>
-<div class='output'><OctaveFunction::`svd`>
-</div><div class='input'>osvd(matrix(1:9,3))
-</div>
-<div class='output'>             [,1]
-[1,] 1.684810e+01
-[2,] 1.068370e+00
-[3,] 6.859989e-17
-</div><div class='input'></div><div class='input'>orand <- OctaveFunction('rand')
-</div><div class='input'>orand()
-</div>
-<div class='output'>[1] 0.08322828
-</div><div class='input'>orand(2)
-</div>
-<div class='output'>          [,1]      [,2]
-[1,] 0.5513811 0.8653187
-[2,] 0.2879493 0.9437343
-</div><div class='input'>orand(2, 3)
-</div>
-<div class='output'>          [,1]      [,2]       [,3]
-[1,] 0.9568597 0.2571396 0.33820330
-[2,] 0.6568402 0.4388643 0.02043351
-</div><div class='input'></div><div class='input'># From source code</div><div class='input'>myfun <- OctaveFunction('function [Y] = somefun(x)
-	Y = x * x;
-	end
-')
-</div><div class='input'>myfun
-</div>
-<div class='output'><OctaveFunction::`somefun`>
-</div><div class='input'>myfun(10)
-</div>
-<div class='output'>[1] 100
-</div></pre>
+    <pre><code class="r">
+osvd &lt;- OctaveFunction(&#39;svd&#39;)
+osvd
+</code></pre>
+
+<pre><code>## &lt;OctaveFunction::`svd`&gt;
+</code></pre>
+
+<pre><code class="r">osvd(matrix(1:9,3))
+</code></pre>
+
+<pre><code>##           [,1]
+## [1,] 1.685e+01
+## [2,] 1.068e+00
+## [3,] 5.543e-16
+</code></pre>
+
+<pre><code class="r">
+orand &lt;- OctaveFunction(&#39;rand&#39;)
+orand()
+</code></pre>
+
+<pre><code>## [1] 0.5151
+</code></pre>
+
+<pre><code class="r">orand(2)
+</code></pre>
+
+<pre><code>##        [,1]   [,2]
+## [1,] 0.8315 0.8549
+## [2,] 0.8712 0.5470
+</code></pre>
+
+<pre><code class="r">orand(2, 3)
+</code></pre>
+
+<pre><code>##        [,1]   [,2]   [,3]
+## [1,] 0.8951 0.6889 0.9339
+## [2,] 0.1065 0.8236 0.6480
+</code></pre>
+
+<pre><code class="r">
+# From source code
+myfun &lt;- OctaveFunction(&#39;function [Y] = somefun(x)
+    Y = x * x;
+    end
+&#39;)
+myfun
+</code></pre>
+
+<pre><code>## &lt;OctaveFunction::`somefun`&gt;
+</code></pre>
+
+<pre><code class="r">myfun(10)
+</code></pre>
+
+<pre><code>## [1] 100
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -148,7 +177,7 @@
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

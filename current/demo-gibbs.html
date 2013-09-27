@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Simple Gibbs sampler study following Darren Wilkinson. RcppOctave 0.9.1</title>
+<title>Simple Gibbs sampler study following Darren Wilkinson. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -51,8 +54,7 @@
   <pre>
   <div class='input'></div><div class='input'>## Gibbs sampler in R and Octave</div><div class='input'>##</div><div class='input'>## Compare with RcppGibbs/ example in Rcpp package</div><div class='input'></div><div class='input'>## Simple Gibbs Sampler Example</div><div class='input'>## Adapted from Darren Wilkinson's post at</div><div class='input'>## http://darrenjw.wordpress.com/2010/04/28/mcmc-programming-in-r-python-java-and-c/</div><div class='input'>##</div><div class='input'>## Sanjog Misra and Dirk Eddelbuettel, June-July 2011</div><div class='input'></div><div class='input'>suppressMessages(library(compiler))
 </div><div class='input'>suppressMessages(library(rbenchmark))
-</div>
-<strong class='error'>Error in library(rbenchmark): there is no package called ‘rbenchmark’</strong><div class='input'>suppressMessages(library(RcppOctave))
+</div><div class='input'>suppressMessages(library(RcppOctave))
 </div><div class='input'></div><div class='input'>## This is Darren Wilkinsons R code (with the corrected variance)</div><div class='input'>## But we are returning only his columns 2 and 3 as the 1:N sequence</div><div class='input'>## is never used below</div><div class='input'>Rgibbs <- function(N,thin) {
     mat <- matrix(0,ncol=2,nrow=N)
     x <- 0
@@ -95,16 +97,19 @@
                            "relative", "user.self", "sys.self"),
                  order="relative",
                  replications=10)
+</div><div class='input'>print(res)
 </div>
-<strong class='error'>Error in eval(expr, envir, enclos): could not find function "benchmark"</strong><div class='input'>print(res)
+<div class='output'>             test replications elapsed relative user.self sys.self
+2 RCgibbs(N, thn)           10   9.439    1.000     9.412    0.004
+1  Rgibbs(N, thn)           10  12.046    1.276    12.016    0.000
+3  Mgibbs(N, thn)           10  22.805    2.416    22.764    0.000
 </div>
-<strong class='error'>Error in print(res): object 'res' not found</strong>
   </pre>
 </div></div>
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

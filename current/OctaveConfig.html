@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>OctaveConfig. RcppOctave 0.9.1</title>
+<title>OctaveConfig. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,13 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Cached RcppOctave Configuration Paths</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>OctaveConfig(name, ..., reset = FALSE)</pre>
     
@@ -69,35 +79,42 @@
   string.</p>
   
     </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Cached RcppOctave Configuration Paths</p>
-  
-    </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>OctaveConfig()
-</div>
-<div class='output'>$lib
-                                LIBDIR                              OCTLIBDIR 
-             "/usr/lib/i386-linux-gnu" "/usr/lib/i386-linux-gnu/octave/3.6.4" 
+    <pre><code class="r">
+OctaveConfig()
+</code></pre>
 
-$include
-                        INCLUDEDIR                      OCTINCLUDEDIR 
-                    "/usr/include" "/usr/include/octave-3.6.4/octave" 
+<pre><code>## $lib
+##                                   LIBDIR 
+##              &quot;/usr/lib/x86_64-linux-gnu&quot; 
+##                                OCTLIBDIR 
+## &quot;/usr/lib/x86_64-linux-gnu/octave/3.6.4&quot; 
+## 
+## $include
+##                         INCLUDEDIR                      OCTINCLUDEDIR 
+##                     &quot;/usr/include&quot; &quot;/usr/include/octave-3.6.4/octave&quot; 
+## 
+## $modules
+## [1] &quot;/tmp/RtmpOTcd3b/file1f9f4796c1a/RcppOctave/modules&quot;
+</code></pre>
 
-$modules
-[1] "/tmp/RtmpWU2WQd/file466c34fe7f66/RcppOctave/modules"
+<pre><code class="r">OctaveConfig(&#39;lib&#39;)
+</code></pre>
 
-</div><div class='input'>OctaveConfig('lib')
-</div>
-<div class='output'>[1] "/usr/lib/i386-linux-gnu"              "/usr/lib/i386-linux-gnu/octave/3.6.4"
-</div><div class='input'>OctaveConfig('include')
-</div>
-<div class='output'>[1] "/usr/include"                     "/usr/include/octave-3.6.4/octave"
-</div></pre>
+<pre><code>## [1] &quot;/usr/lib/x86_64-linux-gnu&quot;             
+## [2] &quot;/usr/lib/x86_64-linux-gnu/octave/3.6.4&quot;
+</code></pre>
+
+<pre><code class="r">OctaveConfig(&#39;include&#39;)
+</code></pre>
+
+<pre><code>## [1] &quot;/usr/include&quot;                     &quot;/usr/include/octave-3.6.4/octave&quot;
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -113,7 +130,7 @@ $modules
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

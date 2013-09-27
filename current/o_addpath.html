@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_addpath. RcppOctave 0.9.1</title>
+<title>o_addpath. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,15 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Adds a directory at the beginning of Octave search path.</p>
+<p><code>o_inpath</code> tells if a directory or files are in
+  Octave path.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_addpath(DIR1, ..., OPTION = "-begin")
 
@@ -71,16 +83,6 @@ o_inpath(...)</pre>
       <h2>Value</h2>
       
       <p>returns invisibly the old value of search path.</p>
-  
-    </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Adds a directory at the beginning of Octave search path.</p>
-  
-      <p><code>o_inpath</code> tells if a directory or files are in
-  Octave path.</p>
   
     </div>
 
@@ -123,24 +125,49 @@ o_inpath(...)</pre>
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:51:44
+  2013-09-27 16:54:08
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># call an undefined function</div><div class='input'>try(.CallOctave('fun1'))
-</div><div class='input'></div><div class='input'># add to the path a directory with a .oct file that contains a definition for 'fun1'</div><div class='input'>o_addpath(system.file('scripts', package='RcppOctave'))
-</div><div class='input'></div><div class='input'># re-call the function</div><div class='input'>#.CallOctave('fun1')</div><div class='input'></div><div class='input'># change the .oct file</div><div class='input'>o_addpath(tempdir())
-</div><div class='input'>o_inpath(tempdir())
-</div>
-<div class='output'>/tmp/RtmpWU2WQd 
-           TRUE 
-</div><div class='input'>o_inpath(tempfile())
-</div>
-<div class='output'>/tmp/RtmpWU2WQd/file466c520cb7b5 
-                           FALSE 
-</div></pre>
+    <pre><code class="r">
+# call an undefined function
+try(.CallOctave(&#39;fun1&#39;))
+
+# add to the path a directory with a .oct file that contains a definition for &#39;fun1&#39;
+o_addpath(system.file(&#39;scripts&#39;, package=&#39;RcppOctave&#39;))
+</code></pre>
+
+<pre><code>## Warning: warning: autoload: &#39;example.m&#39; is not an absolute file name
+## warning: autoload: &#39;example.m&#39; is not an absolute file name warning:
+## autoload: &#39;example.m&#39; is not an absolute file name warning: autoload:
+## &#39;example.m&#39; is not an absolute file name
+</code></pre>
+
+<pre><code class="r">
+# re-call the function
+#.CallOctave(&#39;fun1&#39;)
+
+# change the .oct file
+o_addpath(tempdir())
+o_inpath(tempdir())
+</code></pre>
+
+<pre><code>## /tmp/RtmpOTcd3b 
+##            TRUE
+</code></pre>
+
+<pre><code class="r">o_inpath(tempfile())
+</code></pre>
+
+<pre><code>## /tmp/RtmpOTcd3b/file1f9f5be57ccf 
+##                            FALSE
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -160,7 +187,7 @@ o_inpath(...)</pre>
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

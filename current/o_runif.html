@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_runif. RcppOctave 0.9.1</title>
+<title>o_runif. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,18 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>This function wraps a call to the standard Octave
+  function <code>rand</code>, which is redefined by
+  <code>RcppOctave</code> to call the R base function
+  <code><a href='http://www.inside-r.org/r-doc/stats/Uniform'>runif</a></code>. This enables to exactly
+  reproduce stochastic computations in R and Octave,
+  without changing the original Octave/Matlab code.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_runif(n, p = n)</pre>
     
@@ -64,18 +79,6 @@
       <h2>Value</h2>
       
       <p>a numeric vector or a matrix</p>
-  
-    </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>This function wraps a call to the standard Octave
-  function <code>rand</code>, which is redefined by
-  <code>RcppOctave</code> to call the R base function
-  <code><a href='http://www.inside-r.org/r-doc/stats/Uniform'>runif</a></code>. This enables to exactly
-  reproduce stochastic computations in R and Octave,
-  without changing the original Octave/Matlab code.</p>
   
     </div>
 
@@ -137,38 +140,65 @@ This function substitutes Octave original function in calls from RcppOctave
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:52:03
+  2013-09-27 16:54:15
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># Draw random uniform values (in vector form)</div><div class='input'>set.seed(123)
-</div><div class='input'>o_runif(1)
-</div>
-<div class='output'>[1] 0.2875775
-</div><div class='input'>o_runif(1, 10)
-</div>
-<div class='output'> [1] 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055 0.8924190 0.5514350 0.4566147 0.9568333
-</div><div class='input'># The result is identical as calling runif</div><div class='input'>set.seed(123)
-</div><div class='input'>runif(1)
-</div>
-<div class='output'>[1] 0.2875775
-</div><div class='input'>runif(10)
-</div>
-<div class='output'> [1] 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055 0.8924190 0.5514350 0.4566147 0.9568333
-</div><div class='input'></div><div class='input'># Draw random uniform values (in matrix form)</div><div class='input'>set.seed(123)
-</div><div class='input'>o_runif(2)
-</div>
-<div class='output'>          [,1]      [,2]
-[1,] 0.2875775 0.4089769
-[2,] 0.7883051 0.8830174
-</div><div class='input'>o_runif(2, 5)
-</div>
-<div class='output'>          [,1]      [,2]      [,3]      [,4]      [,5]
-[1,] 0.9404673 0.5281055 0.5514350 0.9568333 0.6775706
-[2,] 0.0455565 0.8924190 0.4566147 0.4533342 0.5726334
-</div></pre>
+    <pre><code class="r">
+# Draw random uniform values (in vector form)
+set.seed(123)
+o_runif(1)
+</code></pre>
+
+<pre><code>## [1] 0.2876
+</code></pre>
+
+<pre><code class="r">o_runif(1, 10)
+</code></pre>
+
+<pre><code>##  [1] 0.78831 0.40898 0.88302 0.94047 0.04556 0.52811 0.89242 0.55144
+##  [9] 0.45661 0.95683
+</code></pre>
+
+<pre><code class="r"># The result is identical as calling runif
+set.seed(123)
+runif(1)
+</code></pre>
+
+<pre><code>## [1] 0.2876
+</code></pre>
+
+<pre><code class="r">runif(10)
+</code></pre>
+
+<pre><code>##  [1] 0.78831 0.40898 0.88302 0.94047 0.04556 0.52811 0.89242 0.55144
+##  [9] 0.45661 0.95683
+</code></pre>
+
+<pre><code class="r">
+# Draw random uniform values (in matrix form)
+set.seed(123)
+o_runif(2)
+</code></pre>
+
+<pre><code>##        [,1]  [,2]
+## [1,] 0.2876 0.409
+## [2,] 0.7883 0.883
+</code></pre>
+
+<pre><code class="r">o_runif(2, 5)
+</code></pre>
+
+<pre><code>##         [,1]   [,2]   [,3]   [,4]   [,5]
+## [1,] 0.94047 0.5281 0.5514 0.9568 0.6776
+## [2,] 0.04556 0.8924 0.4566 0.4533 0.5726
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -191,7 +221,7 @@ This function substitutes Octave original function in calls from RcppOctave
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

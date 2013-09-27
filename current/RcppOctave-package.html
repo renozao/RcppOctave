@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>RcppOctave. RcppOctave 0.9.1</title>
+<title>RcppOctave. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Renaud Gaujoux &lt;a href='mailto:renaud@cbio.uct.ac.za'&gt;renaud@cbio.uct.ac.za&lt;/a&gt;
@@ -17,6 +17,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -31,13 +34,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -53,14 +56,15 @@
 
 <div class="row">
   <div class="span8">
-        
-    <div class="Description">
+    <div class="description">
       <h2>Description</h2>
       
-      <p>Interfacing R with Octave.</p>
+      <p><p>Interfacing R with Octave.</p></p>
   
     </div>
-
+    
+    
+    
     <div class="Details">
       <h2>Details</h2>
       
@@ -97,17 +101,7 @@
   http://www.octave.org/>.</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>.CallOctave('svd', matrix(1:9, 3))
-</div>
-<div class='output'>             [,1]
-[1,] 1.684810e+01
-[2,] 1.068370e+00
-[3,] 3.356916e-16
-</div><div class='input'>o_help('svd')
-</div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
       <li>RcppOctave</li><li>RcppOctave-package</li>
@@ -134,7 +128,7 @@
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_rnorm. RcppOctave 0.9.1</title>
+<title>o_rnorm. RcppOctave 0.10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.9.1</a>
+      <a class="brand" href="index.html">RcppOctave 0.10</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,19 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>This function wraps a call to the standard Octave
+  function <code>randn</code>, which is redefined by
+  <code>RcppOctave</code> to call the R base function
+  <code><a href='http://www.inside-r.org/r-doc/stats/Normal'>rnorm</a></code>. This enables to exactly
+  reproduce stochastic computations in R and Octave,
+  without changing the original Octave/Matlab code. See
+  <code><a href='o_runif.html'>o_runif</a></code> for more details.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>o_rnorm(n, p = n)</pre>
     
@@ -60,19 +76,6 @@
       <dd>number of output columns (default to <code>n</code>)</dd>
     </dl>
     
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>This function wraps a call to the standard Octave
-  function <code>randn</code>, which is redefined by
-  <code>RcppOctave</code> to call the R base function
-  <code><a href='http://www.inside-r.org/r-doc/stats/Normal'>rnorm</a></code>. This enables to exactly
-  reproduce stochastic computations in R and Octave,
-  without changing the original Octave/Matlab code. See
-  <code><a href='o_runif.html'>o_runif</a></code> for more details.</p>
-  
-    </div>
-
     <div class="Octave Documentation for &lt;em&gt;randn&lt;/em&gt;">
       <h2>Octave Documentation for &lt;em&gt;randn&lt;/em&gt;</h2>
       
@@ -97,31 +100,50 @@ This function substitutes Octave original function in calls from RcppOctave
       <p><em>[Generated from
   Octave-3.6.4
  on
-  2013-05-05 11:52:03
+  2013-09-27 16:54:15
 ]</em></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># Draw random normal values (in vector form)</div><div class='input'>set.seed(123)
-</div><div class='input'>o_rnorm(1)
-</div>
-<div class='output'>[1] -0.5604756
-</div><div class='input'>o_rnorm(1, 10)
-</div>
-<div class='output'> [1] -0.23017749  1.55870831  0.07050839  0.12928774  1.71506499  0.46091621 -1.26506123 -0.68685285 -0.44566197  1.22408180
-</div><div class='input'></div><div class='input'># Draw random normal values (in matrix form)</div><div class='input'>set.seed(123)
-</div><div class='input'>o_rnorm(2)
-</div>
-<div class='output'>           [,1]       [,2]
-[1,] -0.5604756 1.55870831
-[2,] -0.2301775 0.07050839
-</div><div class='input'>o_rnorm(2, 5)
-</div>
-<div class='output'>          [,1]       [,2]       [,3]      [,4]      [,5]
-[1,] 0.1292877  0.4609162 -0.6868529 1.2240818 0.4007715
-[2,] 1.7150650 -1.2650612 -0.4456620 0.3598138 0.1106827
-</div></pre>
+    <pre><code class="r">
+# Draw random normal values (in vector form)
+set.seed(123)
+o_rnorm(1)
+</code></pre>
+
+<pre><code>## [1] -0.5605
+</code></pre>
+
+<pre><code class="r">o_rnorm(1, 10)
+</code></pre>
+
+<pre><code>##  [1] -0.23018  1.55871  0.07051  0.12929  1.71506  0.46092 -1.26506
+##  [8] -0.68685 -0.44566  1.22408
+</code></pre>
+
+<pre><code class="r">
+# Draw random normal values (in matrix form)
+set.seed(123)
+o_rnorm(2)
+</code></pre>
+
+<pre><code>##         [,1]    [,2]
+## [1,] -0.5605 1.55871
+## [2,] -0.2302 0.07051
+</code></pre>
+
+<pre><code class="r">o_rnorm(2, 5)
+</code></pre>
+
+<pre><code>##        [,1]    [,2]    [,3]   [,4]   [,5]
+## [1,] 0.1293  0.4609 -0.6869 1.2241 0.4008
+## [2,] 1.7151 -1.2651 -0.4457 0.3598 0.1107
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -144,7 +166,7 @@ This function substitutes Octave original function in calls from RcppOctave
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>
