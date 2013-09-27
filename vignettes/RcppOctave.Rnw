@@ -1,0 +1,649 @@
+\documentclass[english,10pt,a4paper]{article}
+%\VignetteIndexEntry{RcppOctave}
+%\VignetteDepends{RcppOctave,knitr,bibtex}
+%\VignetteCompiler{knitr}
+%\VignetteEngine{knitr::knitr}
+
+<<setup, include=FALSE>>=
+pkg <- 'RcppOctave'
+require( pkg, character.only=TRUE )
+prettyVersion <- packageVersion(pkg)
+pkgtitle <- packageDescription(pkg)$Title
+prettyDate <- format(Sys.Date(), "%B %e, %Y")
+library(knitr)
+knit_hooks$set(try = pkgmaker::hook_try)
+@
+
+\usepackage{fancyvrb}
+\usepackage{indentfirst}
+\usepackage{amsmath} %math symbols
+\usepackage{amssymb} %extra math symbols
+\usepackage{xspace}
+\usepackage{url}
+\usepackage[colorlinks]{hyperref}
+\usepackage{a4wide}
+\setlength{\oddsidemargin}{0pt}
+
+
+% TABLE OF CONTENTS
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecfont}{\small}
+\usepackage[toc]{multitoc}
+
+\newcommand{\matlab}{Matlab$^\circledR$\xspace}
+
+% add preamble from pkgmaker
+<<pkgmaker_preamble, echo=FALSE, results='asis'>>=
+pkgmaker::latex_preamble()
+@
+
+% REFERENCES
+\usepackage[minnames=1,maxnames=2]{biblatex}
+\AtEveryCitekey{\clearfield{url}}
+<<bibliofile, echo=FALSE, results='asis'>>=
+pkgmaker::latex_bibliography(pkg)	
+@
+\newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
+%%
+
+\newcommand{\R}{\proglang{R}\xspace}
+\newcommand{\graphwidth}{0.9\columnwidth}
+%\newcommand{\revision}[2][]{\textcolor{blue}{#2}{\bf \textcolor{blue}{$\blacksquare$ REV[#1]}}}
+
+% Octave
+\newcommand{\octave}{\proglang{Octave}\xspace}
+
+% clever references
+\usepackage[noabbrev, capitalise, nameinlink]{cleveref}
+
+\author{Renaud Gaujoux}
+\title{\pkgname{\Sexpr{pkg}}: \Sexpr{pkgtitle}}
+\date{\Rpkg{\Sexpr{pkg}} -- Version \Sexpr{prettyVersion}
+[\Sexpr{prettyDate}]\footnote{This vignette was built using \octave
+\Sexpr{o_version()}}}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The \Rpkg{RcppOctave} provides a direct interface to \octave from
+\R.
+It allows \\octave functions to be called from an \R session,
+in a similar way \proglang{C/C++} or \proglang{Fortran} functions are called using the base function~\code{.Call}.
+Since \octave uses a language that is mostly compatible with \matlab,
+\pkgname{RcppOctave} may also be used to run Matlab m-files.
+This package was originally developed to facilitate the port and comparison of R
+and Matlab code.
+In particular, it provides \octave modules that redefine
+\octave default random number generator functions, so that they call
+\proglang{R} own dedicated functions.
+This enables to also reproduce and compare stochastic computations.
+\end{abstract}
+
+%These may also be used in any Octave session, independently of R, increasing
+% the range of RNGs available in Octave.
+\noindent\hrulefill
+\tableofcontents
+\noindent\hrulefill
+
+\section{Introduction}
+
+In many research fields, source code of algorithms and statistical methods are
+published as Matlab files (the so called m-files).
+While such code is generally released under public Open Source licenses like the
+GNU Public Licenses (GPLs) \cite{gnuGPL}, effectively running or using it
+require either to have \matlab, which is a nice but expensive proprietary
+software\footnote{\url{http://www.mathworks.com}}, or to be/get -- at least -- a bit familiar with \octave \cite{Eaton2002}, which is free and open source, and is able to read and execute m-files, as long as they do not require Matlab-specific functions.
+However, \proglang{R} users may have neither Matlab license, nor the
+time/will to become \octave-skilled, and yet want to use algorithms written in
+Matlab/\octave for their analyses and research.
+
+Being able to run m-files or selectively use \octave functionalities
+directly from \proglang{R} can greatly alleviate a process that otherwise
+typically implies exporting/importing data between the two environments via
+files on disk, as well as dealing with a variety of issues including
+rounding errors, format compatibility or subtle implementation differences,
+that all may lead to intricate hard-to-debug situations.
+Even if one eventually wants to rewrite or optimise a given algorithm in plain
+\proglang{R} or in \proglang{C/C++}, and therefore remove any dependency to
+\octave, it is important to test the correctness of the port by
+comparing its results with the original implementation.
+Also, a direct interface allows users to stick to their preferred computing
+environment, in which they are more comfortable and productive.
+
+An \proglang{R} package called \pkgname{ROctave}
+\footnote{\url{http://www.omegahat.org/ROctave}} do exist, and intends to
+provide an interface between \proglang{R} and \octave, but appears
+to be outdated (2002), and does not work out of the box with recent version of
+\octave.
+A more recent forum
+post\footnote{\url{http://octave.1599824.n4.nabble.com/ROctave-bindings-for-2-1-73-2-9-x-td1602060.html}}
+brought back some interest on binding these two environments, but
+apparently without any following.
+
+The \citeCRANpkg{RcppOctave} described in this vignette aims at filling the gap
+and facilitating the usage of \proglang{Octave/Matlab} code from \proglang{R}, by providing a lean interface that enables direct and easy interaction with an embedded \octave session.
+The package's name was chosen both to differentiate it from the
+existing \Rpkg{ROctave}, and to reflect its use and integration of the
+\proglang{C++} framework defined by the \citeCRANpkg{Rcpp}.
+
+\section{Objectives \& Features}
+The ultimate objective of \pkgname{RcppOctave} is to provide a two-way
+interface between \proglang{R} and \octave, i.e. that allows calling
+\octave from \proglang{R} and vice-versa.
+The interface intends to be lean and as transparent as possible, as well
+as providing convenient utilities to perform commonly needed tasks (e.g. source
+files, browse documentation).
+
+Currently, the package focuses on accessing \octave functionalities
+from \proglang{R} with:
+
+\begin{itemize}
+ \item An out-of-the-box-working embedded \octave session;
+ \item Ability to run/source m-files from \proglang{R};
+ \item Ability to evaluate \octave statements and function calls from
+ \proglang{R};
+ \item Ability to call \proglang{R} functions in \octave
+ code\footnote{Currently only when run from \proglang{R} through
+ \pkgname{RcppOctave}.};
+ \item Transparent passage of variables between \proglang{R} and \octave;
+ \item Reproducibility of computations, including stochastic computations, in both environment;
+\end{itemize}
+
+Future development should provide similar reverse capabilities, i.e. an out
+of the box embedded R session, typically via the \CRANpkg{RInside}.
+
+\section{Accessing Octave from R}
+
+The \Rpkg{RcppOctave} defines the function \code{.CallOctave}, which acts as a
+single entry point for calling \octave functions from \proglang{R}.
+In order to make common function calls easier (e.g. \code{eval}), other utility
+functions are defined, which essentially wraps a call to \code{.CallOctave}, but
+enhance argument handling and result formating.
+
+\subsection{Core interface: \texttt{.CallOctave}}
+The function \code{.CallOctave} calls an \octave \underline{function}
+from R, mimicking the way native \proglang{C/C++} functions are called with
+\code{.Call}.
+
+\subsubsection{Overview}
+
+The function \code{.CallOctave} takes the name of an \octave function (in its
+first argument \code{.NAME}) and pass the remaining arguments directly to the
+\octave function -- except for the two special arguments \code{argout} (see next
+section) and \code{unlist}.
+Note that \octave function arguments are not named and positional, meaning that
+they must be passed in the correct order.
+Input names are simply ignored by \code{.CallOctave}.
+Calling any \octave function is then as simple as: 
+
+<<sample_CallOctave>>=
+.CallOctave('version')
+.CallOctave('sqrt', 10)
+.CallOctave('eye', 3)
+.CallOctave('eye', 3, 2)
+@
+
+\subsubsection{Controlling output values}
+\label{sec:argout}
+
+\octave functions have the interesting feature of being able to compute
+and return a variable number of output values, depending on the number of output
+variables specified in the statement.
+Hence, a call to an \octave function requires passing both its parameters and
+the number of desired output values.
+
+The following sample code illustrates this concept using the function
+\code{svd}\footnote{The sample code is extracted from the manpage for
+\code{svd}. See \code{o\_help(svd)} for more details.}:
+
+\begin{Verbatim}[frame=single]
+% single output variable: eigen values only
+S = svd(A);
+
+% 3 output variables: complete SVD decomposition  
+[U, S, V] = svd(A);
+\end{Verbatim}
+
+The default behaviour of \code{.CallOctave} \code{.CallOctave} is to try to
+detect the maximum number of output variables, as well as their names, and
+return them all.
+This should be suitable for most common cases, especially for functions
+defined by the user in plain m-files, but does not work for functions defined in
+compiled modules (see examples with in the next section).
+Hence the default is to return the maximum number of output values if it can be
+detected, or only the first one.
+
+For some functions, however, this behaviour may not be ideal, and complete
+control on the return values is possible via the special argument \code{argout}.
+The next section illustrates different situations and use case scenarios.
+
+\subsubsection{Examples}
+
+A sample m-file (i.e. a function definition file) is shipped with any 
+\pkgname{RcppOctave} installation in the ``scripts/" sub-directory and provides
+some examples of different types of \octave functions:
+
+\begin{Verbatim}[frame=single]
+<<ex_function, echo=FALSE, results='asis'>>=
+cat(readLines(system.file('scripts/ex_functions.m', package=pkg)), sep="\n")
+@
+\end{Verbatim}
+
+These definitions can be loaded in the \octave session via the function
+\code{sourceExamples}.
+
+<<src_ex>>=
+# source example function definitions from RcppOctave installation
+sourceExamples('ex_functions.m')
+# several functions are now defined
+o_ls()
+@
+
+The functions \code{fun1}, \code{fun2}, \code{fun\_noargout}, and
+\code{fun\_varargin} perform the same computations independently of the number
+of output.
+For these a default call to \code{.CallOctave} is enough to get their full
+functionalities:
+
+<<call_ex>>=
+# single output value
+.CallOctave('fun1') 
+# 3 output values 
+.CallOctave('fun2')
+
+# no output value
+.CallOctave('fun_noargout', 1)
+.CallOctave('fun_noargout', 'abc')
+
+# variable number of arguments
+.CallOctave('fun_varargin')
+.CallOctave('fun_varargin', 1, 2, 3)
+@
+
+The function \code{fun\_varargout} however, behaves differently when called
+with 1, 2 or 3 output variables, performing different computations.
+Since it is defined in a m-file, the maximum set of output variables is
+detectable and the default behaviour is then to call it asking for 3 output
+variables.
+The other types of computations can be obtained using argument \code{argout}:
+
+<<argout, error = TRUE, try = TRUE>>=
+.CallOctave('fun_varargout')
+.CallOctave('fun_varargout', argout=1)
+# this should throw an error
+try( .CallOctave('fun_varargout', argout=2) )
+@
+
+Argument \code{argout} may also be used to specify names for the output values.
+This is useful for functions defined in compiled modules (e.g. \code{svd}) for
+which expected outputs are not detectable (output names in particular), or when
+limiting the number of output variables in functions defined in m-files.
+Indeed, in this latter case, it is not safe to infer the names based on those
+defined for the complete output, as these may not be relevant anymore:
+
+<<argout_mod>>=
+# single output variable: result is S
+.CallOctave('svd', matrix(1:4, 2))
+# 3 output variables: results is [U,S,V]
+.CallOctave('svd', matrix(1:4, 2), argout=3)
+# specify output names (and therefore number of output variables)
+.CallOctave('svd', matrix(1:4, 2), argout=c('U', 'S', 'V'))
+@
+
+Note that it is quite possible for a compiled function to only accept
+calls with at least 2 output variables.
+In such cases, \code{.CallOctave} calls must always specify argument
+\code{argout}.
+
+\subsection{Direct interface: the \texttt{.O} object}
+
+An alternative and convenient shortcut interface is defined by the S4-class
+\code{Octave}.
+At load time, an instance of this class, an object named \code{.O}, is
+initialised and exported from \pkgname{RcppOctave}'s namespace.
+Using the \code{.O} object, calls to \octave functions are more compact: 
+
+<<O_object>>=
+.O
+.O$version()
+.O$eye(3)
+.O$svd(matrix(1:4,2))
+# argout can still be specified
+.O$svd(matrix(1:4,2), argout=3)
+@
+
+\subsubsection{Manipulating variables}
+The \code{.O} object facilitates manipulating single \octave
+variables, as it emulates an \proglang{R} environment-like object whose elements
+would be the objects available in the current \octave
+embedded session:
+
+<<O_object_variables, try = TRUE, error = TRUE>>=
+# define a variable
+.O$myvar <- 1:5
+# retrieve value
+.O$myvar
+# assign and retrieve new value
+.O$myvar <- 10
+.O$myvar
+# remove 
+.O$myvar <- NULL
+# this should now throw an error since 'myvar' does not exist anymore
+try( .O$myvar )
+@
+
+\subsubsection{Calling functions}
+As illustrated above, \octave functions can be called through the
+\code{.O} object, by passing specifying its arguments as a function call:
+<<O_object_function_call>>=
+# density of x=5 for Poisson(2)
+.O$poisspdf(5, 2)
+# E.g. compare with R own function
+dpois(5, 2)
+@
+
+They may also be retrieved as \proglang{R} functions in a similar way as
+variables, and called in subsequent statements:
+
+<<O_object_functions>>=
+# retrieve Octave function
+f <- .O$poisspdf
+f
+# call (in Octave)
+f(5, 2)
+@
+
+
+\subsubsection{Auto-completion}
+An advantage of using the \code{.O} object is that it has auto-completion
+capabilities similar to the \proglang{R} console.
+This greatly helps and speeds up the interaction with the current embedded
+\octave session.
+For example, typing \code{.O\$std} + \code{TAB} + \code{TAB} will show all
+functions or variables available in the current session, that start with ``std". 
+
+\subsection{Utility functions}
+
+The \Rpkg{RcppOctave} defines some utilities to enhance the interaction with
+\octave, and alleviate calls to a set of commonly used
+\octave functions.
+All these functions start with the prefix ``o\_" (e.g.
+\code{o\_source}), so that they can be listed by typing \code{o\_ + TAB + TAB}
+in the \proglang{R} console.
+Their names have been chosen to reflect the corresponding \octave
+function, and, in some cases, aliases matching standard \proglang{R} names are
+also provided, so that users not familiar with \octave can find their
+way quickly (e.g. \code{o\_rm} is an alias to \code{o\_clear}).
+
+\subsubsection{Assign/get variables}
+
+The functions \code{o\_assign} and \code{o\_get} facilitates assigning variables
+and retrieving objects (variables or functions).
+Variables may be assigned or retrieved individually in separate calls to
+\code{o\_assign} or \code{o\_get}\footnote{This would be similar to using the
+\code{.O} object as described above}, or simultaneously in a variety of ways
+(see \code{?o\_get} for more details and examples):
+
+<<assign, error = TRUE, try = TRUE>>=
+## ASSIGN
+o_assign(a=1)
+o_assign(a=10, b=20)
+o_assign(list(a=5, b=6, aaa=7, aab=list(1,2,3)))
+
+## GET
+# get all variables
+str( o_get() )
+# selected variables
+o_get('a')
+o_get('a', 'b')
+# rename on the fly
+o_get(c='a', d='b')
+# o_get throw an error for objects that do not exist
+try( o_get('xxxxx') )
+# but suggests potential matches
+try( o_get('aa') )
+# get a function
+f <- o_get('svd')
+f
+@
+
+\subsubsection{Evaluate single statements}
+
+To evaluate a single statement, one can use the \code{o\_eval} function, that
+can also evaluate a list of statements sequentially:
+
+<<o_eval, error = TRUE, try = TRUE>>=
+# assign variable 'a'
+o_eval("a=1")
+o_eval("a") # or .O$a
+o_eval("a=svd(rand(3))")
+.O$a
+# eval a list of statements
+l <- o_eval("a=rand(1, 2)", "b=randn(1, 2)", "rand(1, 3)") 
+l
+# variables 'a' and 'b' were assigned the new values
+identical(list(.O$a, .O$b), l[1:2])
+
+# multiple statements are not supported by o_eval
+try( o_eval("a=1; b=2") )
+.O$a
+# argument CATCH allows for recovering from errors in statement
+o_eval("a=usage('ERROR: stop here')", CATCH="c=3")
+.O$a
+.O$c
+@
+
+More details and examples are provided in the manual page \code{?o\_eval}.
+If more than one statement is to be evaluated, then one should use the function
+\code{o\_source}, with argument \code{text} as described in \cref{sec:o_source} below.
+
+\subsubsection{Source m-files}
+\label{sec:o_source}
+
+\proglang{Octave/Matlab} code generally are generally provided as so
+called m-files, which are plain text files that contain function definitions
+and/or sequences of multiple commands that perform a given task.
+This is the form most public third party algorithms are published.
+
+The function \code{o\_source} allows to load these files in the current
+\octave session, so that the object they define are available, or the
+commands they contain are executed.
+\pkgname{RcppOctave} ships an example m-file in the ``scripts/" sub-directory
+of its installation:
+
+<<o_source>>=
+# clear all session 
+o_clear(all=TRUE)
+o_ls()
+
+# source example file from RcppOctave installation
+mfile <- system.file("scripts/ex_source.m", package='RcppOctave')
+cat(readLines(mfile), sep="\n")
+o_source(mfile)
+# Now objects 'a', 'b', and 'c' as well as the function 'abc'
+# should be defined:
+o_ls(long=TRUE)
+# 
+o_eval("abc(2, 4, 6)")
+o_eval("abc(a, b, c)")
+@
+
+This function can also conveniently be used to evaluate multiple statements
+directly passed from the \R console as character strings via its argument
+\code{text}:
+
+<<o_source_text>>=
+o_source(text="clear a b c; a=100; a*sin(123)")
+# last statement is stored in automatic variable 'ans'
+o_get('a', 'ans')
+@
+
+\subsubsection{List objects}
+
+The function \code{o\_ls} (as used above) lists the objects (variables and
+functions) that are defined in the current \octave embedded session.
+It is an enhanced version over \octave standard listing functions such as
+\code{who} (see \code{?o\_who}), which only lists variables, and not
+user-defined functions.
+With argument \code{long} it returns details about each variable and function,
+in a similar way \code{whos} does (see \code{?o\_who}).
+
+<<o_ls>>=
+o_ls()
+o_ls(long=TRUE)
+
+#clear all (variables + functions)
+o_clear(all=TRUE)
+o_ls()
+@
+
+See \code{?o\_ls} for more details as well as \cref{sec:issues} for a
+known issue in \octave versions older than 3.6.1.
+
+\subsubsection{Browse documentation}
+
+\octave has offers two ways of browsing documentation, via the functions
+\code{help} and \code{doc}, which display a manual page for a given function and
+lookup the whole documentation for a given topic respectively.
+
+The \Rpkg{RcppOctave} provides wrapper for these two functions to enable
+browsing \octave help pages in the way \R users are used to.
+Hence, to access the manpage for a given function one types for example the
+following, which displays using the \R function \code{file.show}:
+<<o_help, eval=FALSE>>=
+o_help(std)
+@ 
+
+To display all documentation about a topic one types for example the following,
+opens the documentation using the GNU Info browser\footnote{At least on
+Linux machines.}:
+<<o_doc, eval=FALSE>>=
+o_doc(poisson)
+@
+Once the GNU Info browser is running, help for using it is available using the
+command `Ctrl + h' -- as stated in the \octave documentation for \code{doc} (see
+\code{o\_help(doc)}).
+
+\subsection{Low-level \textit{C/C++} interface}
+
+\pkgname{RcppOctave} builds upon the \Rpkg{Rcpp}, and defines specialisation
+for the \proglang{Rcpp} template functions \code{Rcpp::as} and
+\code{Rcpp::wrap}, for converting \proglang{R} types to \octave
+types and \emph{vice versa}.
+Currently these templates are not exported, but will probably be in the future.
+
+\section{Calling R functions from Octave}
+
+This is currently not implemented but is on the TODO list for future
+developments.
+
+\section{Examples}
+\subsection{Comparing implementations}
+
+Comparing equivalent \R and \octave functions is as easy as comparing two \R
+functions.
+For example, one can compare the respective functions \code{svd} with the
+following code, which defines a wrapper functions to format the output of
+\octave \code{svd} function as \R (see \code{?svd} and \code{o\_help(svd)}):
+
+<<sample_svd>>=
+
+o_svd <- function(x){
+	# ask for the complete decomposition
+	res <- .O$svd(x, argout=c('u','d','v'))
+	# reformat/reorder result
+	res$d <- diag(res$d)
+	res[c(2, 1, 3)]
+}
+
+# define random data
+X <- matrix(runif(25), 5)
+
+# run SVD in R
+svd.R <- svd(X)
+# run SVD in Octave
+svd.O <- o_svd(X)
+str(svd.O)
+# check results
+all.equal(svd.R, svd.O)
+# but not exactly identical
+all.equal(svd.R, svd.O, tol=10^-16)
+@
+
+\subsection{Random computations}
+
+In order to ensure reproducibility of results and facilitate the comparability
+of implementations between \R and \octave, \pkgname{RcppOctave} ships
+a custom \octave module that redefine \octave standard random number generator
+functions \code{rand}, \code{randn}, \code{rande} and \code{randg}, so that they
+call \R corresponding functions \code{runif}, \code{rnorm}, \code{rexp} and
+\code{rgamma}.
+This module is loaded when the \Rpkg{RcppOctave} is itself loaded.
+As a result, random computation -- that use these functions -- can be seeded in
+both \octave and \R, using \R standard function \code{set.seed}.
+This facilitates, in particular, the validation of ports of stochastic
+algorithms (e.g. simulations, MCMC-based estimations):
+
+<<set_seed, tidy=FALSE>>=
+
+Rf <- function(){
+	x <- matrix(runif(100), 10)
+	y <- matrix(rnorm(100), 10)
+	(x * y) %*% (x / y)
+}
+
+Of <- {
+# define Octave function
+o_source(text="
+function [res] = test()
+x = rand(10);
+y = randn(10);
+res = (x .* y) * (x ./ y);
+end
+")
+# return the function
+.O$test
+}
+
+# run both computations with a common seed  
+set.seed(1234); res.R <- Rf()
+set.seed(1234); res.O <- Of()
+# compare results
+identical(res.R, res.O)
+
+# not seeding the second computation would give different results
+set.seed(1234);
+identical(Rf(), Of())
+
+@
+
+\section{Known issues}
+\label{sec:issues}
+
+\begin{itemize}
+ \item In \octave versions older than 3.6.1, the function \code{o\_ls} may not
+ list user-defined functions. 
+ This is due to the built-in \octave function \code{completion\_matches} that
+ does not return them. The issue seems to have been fixed by \octave team at
+ least in 3.6.1.
+ \item The detection of output names by \code{.CallOctave} in \octave versions
+ older than 3.4.1 does not work, meaning that \octave functions are always
+ called with a single output variable.
+ For obtaining more outputs, the user must specify argument \code{argout}
+ accordingly.
+ \item Errors and warnings thrown by \octave do not show up in Sweave documents
+ processed using the \citeCRANpkg{knitr} -- like this vignette.
+ The issue needs further investigation.
+\end{itemize}
+
+\section*{Session information}
+{\small
+<<session_info, echo=FALSE, comment=NA>>=
+sessionInfo()
+@
+}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}

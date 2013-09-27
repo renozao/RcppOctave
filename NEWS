@@ -1,0 +1,20 @@
+********************
+Changes in 0.10
+********************
+CHANGES
+    o Octave functions' stderr output is now buffered by default, so 
+    that it does not bypass R own i/o functions.
+    All messages/warnings sent to stderr from Octave are displayed on 
+    exiting the function call.
+    o function .CallOctave gains a new argument buffer_stderr to disable stderr 
+    buffering (see above).
+    o Octave startup warnings (e.g. shadowing of core functions by Octave modules) 
+    are not shown anymore.
+    o Minor adaptations to pass new CRAN checks
+
+********************
+Changes in 0.9.3
+********************
+CHANGES
+    o Conditional use of function packageName: use the one from pkgmaker 
+    in R <= 2.15.3, or the one exported by utils in R >= 3.0. 

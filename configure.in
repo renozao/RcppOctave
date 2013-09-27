@@ -1,0 +1,123 @@
+## Process this file with autoconf to produce a configure script.
+##
+## Configure.in for RcppOctave
+##
+## Borrowed and adapted from the file configure.in for RcppGSL
+## Copyright (C) 2010 Romain Francois and Dirk Eddelbuettel
+## Licensed under GNU GPL 2 or later
+##
+## Copyright (C) 2011 Renaud Gaujoux
+
+# The version set here will propagate to other files from here
+AC_INIT([RcppOctave], 0.9.5)
+
+# Checks for common programs using default macros
+AC_PROG_CC
+AC_PROG_CXX
+AC_LANG(C++)
+
+# You will very likely need to ensure that the same C compiler and compiler 
+# flags are used in the configure tests as when compiling R or your package. 
+# Under a Unix-alike, you can achieve this by including the following fragment 
+# early in configure.ac
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+
+# check R is a shared library
+R_LDFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config --ldflags 2>/dev/null`
+R_CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config --cppflags 2>/dev/null`
+has_R_shlib=no
+if test -n "$R_LDFLAGS"; then
+   has_R_shlib=yes
+fi
+
+AC_MSG_CHECKING([whether R is a shared library])
+if test "${has_R_shlib}" = no; then
+	AC_MSG_RESULT(no)
+	# add path to R headers 
+	R_CPPFLAGS="-I'${R_INCLUDE_DIR}' -I'${R_INCLUDE_DIR}${R_ARCH}'"
+else
+   AC_MSG_RESULT(yes)
+fi
+
+AC_MSG_RESULT([Using R LDFLAGS: ${R_LDFLAGS}])
+AC_MSG_RESULT([Using R CPPFLAGS: ${R_CPPFLAGS}])
+
+# get compilation flags
+CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
+CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
+CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
+CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
+
+# pass R flags down to makefile in modules/
+AC_SUBST(R_CPPFLAGS)
+AC_SUBST(R_LDFLAGS)
+
+## Use octave-config to find arguments for compiler and linker flags
+##
+## Check for non-standard programs: 
+## octave-config
+AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
+## mkoctfile
+AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+
+## If octave-config was found, let's use it
+if test "${OCTAVE_CONFIG}" != ""; then	
+    # Use gsl-config for header and linker arguments
+    AC_MSG_CHECKING([Octave include directory])
+    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
+    AC_MSG_RESULT([${OCTINCLUDEDIR}])
+    
+    AC_MSG_CHECKING([Octave library directory])
+    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
+    AC_MSG_RESULT([${OCTLIBDIR}])
+        
+    # check Octave version to know whether one should infer output names:
+    # it works for Octave >= 3.4.3
+    AC_MSG_CHECKING([Octave version])
+    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
+    AC_MSG_RESULT([${OCTVERSION}])
+    
+    CMPV="3.4.3"
+    AC_MSG_CHECKING([whether to infer output names for Octave function (>= ${CMPV})])
+    AS_VERSION_COMPARE(${OCTVERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
+    AS_IF([test "${OCT_POST_3_4_0}" != "-1"], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
+    
+else
+    AC_MSG_ERROR([octave-config not found, is Octave installed?
+    
+    -> On Debian/Ubuntu please check that the required packages are installed:
+    
+      * For Octave 3.6 (works out of the box):
+        sudo apt-get install octave liboctave-dev
+        # install as usual in R
+        install.packages('RcppOctave')
+        
+      * For Octave 3.2.4 (might require extra command)
+        sudo apt-get install octave3.2 octave3.2-headers
+        # requires to explicitly export Octave lib directory 
+        export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:`octave-config -p OCTLIBDIR`
+        # install as usual in R
+        install.packages('RcppOctave')
+    ])
+fi
+
+# Now substitute these variables in src/Makevars.in to create src/Makevars
+AC_SUBST(OCTINCLUDEDIR)
+AC_SUBST(OCTLIBDIR)
+AC_SUBST(OCT_POST_3_4_0)
+
+# Module path
+AC_MSG_CHECKING([RcppOctave Octave module directory])
+OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules  
+AC_MSG_RESULT([${OCT_MODULES_PATH}])
+AC_SUBST(OCT_MODULES_PATH)
+
+# Configure libRrng
+#AC_CONFIG_SUBDIRS([src/modules])
+
+AC_OUTPUT(src/Makevars)
+AC_OUTPUT(src/modules/Makefile)
