@@ -1,0 +1,4 @@
+Kalman	Benchmark comparison of Kalman Filter implementations
+gibbs   Simple Gibbs sampler study following Darren Wilkinson
+gamma   Reproducible RNG draws between R and Octave: gamma example
+timerng Timing foe RNGs

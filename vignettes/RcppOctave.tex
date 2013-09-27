@@ -1,0 +1,1259 @@
+\documentclass[english,10pt,a4paper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+%\VignetteIndexEntry{RcppOctave}
+%\VignetteDepends{RcppOctave,knitr,bibtex}
+%\VignetteCompiler{knitr}
+%\VignetteEngine{knitr::knitr}
+
+
+
+
+\usepackage{fancyvrb}
+\usepackage{indentfirst}
+\usepackage{amsmath} %math symbols
+\usepackage{amssymb} %extra math symbols
+\usepackage{xspace}
+\usepackage{url}
+\usepackage[colorlinks]{hyperref}
+\usepackage{a4wide}
+\setlength{\oddsidemargin}{0pt}
+
+
+% TABLE OF CONTENTS
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecfont}{\small}
+\usepackage[toc]{multitoc}
+
+\newcommand{\matlab}{Matlab$^\circledR$\xspace}
+
+% add preamble from pkgmaker
+%%%% PKGMAKER COMMANDS %%%%%%
+\usepackage{xspace}
+
+% R
+\let\proglang=\textit
+\let\code=\texttt 
+\newcommand{\Rcode}{\code}
+\newcommand{\pkgname}[1]{\textit{#1}\xspace}
+\newcommand{\Rpkg}[1]{\pkgname{#1} package\xspace}
+\newcommand{\citepkg}[1]{\cite{#1}}
+
+% CRAN
+\newcommand{\CRANurl}[1]{\url{http://cran.r-project.org/package=#1}}
+%% CRANpkg
+\makeatletter
+\def\CRANpkg{\@ifstar\@CRANpkg\@@CRANpkg}
+\def\@CRANpkg#1{\href{http://cran.r-project.org/package=#1}{\pkgname{#1}}\footnote{\CRANurl{#1}}}
+\def\@@CRANpkg#1{\href{http://cran.r-project.org/package=#1}{\pkgname{#1}} package\footnote{\CRANurl{#1}}}
+\makeatother
+%% citeCRANpkg
+\makeatletter
+\def\citeCRANpkg{\@ifstar\@citeCRANpkg\@@citeCRANpkg}
+\def\@citeCRANpkg#1{\CRANpkg{#1}\cite*{Rpackage:#1}}
+\def\@@citeCRANpkg#1{\CRANpkg{#1}~\cite{Rpackage:#1}}
+\makeatother
+\newcommand{\CRANnmf}{\href{http://cran.r-project.org/package=NMF}{CRAN}}
+\newcommand{\CRANnmfURL}{\url{http://cran.r-project.org/package=NMF}}
+
+% Bioconductor
+\newcommand{\BioCurl}[1]{\url{http://www.bioconductor.org/packages/release/bioc/html/#1.html}}
+\newcommand{\BioCpkg}[1]{\href{http://www.bioconductor.org/packages/release/bioc/html/#1.html}{\pkgname{#1}} package\footnote{\BioCurl{#1}}}
+\newcommand{\citeBioCpkg}[1]{\BioCpkg{#1}~\cite{Rpackage:#1}}
+% Bioconductor annotation
+\newcommand{\BioCAnnurl}[1]{\url{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}}
+\newcommand{\BioCAnnpkg}[1]{\href{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}{\Rcode{#1}} annotation package\footnote{\BioCAnnurl{#1}}}
+\newcommand{\citeBioCAnnpkg}[1]{\BioCAnnpkg{#1}~\cite{Rpackage:#1}}
+
+% GEO
+\newcommand{\GEOurl}[1]{\href{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=#1}{#1}\xspace}
+\newcommand{\GEOhref}[1]{\GEOurl{#1}\footnote{\url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=#1}}}
+
+% ArrayExpress
+\newcommand{\ArrayExpressurl}[1]{\href{http://www.ebi.ac.uk/arrayexpress/experiments/#1}{#1}\xspace}
+\newcommand{\ArrayExpresshref}[1]{\ArrayExpressurl{#1}\footnote{\url{http://www.ebi.ac.uk/arrayexpress/experiments/#1}}}
+
+%%%% END: PKGMAKER COMMANDS %%%%%%
+
+
+
+% REFERENCES
+\usepackage[minnames=1,maxnames=2]{biblatex}
+\AtEveryCitekey{\clearfield{url}}
+\bibliography{Rpackages}
+\bibliography{/tmp/Rpkglib_78ba41351114/RcppOctave/REFERENCES}
+
+
+\newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
+%%
+
+\newcommand{\R}{\proglang{R}\xspace}
+\newcommand{\graphwidth}{0.9\columnwidth}
+%\newcommand{\revision}[2][]{\textcolor{blue}{#2}{\bf \textcolor{blue}{$\blacksquare$ REV[#1]}}}
+
+% Octave
+\newcommand{\octave}{\proglang{Octave}\xspace}
+
+% clever references
+\usepackage[noabbrev, capitalise, nameinlink]{cleveref}
+
+\author{Renaud Gaujoux}
+\title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
+\date{\Rpkg{RcppOctave} -- Version 0.10
+[September 27, 2013]\footnote{This vignette was built using \octave
+3.6.4}}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The \Rpkg{RcppOctave} provides a direct interface to \octave from
+\R.
+It allows \\octave functions to be called from an \R session,
+in a similar way \proglang{C/C++} or \proglang{Fortran} functions are called using the base function~\code{.Call}.
+Since \octave uses a language that is mostly compatible with \matlab,
+\pkgname{RcppOctave} may also be used to run Matlab m-files.
+This package was originally developed to facilitate the port and comparison of R
+and Matlab code.
+In particular, it provides \octave modules that redefine
+\octave default random number generator functions, so that they call
+\proglang{R} own dedicated functions.
+This enables to also reproduce and compare stochastic computations.
+\end{abstract}
+
+%These may also be used in any Octave session, independently of R, increasing
+% the range of RNGs available in Octave.
+\noindent\hrulefill
+\tableofcontents
+\noindent\hrulefill
+
+\section{Introduction}
+
+In many research fields, source code of algorithms and statistical methods are
+published as Matlab files (the so called m-files).
+While such code is generally released under public Open Source licenses like the
+GNU Public Licenses (GPLs) \cite{gnuGPL}, effectively running or using it
+require either to have \matlab, which is a nice but expensive proprietary
+software\footnote{\url{http://www.mathworks.com}}, or to be/get -- at least -- a bit familiar with \octave \cite{Eaton2002}, which is free and open source, and is able to read and execute m-files, as long as they do not require Matlab-specific functions.
+However, \proglang{R} users may have neither Matlab license, nor the
+time/will to become \octave-skilled, and yet want to use algorithms written in
+Matlab/\octave for their analyses and research.
+
+Being able to run m-files or selectively use \octave functionalities
+directly from \proglang{R} can greatly alleviate a process that otherwise
+typically implies exporting/importing data between the two environments via
+files on disk, as well as dealing with a variety of issues including
+rounding errors, format compatibility or subtle implementation differences,
+that all may lead to intricate hard-to-debug situations.
+Even if one eventually wants to rewrite or optimise a given algorithm in plain
+\proglang{R} or in \proglang{C/C++}, and therefore remove any dependency to
+\octave, it is important to test the correctness of the port by
+comparing its results with the original implementation.
+Also, a direct interface allows users to stick to their preferred computing
+environment, in which they are more comfortable and productive.
+
+An \proglang{R} package called \pkgname{ROctave}
+\footnote{\url{http://www.omegahat.org/ROctave}} do exist, and intends to
+provide an interface between \proglang{R} and \octave, but appears
+to be outdated (2002), and does not work out of the box with recent version of
+\octave.
+A more recent forum
+post\footnote{\url{http://octave.1599824.n4.nabble.com/ROctave-bindings-for-2-1-73-2-9-x-td1602060.html}}
+brought back some interest on binding these two environments, but
+apparently without any following.
+
+The \citeCRANpkg{RcppOctave} described in this vignette aims at filling the gap
+and facilitating the usage of \proglang{Octave/Matlab} code from \proglang{R}, by providing a lean interface that enables direct and easy interaction with an embedded \octave session.
+The package's name was chosen both to differentiate it from the
+existing \Rpkg{ROctave}, and to reflect its use and integration of the
+\proglang{C++} framework defined by the \citeCRANpkg{Rcpp}.
+
+\section{Objectives \& Features}
+The ultimate objective of \pkgname{RcppOctave} is to provide a two-way
+interface between \proglang{R} and \octave, i.e. that allows calling
+\octave from \proglang{R} and vice-versa.
+The interface intends to be lean and as transparent as possible, as well
+as providing convenient utilities to perform commonly needed tasks (e.g. source
+files, browse documentation).
+
+Currently, the package focuses on accessing \octave functionalities
+from \proglang{R} with:
+
+\begin{itemize}
+ \item An out-of-the-box-working embedded \octave session;
+ \item Ability to run/source m-files from \proglang{R};
+ \item Ability to evaluate \octave statements and function calls from
+ \proglang{R};
+ \item Ability to call \proglang{R} functions in \octave
+ code\footnote{Currently only when run from \proglang{R} through
+ \pkgname{RcppOctave}.};
+ \item Transparent passage of variables between \proglang{R} and \octave;
+ \item Reproducibility of computations, including stochastic computations, in both environment;
+\end{itemize}
+
+Future development should provide similar reverse capabilities, i.e. an out
+of the box embedded R session, typically via the \CRANpkg{RInside}.
+
+\section{Accessing Octave from R}
+
+The \Rpkg{RcppOctave} defines the function \code{.CallOctave}, which acts as a
+single entry point for calling \octave functions from \proglang{R}.
+In order to make common function calls easier (e.g. \code{eval}), other utility
+functions are defined, which essentially wraps a call to \code{.CallOctave}, but
+enhance argument handling and result formating.
+
+\subsection{Core interface: \texttt{.CallOctave}}
+The function \code{.CallOctave} calls an \octave \underline{function}
+from R, mimicking the way native \proglang{C/C++} functions are called with
+\code{.Call}.
+
+\subsubsection{Overview}
+
+The function \code{.CallOctave} takes the name of an \octave function (in its
+first argument \code{.NAME}) and pass the remaining arguments directly to the
+\octave function -- except for the two special arguments \code{argout} (see next
+section) and \code{unlist}.
+Note that \octave function arguments are not named and positional, meaning that
+they must be passed in the correct order.
+Input names are simply ignored by \code{.CallOctave}.
+Calling any \octave function is then as simple as: 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"version"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "3.6.4"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"sqrt"}\hlstd{,} \hlnum{10}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3.162
+\end{verbatim}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"eye"}\hlstd{,} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+\end{verbatim}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"eye"}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    0
+## [2,]    0    1
+## [3,]    0    0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsubsection{Controlling output values}
+\label{sec:argout}
+
+\octave functions have the interesting feature of being able to compute
+and return a variable number of output values, depending on the number of output
+variables specified in the statement.
+Hence, a call to an \octave function requires passing both its parameters and
+the number of desired output values.
+
+The following sample code illustrates this concept using the function
+\code{svd}\footnote{The sample code is extracted from the manpage for
+\code{svd}. See \code{o\_help(svd)} for more details.}:
+
+\begin{Verbatim}[frame=single]
+% single output variable: eigen values only
+S = svd(A);
+
+% 3 output variables: complete SVD decomposition  
+[U, S, V] = svd(A);
+\end{Verbatim}
+
+The default behaviour of \code{.CallOctave} \code{.CallOctave} is to try to
+detect the maximum number of output variables, as well as their names, and
+return them all.
+This should be suitable for most common cases, especially for functions
+defined by the user in plain m-files, but does not work for functions defined in
+compiled modules (see examples with in the next section).
+Hence the default is to return the maximum number of output values if it can be
+detected, or only the first one.
+
+For some functions, however, this behaviour may not be ideal, and complete
+control on the return values is possible via the special argument \code{argout}.
+The next section illustrates different situations and use case scenarios.
+
+\subsubsection{Examples}
+
+A sample m-file (i.e. a function definition file) is shipped with any 
+\pkgname{RcppOctave} installation in the ``scripts/" sub-directory and provides
+some examples of different types of \octave functions:
+
+\begin{Verbatim}[frame=single]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Example file for the R package RcppOctave
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function [a] = fun1()
+	a = rand(1,4);
+end
+
+function [a,b,c] = fun2()
+	a = rand(1,4);
+	b = rand(2,3);
+	c = "some text";
+end
+
+function fun_noargout(x) 
+	% no effect outside the function
+	y = 1;
+	printf("%% Printed from Octave: x="), disp(x);
+end
+
+function [s] = fun_varargin(varargin)
+  if (nargin==0)
+	s = 0;
+  else
+	s = varargin{1} + varargin{2} + varargin{3};
+  endif
+end
+
+function [u, s, v] = fun_varargout()
+
+	if (nargout == 1) u = 1; 
+	elseif (nargout == 3)
+		u = 10; s = 20; v = 30; 
+	else usage("Expecting 1 or 3 output variables.");
+	endif; 
+end
+
+
+
+\end{Verbatim}
+
+These definitions can be loaded in the \octave session via the function
+\code{sourceExamples}.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# source example function definitions from RcppOctave installation}
+\hlkwd{sourceExamples}\hlstd{(}\hlstr{"ex_functions.m"}\hlstd{)}
+\hlcom{# several functions are now defined}
+\hlkwd{o_ls}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] "fun1"          "fun2"          "fun_noargout"  "fun_varargin" 
+## [5] "fun_varargout"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The functions \code{fun1}, \code{fun2}, \code{fun\_noargout}, and
+\code{fun\_varargin} perform the same computations independently of the number
+of output.
+For these a default call to \code{.CallOctave} is enough to get their full
+functionalities:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# single output value}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.3654 0.7123 0.6989 0.5597
+\end{verbatim}
+\begin{alltt}
+\hlcom{# 3 output values}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun2"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $a
+## [1] 0.7734 0.3392 0.1778 0.2452
+## 
+## $b
+##        [,1]   [,2]   [,3]
+## [1,] 0.9813 0.9305 0.2297
+## [2,] 0.9034 0.5521 0.4791
+## 
+## $c
+## [1] "some text"
+\end{verbatim}
+\begin{alltt}
+\hlcom{# no output value}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_noargout"}\hlstd{,} \hlnum{1}\hlstd{)}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_noargout"}\hlstd{,} \hlstr{"abc"}\hlstd{)}
+\hlcom{# variable number of arguments}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargin"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargin"}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 6
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The function \code{fun\_varargout} however, behaves differently when called
+with 1, 2 or 3 output variables, performing different computations.
+Since it is defined in a m-file, the maximum set of output variables is
+detectable and the default behaviour is then to call it asking for 3 output
+variables.
+The other types of computations can be obtained using argument \code{argout}:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargout"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $u
+## [1] 10
+## 
+## $s
+## [1] 20
+## 
+## $v
+## [1] 30
+\end{verbatim}
+\begin{alltt}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargout"}\hlstd{,} \hlkwc{argout} \hlstd{=} \hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+\begin{alltt}
+\hlcom{# this should throw an error}
+\hlkwd{try}\hlstd{(}\hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargout"}\hlstd{,} \hlkwc{argout} \hlstd{=} \hlnum{2}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `fun\_varargout`:\\\#\#\ \  usage: Expecting 1 or 3 output variables.\\\#\# error:\ \  fun\_varargout at line 34, column 7}}\end{kframe}
+\end{knitrout}
+
+
+Argument \code{argout} may also be used to specify names for the output values.
+This is useful for functions defined in compiled modules (e.g. \code{svd}) for
+which expected outputs are not detectable (output names in particular), or when
+limiting the number of output variables in functions defined in m-files.
+Indeed, in this latter case, it is not safe to infer the names based on those
+defined for the complete output, as these may not be relevant anymore:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# single output variable: result is S}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"svd"}\hlstd{,} \hlkwd{matrix}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,} \hlnum{2}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##       [,1]
+## [1,] 5.465
+## [2,] 0.366
+\end{verbatim}
+\begin{alltt}
+\hlcom{# 3 output variables: results is [U,S,V]}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"svd"}\hlstd{,} \hlkwd{matrix}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,} \hlnum{2}\hlstd{),} \hlkwc{argout} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [[1]]
+##         [,1]    [,2]
+## [1,] -0.5760 -0.8174
+## [2,] -0.8174  0.5760
+## 
+## [[2]]
+##       [,1]  [,2]
+## [1,] 5.465 0.000
+## [2,] 0.000 0.366
+## 
+## [[3]]
+##         [,1]    [,2]
+## [1,] -0.4046  0.9145
+## [2,] -0.9145 -0.4046
+\end{verbatim}
+\begin{alltt}
+\hlcom{# specify output names (and therefore number of output variables)}
+\hlkwd{.CallOctave}\hlstd{(}\hlstr{"svd"}\hlstd{,} \hlkwd{matrix}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,} \hlnum{2}\hlstd{),} \hlkwc{argout} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"U"}\hlstd{,} \hlstr{"S"}\hlstd{,} \hlstr{"V"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## $U
+##         [,1]    [,2]
+## [1,] -0.5760 -0.8174
+## [2,] -0.8174  0.5760
+## 
+## $S
+##       [,1]  [,2]
+## [1,] 5.465 0.000
+## [2,] 0.000 0.366
+## 
+## $V
+##         [,1]    [,2]
+## [1,] -0.4046  0.9145
+## [2,] -0.9145 -0.4046
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+Note that it is quite possible for a compiled function to only accept
+calls with at least 2 output variables.
+In such cases, \code{.CallOctave} calls must always specify argument
+\code{argout}.
+
+\subsection{Direct interface: the \texttt{.O} object}
+
+An alternative and convenient shortcut interface is defined by the S4-class
+\code{Octave}.
+At load time, an instance of this class, an object named \code{.O}, is
+initialised and exported from \pkgname{RcppOctave}'s namespace.
+Using the \code{.O} object, calls to \octave functions are more compact: 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{.O}
+\end{alltt}
+\begin{verbatim}
+##  <Octave Interface>
+##  - Use `$x` to call Octave function or get variable x.
+##  - Use `$x <- val` to assign a value val to the Octave variable x.
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlkwd{version}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] "3.6.4"
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlkwd{eye}\hlstd{(}\hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlkwd{svd}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,} \hlnum{2}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##       [,1]
+## [1,] 5.465
+## [2,] 0.366
+\end{verbatim}
+\begin{alltt}
+\hlcom{# argout can still be specified}
+\hlstd{.O}\hlopt{$}\hlkwd{svd}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,} \hlnum{2}\hlstd{),} \hlkwc{argout} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [[1]]
+##         [,1]    [,2]
+## [1,] -0.5760 -0.8174
+## [2,] -0.8174  0.5760
+## 
+## [[2]]
+##       [,1]  [,2]
+## [1,] 5.465 0.000
+## [2,] 0.000 0.366
+## 
+## [[3]]
+##         [,1]    [,2]
+## [1,] -0.4046  0.9145
+## [2,] -0.9145 -0.4046
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsubsection{Manipulating variables}
+The \code{.O} object facilitates manipulating single \octave
+variables, as it emulates an \proglang{R} environment-like object whose elements
+would be the objects available in the current \octave
+embedded session:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# define a variable}
+\hlstd{.O}\hlopt{$}\hlstd{myvar} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlnum{5}
+\hlcom{# retrieve value}
+\hlstd{.O}\hlopt{$}\hlstd{myvar}
+\end{alltt}
+\begin{verbatim}
+## [1] 1 2 3 4 5
+\end{verbatim}
+\begin{alltt}
+\hlcom{# assign and retrieve new value}
+\hlstd{.O}\hlopt{$}\hlstd{myvar} \hlkwb{<-} \hlnum{10}
+\hlstd{.O}\hlopt{$}\hlstd{myvar}
+\end{alltt}
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+\begin{alltt}
+\hlcom{# remove}
+\hlstd{.O}\hlopt{$}\hlstd{myvar} \hlkwb{<-} \hlkwa{NULL}
+\hlcom{# this should now throw an error since 'myvar' does not exist anymore}
+\hlkwd{try}\hlstd{(.O}\hlopt{$}\hlstd{myvar)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave::o\_get - Could not find an Octave object named 'myvar'.}}\end{kframe}
+\end{knitrout}
+
+
+\subsubsection{Calling functions}
+As illustrated above, \octave functions can be called through the
+\code{.O} object, by passing specifying its arguments as a function call:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# density of x=5 for Poisson(2)}
+\hlstd{.O}\hlopt{$}\hlkwd{poisspdf}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.03609
+\end{verbatim}
+\begin{alltt}
+\hlcom{# E.g. compare with R own function}
+\hlkwd{dpois}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.03609
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+They may also be retrieved as \proglang{R} functions in a similar way as
+variables, and called in subsequent statements:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# retrieve Octave function}
+\hlstd{f} \hlkwb{<-} \hlstd{.O}\hlopt{$}\hlstd{poisspdf}
+\hlstd{f}
+\end{alltt}
+\begin{verbatim}
+## <OctaveFunction::`poisspdf`>
+\end{verbatim}
+\begin{alltt}
+\hlcom{# call (in Octave)}
+\hlkwd{f}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.03609
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+\subsubsection{Auto-completion}
+An advantage of using the \code{.O} object is that it has auto-completion
+capabilities similar to the \proglang{R} console.
+This greatly helps and speeds up the interaction with the current embedded
+\octave session.
+For example, typing \code{.O\$std} + \code{TAB} + \code{TAB} will show all
+functions or variables available in the current session, that start with ``std". 
+
+\subsection{Utility functions}
+
+The \Rpkg{RcppOctave} defines some utilities to enhance the interaction with
+\octave, and alleviate calls to a set of commonly used
+\octave functions.
+All these functions start with the prefix ``o\_" (e.g.
+\code{o\_source}), so that they can be listed by typing \code{o\_ + TAB + TAB}
+in the \proglang{R} console.
+Their names have been chosen to reflect the corresponding \octave
+function, and, in some cases, aliases matching standard \proglang{R} names are
+also provided, so that users not familiar with \octave can find their
+way quickly (e.g. \code{o\_rm} is an alias to \code{o\_clear}).
+
+\subsubsection{Assign/get variables}
+
+The functions \code{o\_assign} and \code{o\_get} facilitates assigning variables
+and retrieving objects (variables or functions).
+Variables may be assigned or retrieved individually in separate calls to
+\code{o\_assign} or \code{o\_get}\footnote{This would be similar to using the
+\code{.O} object as described above}, or simultaneously in a variety of ways
+(see \code{?o\_get} for more details and examples):
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## ASSIGN}
+\hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{20}\hlstd{)}
+\hlkwd{o_assign}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{aaa} \hlstd{=} \hlnum{7}\hlstd{,} \hlkwc{aab} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{)))}
+\hlcom{## GET get all variables}
+\hlkwd{str}\hlstd{(}\hlkwd{o_get}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+## List of 4
+##  $ a  : num 5
+##  $ aaa: num 7
+##  $ aab:List of 3
+##   ..$ : num 1
+##   ..$ : num 2
+##   ..$ : num 3
+##  $ b  : num 6
+\end{verbatim}
+\begin{alltt}
+\hlcom{# selected variables}
+\hlkwd{o_get}\hlstd{(}\hlstr{"a"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 5
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_get}\hlstd{(}\hlstr{"a"}\hlstd{,} \hlstr{"b"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $a
+## [1] 5
+## 
+## $b
+## [1] 6
+\end{verbatim}
+\begin{alltt}
+\hlcom{# rename on the fly}
+\hlkwd{o_get}\hlstd{(}\hlkwc{c} \hlstd{=} \hlstr{"a"}\hlstd{,} \hlkwc{d} \hlstd{=} \hlstr{"b"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $c
+## [1] 5
+## 
+## $d
+## [1] 6
+\end{verbatim}
+\begin{alltt}
+\hlcom{# o_get throw an error for objects that do not exist}
+\hlkwd{try}\hlstd{(}\hlkwd{o_get}\hlstd{(}\hlstr{"xxxxx"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave::o\_get - Could not find an Octave object named 'xxxxx'.}}\begin{alltt}
+\hlcom{# but suggests potential matches}
+\hlkwd{try}\hlstd{(}\hlkwd{o_get}\hlstd{(}\hlstr{"aa"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave::o\_get - Could not find an Octave object named 'aa'.\\\#\#\ \ \ \ \ \ \ \ Match(es): aaa aab}}\begin{alltt}
+\hlcom{# get a function}
+\hlstd{f} \hlkwb{<-} \hlkwd{o_get}\hlstd{(}\hlstr{"svd"}\hlstd{)}
+\hlstd{f}
+\end{alltt}
+\begin{verbatim}
+## <OctaveFunction::`svd`>
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsubsection{Evaluate single statements}
+
+To evaluate a single statement, one can use the \code{o\_eval} function, that
+can also evaluate a list of statements sequentially:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# assign variable 'a'}
+\hlkwd{o_eval}\hlstd{(}\hlstr{"a=1"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_eval}\hlstd{(}\hlstr{"a"}\hlstd{)}  \hlcom{# or .O$a}
+\end{alltt}
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##         [,1]
+## [1,] 1.73958
+## [2,] 0.28619
+## [3,] 0.09937
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlstd{a}
+\end{alltt}
+\begin{verbatim}
+##         [,1]
+## [1,] 1.73958
+## [2,] 0.28619
+## [3,] 0.09937
+\end{verbatim}
+\begin{alltt}
+\hlcom{# eval a list of statements}
+\hlstd{l} \hlkwb{<-} \hlkwd{o_eval}\hlstd{(}\hlstr{"a=rand(1, 2)"}\hlstd{,} \hlstr{"b=randn(1, 2)"}\hlstd{,} \hlstr{"rand(1, 3)"}\hlstd{)}
+\hlstd{l}
+\end{alltt}
+\begin{verbatim}
+## [[1]]
+## [1] 0.05239 0.54790
+## 
+## [[2]]
+## [1] 0.07999 1.09599
+## 
+## [[3]]
+## [1] 0.5597 0.9977 0.2484
+\end{verbatim}
+\begin{alltt}
+\hlcom{# variables 'a' and 'b' were assigned the new values}
+\hlkwd{identical}\hlstd{(}\hlkwd{list}\hlstd{(.O}\hlopt{$}\hlstd{a, .O}\hlopt{$}\hlstd{b), l[}\hlnum{1}\hlopt{:}\hlnum{2}\hlstd{])}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlcom{# multiple statements are not supported by o_eval}
+\hlkwd{try}\hlstd{(}\hlkwd{o_eval}\hlstd{(}\hlstr{"a=1; b=2"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `eval`:\\\#\#\ \  error: eval: invalid use of statement list}}\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlstd{a}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.05239 0.54790
+\end{verbatim}
+\begin{alltt}
+\hlcom{# argument CATCH allows for recovering from errors in statement}
+\hlkwd{o_eval}\hlstd{(}\hlstr{"a=usage('ERROR: stop here')"}\hlstd{,} \hlkwc{CATCH} \hlstd{=} \hlstr{"c=3"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlstd{a}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.05239 0.54790
+\end{verbatim}
+\begin{alltt}
+\hlstd{.O}\hlopt{$}\hlstd{c}
+\end{alltt}
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+More details and examples are provided in the manual page \code{?o\_eval}.
+If more than one statement is to be evaluated, then one should use the function
+\code{o\_source}, with argument \code{text} as described in \cref{sec:o_source} below.
+
+\subsubsection{Source m-files}
+\label{sec:o_source}
+
+\proglang{Octave/Matlab} code generally are generally provided as so
+called m-files, which are plain text files that contain function definitions
+and/or sequences of multiple commands that perform a given task.
+This is the form most public third party algorithms are published.
+
+The function \code{o\_source} allows to load these files in the current
+\octave session, so that the object they define are available, or the
+commands they contain are executed.
+\pkgname{RcppOctave} ships an example m-file in the ``scripts/" sub-directory
+of its installation:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# clear all session}
+\hlkwd{o_clear}\hlstd{(}\hlkwc{all} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{o_ls}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## character(0)
+\end{verbatim}
+\begin{alltt}
+\hlcom{# source example file from RcppOctave installation}
+\hlstd{mfile} \hlkwb{<-} \hlkwd{system.file}\hlstd{(}\hlstr{"scripts/ex_source.m"}\hlstd{,} \hlkwc{package} \hlstd{=} \hlstr{"RcppOctave"}\hlstd{)}
+\hlkwd{cat}\hlstd{(}\hlkwd{readLines}\hlstd{(mfile),} \hlkwc{sep} \hlstd{=} \hlstr{"\textbackslash{}n"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## % Example m-file to illustrate the usage of the function o_source
+## %
+## % This file defines 3 dummy variables ('a','b' and 'c') 
+## % and a dummy function 'abc', that adds up its three arguments.
+## % 
+## 
+## a = 1;
+## b = 2;
+## c = 3;
+## 
+## function [res] = abc(x, y, z)
+## 	res = x + y + z; 
+## end
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_source}\hlstd{(mfile)}
+\hlcom{# Now objects 'a', 'b', and 'c' as well as the function 'abc' should be}
+\hlcom{# defined:}
+\hlkwd{o_ls}\hlstd{(}\hlkwc{long} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##  <Octave session: 4 object(s)>
+##  name size bytes    class global sparse complex nesting persistent
+##     a  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##     b  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##     c  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##   abc   NA    NA function   TRUE     NA      NA       1         NA
+\end{verbatim}
+\begin{alltt}
+\hlcom{# }
+\hlkwd{o_eval}\hlstd{(}\hlstr{"abc(2, 4, 6)"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 12
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_eval}\hlstd{(}\hlstr{"abc(a, b, c)"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 6
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+This function can also conveniently be used to evaluate multiple statements
+directly passed from the \R console as character strings via its argument
+\code{text}:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{o_source}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"clear a b c; a=100; a*sin(123)"}\hlstd{)}
+\hlcom{# last statement is stored in automatic variable 'ans'}
+\hlkwd{o_get}\hlstd{(}\hlstr{"a"}\hlstd{,} \hlstr{"ans"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $a
+## [1] 100
+## 
+## $ans
+## [1] -45.99
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsubsection{List objects}
+
+The function \code{o\_ls} (as used above) lists the objects (variables and
+functions) that are defined in the current \octave embedded session.
+It is an enhanced version over \octave standard listing functions such as
+\code{who} (see \code{?o\_who}), which only lists variables, and not
+user-defined functions.
+With argument \code{long} it returns details about each variable and function,
+in a similar way \code{whos} does (see \code{?o\_who}).
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{o_ls}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] "a"   "abc"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{o_ls}\hlstd{(}\hlkwc{long} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##  <Octave session: 2 object(s)>
+##  name size bytes    class global sparse complex nesting persistent
+##     a  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##   abc   NA    NA function   TRUE     NA      NA       1         NA
+\end{verbatim}
+\begin{alltt}
+\hlcom{# clear all (variables + functions)}
+\hlkwd{o_clear}\hlstd{(}\hlkwc{all} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{o_ls}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## character(0)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+See \code{?o\_ls} for more details as well as \cref{sec:issues} for a
+known issue in \octave versions older than 3.6.1.
+
+\subsubsection{Browse documentation}
+
+\octave has offers two ways of browsing documentation, via the functions
+\code{help} and \code{doc}, which display a manual page for a given function and
+lookup the whole documentation for a given topic respectively.
+
+The \Rpkg{RcppOctave} provides wrapper for these two functions to enable
+browsing \octave help pages in the way \R users are used to.
+Hence, to access the manpage for a given function one types for example the
+following, which displays using the \R function \code{file.show}:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{o_help}\hlstd{(std)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+To display all documentation about a topic one types for example the following,
+opens the documentation using the GNU Info browser\footnote{At least on
+Linux machines.}:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{o_doc}\hlstd{(poisson)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Once the GNU Info browser is running, help for using it is available using the
+command `Ctrl + h' -- as stated in the \octave documentation for \code{doc} (see
+\code{o\_help(doc)}).
+
+\subsection{Low-level \textit{C/C++} interface}
+
+\pkgname{RcppOctave} builds upon the \Rpkg{Rcpp}, and defines specialisation
+for the \proglang{Rcpp} template functions \code{Rcpp::as} and
+\code{Rcpp::wrap}, for converting \proglang{R} types to \octave
+types and \emph{vice versa}.
+Currently these templates are not exported, but will probably be in the future.
+
+\section{Calling R functions from Octave}
+
+This is currently not implemented but is on the TODO list for future
+developments.
+
+\section{Examples}
+\subsection{Comparing implementations}
+
+Comparing equivalent \R and \octave functions is as easy as comparing two \R
+functions.
+For example, one can compare the respective functions \code{svd} with the
+following code, which defines a wrapper functions to format the output of
+\octave \code{svd} function as \R (see \code{?svd} and \code{o\_help(svd)}):
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{o_svd} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
+    \hlcom{# ask for the complete decomposition}
+    \hlstd{res} \hlkwb{<-} \hlstd{.O}\hlopt{$}\hlkwd{svd}\hlstd{(x,} \hlkwc{argout} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"u"}\hlstd{,} \hlstr{"d"}\hlstd{,} \hlstr{"v"}\hlstd{))}
+    \hlcom{# reformat/reorder result}
+    \hlstd{res}\hlopt{$}\hlstd{d} \hlkwb{<-} \hlkwd{diag}\hlstd{(res}\hlopt{$}\hlstd{d)}
+    \hlstd{res[}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{3}\hlstd{)]}
+\hlstd{\}}
+\hlcom{# define random data}
+\hlstd{X} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{25}\hlstd{),} \hlnum{5}\hlstd{)}
+\hlcom{# run SVD in R}
+\hlstd{svd.R} \hlkwb{<-} \hlkwd{svd}\hlstd{(X)}
+\hlcom{# run SVD in Octave}
+\hlstd{svd.O} \hlkwb{<-} \hlkwd{o_svd}\hlstd{(X)}
+\hlkwd{str}\hlstd{(svd.O)}
+\end{alltt}
+\begin{verbatim}
+## List of 3
+##  $ d: num [1:5] 2.7286 0.9286 0.5623 0.2437 0.0985
+##  $ u: num [1:5, 1:5] -0.592 -0.45 -0.428 -0.398 -0.324 ...
+##  $ v: num [1:5, 1:5] -0.593 -0.449 -0.41 -0.398 -0.348 ...
+\end{verbatim}
+\begin{alltt}
+\hlcom{# check results}
+\hlkwd{all.equal}\hlstd{(svd.R, svd.O)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlcom{# but not exactly identical}
+\hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "Component 2: Mean relative difference: 2.526e-16"
+## [2] "Component 3: Mean relative difference: 2.595e-16"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsection{Random computations}
+
+In order to ensure reproducibility of results and facilitate the comparability
+of implementations between \R and \octave, \pkgname{RcppOctave} ships
+a custom \octave module that redefine \octave standard random number generator
+functions \code{rand}, \code{randn}, \code{rande} and \code{randg}, so that they
+call \R corresponding functions \code{runif}, \code{rnorm}, \code{rexp} and
+\code{rgamma}.
+This module is loaded when the \Rpkg{RcppOctave} is itself loaded.
+As a result, random computation -- that use these functions -- can be seeded in
+both \octave and \R, using \R standard function \code{set.seed}.
+This facilitates, in particular, the validation of ports of stochastic
+algorithms (e.g. simulations, MCMC-based estimations):
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Rf} \hlkwb{<-} \hlkwa{function}\hlstd{()\{}
+        \hlstd{x} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{100}\hlstd{),} \hlnum{10}\hlstd{)}
+        \hlstd{y} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{rnorm}\hlstd{(}\hlnum{100}\hlstd{),} \hlnum{10}\hlstd{)}
+        \hlstd{(x} \hlopt{*} \hlstd{y)} \hlopt{%*%} \hlstd{(x} \hlopt{/} \hlstd{y)}
+\hlstd{\}}
+\hlstd{Of} \hlkwb{<-} \hlstd{\{}
+\hlcom{# define Octave function}
+\hlkwd{o_source}\hlstd{(}\hlkwc{text}\hlstd{=}\hlstr{"
+function [res] = test()
+x = rand(10);
+y = randn(10);
+res = (x .* y) * (x ./ y);
+end
+"}\hlstd{)}
+\hlcom{# return the function}
+\hlstd{.O}\hlopt{$}\hlstd{test}
+\hlstd{\}}
+\hlcom{# run both computations with a common seed  }
+\hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.R} \hlkwb{<-} \hlkwd{Rf}\hlstd{()}
+\hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.O} \hlkwb{<-} \hlkwd{Of}\hlstd{()}
+\hlcom{# compare results}
+\hlkwd{identical}\hlstd{(res.R, res.O)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlcom{# not seeding the second computation would give different results}
+\hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{);}
+\hlkwd{identical}\hlstd{(}\hlkwd{Rf}\hlstd{(),} \hlkwd{Of}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\section{Known issues}
+\label{sec:issues}
+
+\begin{itemize}
+ \item In \octave versions older than 3.6.1, the function \code{o\_ls} may not
+ list user-defined functions. 
+ This is due to the built-in \octave function \code{completion\_matches} that
+ does not return them. The issue seems to have been fixed by \octave team at
+ least in 3.6.1.
+ \item The detection of output names by \code{.CallOctave} in \octave versions
+ older than 3.4.1 does not work, meaning that \octave functions are always
+ called with a single output variable.
+ For obtaining more outputs, the user must specify argument \code{argout}
+ accordingly.
+ \item Errors and warnings thrown by \octave do not show up in Sweave documents
+ processed using the \citeCRANpkg{knitr} -- like this vignette.
+ The issue needs further investigation.
+\end{itemize}
+
+\section*{Session information}
+{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+R version 3.0.1 (2013-05-16)
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=C                 LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] methods   stats     graphics  grDevices utils     datasets  base     
+
+other attached packages:
+[1] RcppOctave_0.10 pkgmaker_0.17.4 registry_0.2    Rcpp_0.10.4    
+[5] knitr_1.4.1    
+
+loaded via a namespace (and not attached):
+[1] codetools_0.2-8 digest_0.6.3    evaluate_0.4.7  formatR_0.9    
+[5] highr_0.2.1     stringr_0.6.2   tools_3.0.1     xtable_1.7-1   
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
