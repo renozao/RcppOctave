@@ -26,6 +26,8 @@
 #include <R_ext/Rdynload.h>
 
 // Octave includes
+#include <octave/oct.h>
+#include <octave/octave.h>
 #include <octave/config.h>
 #include <octave/input.h>
 

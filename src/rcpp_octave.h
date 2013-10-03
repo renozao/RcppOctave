@@ -3,16 +3,9 @@
 
 #include <RcppCommon.h>
 
-#include <Rdefines.h>
-#define getAttrib Rf_getAttrib
-
 //// Octave libraries
-#include <octave/oct.h>
-#include <octave/octave.h>
-#include <octave/parse.h>
-#include <octave/ov-base.h>
-#include <octave/ov-scalar.h>
-#include <octave/ov-struct.h>
+#include <octave/config.h>
+#include <octave/oct-obj.h>
 
 #ifndef OCT_POST_3_4_0
 #define OCT_POST_3_4_0 -1
