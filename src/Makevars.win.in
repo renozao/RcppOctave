@@ -1,0 +1,34 @@
+## Use the R_HOME indirection to support installations of multiple R version
+
+# set by configure.win
+OCTINCLUDEDIR=@OCTINCLUDEDIR@
+OCTINCLUDEDIR2=@OCTINCLUDEDIR2@
+OCTLIBDIR=@OCTLIBDIR@
+OCT_POST_3_4_0=@OCT_POST_3_4_0@
+OCT_MODULES_PATH=@OCT_MODULES_PATH@
+
+## Use the R_HOME indirection to support installations of multiple R version
+PKG_LIBS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()")
+PKG_CPPFLAGS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR2)" -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../"
+
+.PHONY: all OctaveModule
+
+all: OctaveModule
+
+OctaveModule:
+	@cd modules;\
+	make; \
+	echo "# Copying Octave module directory '$(OCT_MODULES_PATH)'"; \
+	mkdir -p "$(OCT_MODULES_PATH)"; \
+	cp -f PKG_ADD *.oct "$(OCT_MODULES_PATH)";
+	
+clean:
+	rm *.o; \
+	cd modules; \
+	make clean;
+
+clean-all: clean
+	rm *.so; \
+	cd modules; \
+	make clean-all;
+

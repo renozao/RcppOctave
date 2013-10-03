@@ -27,10 +27,10 @@ utils.oct: utils.cc
 	@OCTAVE_MKOCTFILE@ -v utils.cc
 
 .cc.oct:
-	@OCTAVE_MKOCTFILE@ -v ${R_CPPFLAGS} $(PKG_CPPFLAGS) ${R_LDFLAGS} $(PKG_LIBS) $<
+	@OCTAVE_MKOCTFILE@ -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
 	
 clean:
 	rm -vf *.o *~
 	
 clean-all: clean
-	rm -vf *.oct
+	rm -vf *.oct Makefile
