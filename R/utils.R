@@ -87,4 +87,4 @@ check.equal <- function(x, y, msg){
 	invisible()
 }
 
-packageName <- if( pkgmaker::testRversion("> 2.15.3") ) utils::packageName else pkgmaker:::packageName
+packageName <- function() 'RcppOctave' #if( pkgmaker::testRversion("> 2.15.3") ) utils::packageName else pkgmaker:::packageName
