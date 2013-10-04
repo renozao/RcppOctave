@@ -3,10 +3,11 @@
 # set by configure
 OCTINCLUDEDIR=@OCTINCLUDEDIR@
 OCTLIBDIR=@OCTLIBDIR@
+OCT_SYSLIBDIR=@OCT_SYSLIBDIR@
 OCT_POST_3_4_0=@OCT_POST_3_4_0@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 
-PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` -L"$(OCTLIBDIR)" -l octinterp
+PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft
 PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../" -I"$(OCTINCLUDEDIR)/octave"
 
 .PHONY: all OctaveModule

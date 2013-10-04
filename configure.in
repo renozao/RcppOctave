@@ -82,6 +82,10 @@ if test "${OCTAVE_CONFIG}" != ""; then
     AC_MSG_CHECKING([Octave library directory])
     OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
     AC_MSG_RESULT([${OCTLIBDIR}])
+    
+    AC_MSG_CHECKING([Octave system library directory])
+    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
+    AC_MSG_RESULT([${OCT_SYSLIBDIR}])
         
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
@@ -116,6 +120,7 @@ fi
 # Now substitute these variables in src/Makevars.in to create src/Makevars
 AC_SUBST(OCTINCLUDEDIR)
 AC_SUBST(OCTLIBDIR)
+AC_SUBST(OCT_SYSLIBDIR)
 AC_SUBST(OCT_POST_3_4_0)
 
 # Module path

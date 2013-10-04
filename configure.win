@@ -59,6 +59,14 @@ AC_OUTPUT () {
 "
 }
 
+AC_MSG_CHECKING () {
+	echo -n "Checking $1..."
+}
+
+AC_MSG_RESULT () {
+	echo "$1"
+}
+
 # check R is a shared library
 R_LDFLAGS=`"${R_BIN}" CMD config --ldflags 2>/dev/null`
 R_LDFLAGS=`echo -n "${R_LDFLAGS} -lR"`
@@ -127,6 +135,10 @@ if test "${OCTAVE_CONFIG}" != ""; then
     echo -n "Checking Octave library directory... "
     OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
     echo "${OCTLIBDIR}"
+    
+    AC_MSG_CHECKING "Octave system library directory"
+    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
+    AC_MSG_RESULT "${OCT_SYSLIBDIR}"
         
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
@@ -146,19 +158,8 @@ if test "${OCTAVE_CONFIG}" != ""; then
 else
     echo "octave-config not found, is Octave installed?
     
-    -> On Debian/Ubuntu please check that the required packages are installed:
-    
-      * For Octave 3.6 (works out of the box):
-        sudo apt-get install octave liboctave-dev
-        # install as usual in R
-        install.packages('RcppOctave')
-        
-      * For Octave 3.2.4 (might require extra command)
-        sudo apt-get install octave3.2 octave3.2-headers
-        # requires to explicitly export Octave lib directory 
-        export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:`octave-config -p OCTLIBDIR`
-        # install as usual in R
-        install.packages('RcppOctave')
+    -> On Windows please check that Octave is installed and that its bin/ sub-directory
+       is in Windows PATH.
     "
     exit 2
 fi
@@ -167,6 +168,7 @@ fi
 AC_SUBST OCTINCLUDEDIR
 AC_SUBST OCTINCLUDEDIR2
 AC_SUBST OCTLIBDIR
+AC_SUBST OCT_SYSLIBDIR
 AC_SUBST OCT_POST_3_4_0
 
 # Module path
