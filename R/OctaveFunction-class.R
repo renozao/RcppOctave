@@ -163,6 +163,8 @@ as.mfile <- function(..., pattern='mfile_', dir=tempdir()){
 	x
 }
 
+#' Path to Package M-files Standard Location
+#' 
 #' \code{system.mfile} returns paths to .m files installed with packages.
 #' 
 #' \code{system.mfile} is a shortcut for:
@@ -175,7 +177,6 @@ as.mfile <- function(..., pattern='mfile_', dir=tempdir()){
 #' @param ... arguments passed to \code{\link{system.file}}.
 #'  
 #' @export
-#' @rdname mfiles
 system.mfile <- function(..., package = 'base'){
     system.file('m-files', ..., package = package)
 }
