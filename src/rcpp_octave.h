@@ -3,25 +3,9 @@
 
 #include <RcppCommon.h>
 
-//// Octave libraries
-#include <octave/config.h>
-#include <octave/oct-obj.h>
-
-#ifndef OCT_POST_3_4_0
-#define OCT_POST_3_4_0 -1
-#endif
-
-#if OCT_POST_3_4_0 < 0
-#define PRE_3_4_0(x) x
-#define POST_3_4_0(x)
-#else
-#define PRE_3_4_0(x)
-#define POST_3_4_0(x) x
-#endif
-
-// define which class to use for Octave maps
-#define OCTAVE_MAP Octave_map
-
+// forward declaration of Octave classes
+class octave_value;
+class octave_value_list;
 // declaring the specialization
 namespace Rcpp {
 	template <> SEXP wrap( const octave_value& );
@@ -34,6 +18,28 @@ namespace Rcpp {
 // this must appear after the specialization,
 // otherwise the specialization will not be seen by Rcpp types
 #include <Rcpp.h>
+
+// OCTAVE STUFF
+
+// define version-specific macros
+#ifndef OCT_POST_3_4_0
+#define OCT_POST_3_4_0 -1
+#endif
+
+#if OCT_POST_3_4_0 < 0
+#define PRE_3_4_0(x) x
+#define POST_3_4_0(x)
+#else
+#define PRE_3_4_0(x)
+#define POST_3_4_0(x) x
+#endif
+
+// Octave libraries
+#include <octave/config.h>
+#include <octave/oct-obj.h>
+// define which class to use for Octave maps
+#define OCTAVE_MAP Octave_map
+//
 
 #define VERBOSE_LOG if( RCPP_OCTAVE_VERBOSE ) Rprintf
 
