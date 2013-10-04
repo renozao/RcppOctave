@@ -99,7 +99,8 @@ OctaveConfig <- local({
 	}
 		
 	settings <- .OctaveConfig[[name]]
-	file.path(settings, ...)
+    # settings may contain more than one path => sapply
+	unlist(sapply(settings, file.path, ...), use.names = FALSE)
 	}
 })
 
@@ -108,14 +109,27 @@ OctaveConfig <- local({
 		
 	dyn.fun <- function(x, dlls){
 		if( !x %in%  dlls ){
+            # add platform depend extension
 			libname <- paste(x, .Platform$dynlib.ext, sep='')
+            
+            # On windows: Octave GCC dll files end with .a
+            if( .Platform$OS.type == 'windows' ){
+                libname <- c(libname, paste(x, '.a', sep = ''), paste(libname, '.a', sep = ''))
+            }
+            #
+            
+            # look-up and load dll files in the
+            message(str_out(libname, Inf)) 
 			libs <- OctaveConfig('lib', libname)
+            message(str_out(libs, Inf))
 			for( l in libs ){
 				if( utils::file_test('-f', l) ){
 					return( if( !unload ) dyn.load(l) else dyn.unload(l) )
 				}
 			}
-			stop("Could not find Octave library '", x, "'")
+            # error if none of the expected path exist
+			stop("Could not find Octave library '", x, "' in ", str_out(unique(dirname(libs)), Inf)
+                , ".\n  File(s) looked up: ", str_out(basename(libs), Inf))
 		}
 	}
 	
@@ -130,7 +144,7 @@ OctaveConfig <- local({
 	OctaveConfig()
 	
 	# load required Octave libraries
-	.OctaveLibs()
+	#.OctaveLibs()
 	
 	# load compiled library normally or in devmode
 	if( !isDevNamespace() ) library.dynam(packageName(), pkgname, libname)
@@ -154,6 +168,6 @@ OctaveConfig <- local({
 	}
 	
 	# unload required Octave libraries 
-	.OctaveLibs(unload=TRUE)
+	#.OctaveLibs(unload=TRUE)
 }
 
