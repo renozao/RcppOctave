@@ -4,7 +4,7 @@
 
 rm -f  config.log config.status confdefs.h \
        configure.rds \
-       src/*.o src/*.so src/Makevars src/Makevars.win \
+       src/*.o src/*.so src/Makevars src/*.dll src/Makevars.win \
        src/modules/*.o src/modules/*.oct src/modules/Makefile \
        inst/doc/*.blg inst/doc/*.bbl \
        */*~ *~ 

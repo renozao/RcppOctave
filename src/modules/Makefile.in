@@ -33,4 +33,4 @@ clean:
 	rm -vf *.o *~
 	
 clean-all: clean
-	rm -vf *.oct Makefile
+	rm -vf *.oct
