@@ -6,13 +6,14 @@
 \alias{overbose}
 \title{Low-level Function Interfacing with Octave}
 \usage{
-  ostart(verbose = FALSE, warnings = FALSE)
+  ostart(verbose = FALSE, warnings = FALSE, force = FALSE)
 
   oend()
 
   overbose(value)
 
-  oconfig(varname, verbose = FALSE, warn = TRUE)
+  oconfig(varname, verbose = FALSE, warn = TRUE,
+    mustWork = TRUE)
 
   omodules(verbose = getOption("verbose"))
 }
@@ -21,7 +22,12 @@
   status.}
 
   \item{warnings}{logical that indicates if Octave startup
-  warnings should be shown.}
+  warnings}
+
+  \item{force}{logical that indicates if Octave session
+  should be reinitialised, even if one was previously
+  started (not meant to be used by end-users). should be
+  shown.}
 
   \item{value}{logical value to toggle verbosity}
 
@@ -34,6 +40,9 @@
   \item{warn}{logical that indicates if a warning should be
   thrown when a variable is returned empty, which generally
   means that \code{x} is not a valid config variable name.}
+
+  \item{mustWork}{logical that indicates if an error should
+  be thrown if failing to load Octave configuration.}
 }
 \description{
   \code{ostart} Initialize an Octave session.
@@ -46,7 +55,10 @@
   of objects between R and Octave (e.g. arguments and
   results).
 
-  \code{oconfig} retrieves Octave configuration variables.
+  Failure to load Octave configuration is generally due to
+  Octave binaries not being found. Users should ensure that
+  Octave binary directory is in the PATH or set the option
+  'octave.path' to the path to the relevant directory.
 
   \code{omodules} add the Octave modules shipped with
   RcppOctave to Octave path.
