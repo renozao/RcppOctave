@@ -11,6 +11,7 @@
 #' (i.e. the scope where user objects are defined).
 #'  
 #' 
+#' @import methods
 #' @keywords internal
 setClass("Octave", contains='character')
 
@@ -36,7 +37,6 @@ setClass("Octave", contains='character')
 #' 
 .O <- new("Octave")
 
-#' @importMethodsFrom methods show
 setGeneric('show', package='methods')
 
 #' Show method for \code{\linkS4class{Octave}} objects
