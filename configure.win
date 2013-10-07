@@ -74,18 +74,18 @@ AC_SUBST R_LDFLAGS
 
 R_CPPFLAGS=`"${R_BIN}" CMD config --cppflags 2>/dev/null`
 
-echo -n "Checking whether R is a shared library... "
+AC_MSG_CHECKING "whether R is a shared library"
 has_R_shlib=no
 if test -n "$R_LDFLAGS"; then
    has_R_shlib=yes
 fi
 
 if test "${has_R_shlib}" = "no"; then
-	echo "NO"
+	AC_MSG_RESULT "NO"
 	# add path to R headers 
 	R_CPPFLAGS="-I'${R_INCLUDE_DIR}' -I'${R_INCLUDE_DIR}${R_ARCH}'"
 else
-   echo "YES"
+   AC_MSG_RESULT "YES"
 fi
 AC_SUBST R_CPPFLAGS
 
@@ -128,13 +128,13 @@ if test "${OCTAVE_CONFIG}" != ""; then
     # Use octave-config for header and linker arguments
     echo "Checking Octave include directory... "
     OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    echo "    ${OCTINCLUDEDIR}"
+    AC_MSG_RESULT "    ${OCTINCLUDEDIR}"
     OCTINCLUDEDIR2=`${OCTAVE_CONFIG} -p INCLUDEDIR`
-    echo "    ${OCTINCLUDEDIR2}"
+    AC_MSG_RESULT "    ${OCTINCLUDEDIR2}"
     
-    echo -n "Checking Octave library directory... "
+    AC_MSG_CHECKING "Octave library directory"
     OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    echo "${OCTLIBDIR}"
+    AC_MSG_RESULT "${OCTLIBDIR}"
     
     AC_MSG_CHECKING "Octave system library directory"
     OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
@@ -142,17 +142,17 @@ if test "${OCTAVE_CONFIG}" != ""; then
         
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
-    echo -n "Checking Octave version... "
+    AC_MSG_CHECKING "Octave version"
     OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
-    echo "${OCTVERSION}"
+    AC_MSG_RESULT "${OCTVERSION}"
     
     CMPV="3.4.3"
-    echo -n "Checking whether to infer output names for Octave function (>= ${CMPV})... "
+    AC_MSG_CHECKING "whether to infer output names for Octave function (>= ${CMPV})"
     OCT_POST_3_4_0=`"${RSCRIPT}" -e "cat(utils::compareVersion('${OCTVERSION}', '${CMPV}'))"`
     if test "${OCT_POST_3_4_0}" != "-1"; then
-     	echo "YES"
+     	AC_MSG_RESULT "YES"
      else 
-		echo "NO"
+		AC_MSG_RESULT "NO"
 	fi
     
 else
@@ -172,9 +172,9 @@ AC_SUBST OCT_SYSLIBDIR
 AC_SUBST OCT_POST_3_4_0
 
 # Module path
-echo -n "Checking RcppOctave Octave module directory... "
+AC_MSG_CHECKING "RcppOctave Octave module directory"
 OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules
-echo "${OCT_MODULES_PATH}"
+AC_MSG_RESULT "${OCT_MODULES_PATH}"
 AC_SUBST OCT_MODULES_PATH
 
 # Configure libRrng
