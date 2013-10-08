@@ -11,7 +11,8 @@ Description: Direct interface to Octave. The primary goal is to facilitate the
     variables between R and Octave, using R core RNGs in Octave, which ensures
     that stochastic computations are also reproducible.
 License: GPL (>=2)
-URL: http://r-forge.r-project.org/projects/rcppoctave/
+URL: http://renozao.github.io/RcppOctave/current, http://github.com/renozao/RcppOctave, http://r-forge.r-project.org/projects/rcppoctave/
+BugReports: http://github.com/renozao/RcppOctave/issues
 LazyLoad: yes
 SystemRequirements: Octave (>= 3.2.4) and its development files
 Depends:
