@@ -79,9 +79,9 @@
 </div><div class='input'>print(res)
 </div>
 <div class='output'>               test replications elapsed relative
-2   rgamma(N, 9, 1)         1000   0.075    1.000
-3 o_rgamma(9, N, 1)         1000   0.826   11.013
-1 .O$orndg(9, 1, N)         1000   1.869   24.920
+2   rgamma(N, 9, 1)         1000   0.073    1.000
+3 o_rgamma(9, N, 1)         1000   0.810   11.096
+1 .O$orndg(9, 1, N)         1000   1.744   23.890
 </div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
 </div><div class='input'>x1 <- c(.O$orndn(N,1))
 </div><div class='input'>set.seed(42)  # reset RNG
@@ -95,9 +95,9 @@
                  replications=1000)
 </div><div class='input'>print(res)</div>
 <div class='output'>           test replications elapsed relative
-2      rnorm(N)         1000   0.060     1.00
-3 o_rnorm(N, 1)         1000   0.087     1.45
-1   .O$orndn(N)         1000   1.788    29.80
+2      rnorm(N)         1000   0.060    1.000
+3 o_rnorm(N, 1)         1000   0.084    1.400
+1   .O$orndn(N)         1000   1.783   29.717
 </div>
   </pre>
 </div></div>

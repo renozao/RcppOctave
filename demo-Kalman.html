@@ -565,13 +565,13 @@ end
 </div><div class='input'>print(res)
 </div>
 <div class='output'>                test replications elapsed relative
-7  KalmanOctave(pos)          100   1.552    1.000
-4   KalmanRfunC(pos)          100   3.421    2.204
-2      KalmanRC(pos)          100   3.449    2.222
-3    KalmanRfun(pos)          100   3.900    2.513
-1       KalmanR(pos)          100   4.042    2.604
-6 FirstKalmanRC(pos)          100   4.216    2.716
-5  FirstKalmanR(pos)          100   4.730    3.048
+7  KalmanOctave(pos)          100   1.523    1.000
+4   KalmanRfunC(pos)          100   3.392    2.227
+2      KalmanRC(pos)          100   3.424    2.248
+3    KalmanRfun(pos)          100   3.895    2.557
+1       KalmanR(pos)          100   3.903    2.563
+6 FirstKalmanRC(pos)          100   4.192    2.752
+5  FirstKalmanR(pos)          100   4.724    3.102
 </div><div class='input'></div><div class='input'></div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanCpp(pos), col='green', pch=20)</div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanR(pos), col='green', pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Set1'))</div><div class='input'>#c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")</div><div class='input'>#plot(pos, col='#377EB8', pch=20)</div><div class='input'>#points(KalmanR(pos), col="#E41A1C", pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Paired'))</div><div class='input'>#c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C")</div><div class='input'></div><div class='input'>## doPdfPlot <- function() {</div><div class='input'>##     pdf("../images/kalmanExample.pdf")</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=18,</div><div class='input'>##          main="Object Trajectory and Kalman Filter Estimate")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4DD", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3DD", "#1F78B4DD"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div><div class='input'></div><div class='input'>## doEpsPlot <- function() {</div><div class='input'>##     setEPS()</div><div class='input'>##     postscript("../images/kalmanExample.eps")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3", "#1F78B4"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div>
   </pre>
 </div></div>
