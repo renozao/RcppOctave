@@ -9,7 +9,7 @@
 ## Copyright (C) 2011 Renaud Gaujoux
 
 # The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.9.5)
+AC_INIT([RcppOctave], 0.10.2)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -22,7 +22,7 @@ AC_LANG(C++)
 # early in configure.ac
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
-  echo "could not determine R_HOME"
+  echo "RcppOctave - configure: could not determine R_HOME"
   exit 1
 fi
 
@@ -56,6 +56,14 @@ CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
 AC_SUBST(R_CPPFLAGS)
 AC_SUBST(R_LDFLAGS)
 
+#RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
+#RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
+#AC_MSG_RESULT([Using Rcpp LIBS: ${RCPP_LIBS}])
+#AC_MSG_RESULT([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
+#AC_SUBST(RCPP_LIBS)
+#AC_SUBST(RCPP_CXXFLAGS)
+
+
 ## Use octave-config to find arguments for compiler and linker flags
 ##
 ## Check for non-standard programs: 
@@ -66,7 +74,7 @@ AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
 
 ## If octave-config was found, let's use it
 if test "${OCTAVE_CONFIG}" != ""; then	
-    # Use gsl-config for header and linker arguments
+    # Use octave-config for header and linker arguments
     AC_MSG_CHECKING([Octave include directory])
     OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
     AC_MSG_RESULT([${OCTINCLUDEDIR}])
@@ -74,6 +82,10 @@ if test "${OCTAVE_CONFIG}" != ""; then
     AC_MSG_CHECKING([Octave library directory])
     OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
     AC_MSG_RESULT([${OCTLIBDIR}])
+    
+    AC_MSG_CHECKING([Octave system library directory])
+    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
+    AC_MSG_RESULT([${OCT_SYSLIBDIR}])
         
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
@@ -108,6 +120,7 @@ fi
 # Now substitute these variables in src/Makevars.in to create src/Makevars
 AC_SUBST(OCTINCLUDEDIR)
 AC_SUBST(OCTLIBDIR)
+AC_SUBST(OCT_SYSLIBDIR)
 AC_SUBST(OCT_POST_3_4_0)
 
 # Module path

@@ -28,8 +28,8 @@
 #' \code{RcppOctave} defines a set of functions like \code{rand} that shadow 
 #' Octave built-in functions.
 #' These functions are defined in the Octave module \code{Rrng.oct} that is 
-#' stored in the package \emph{modules/} sub-directory (call \code{OctaveConfig()}) 
-#' to see the exact path to this location).
+#' stored in the package \emph{modules/} sub-directory.
+#' Call \code{OctaveConfig('modules')} to see this directory's full path.
 #' 
 #' @param n number of output rows
 #' @param p number of output columns (default to \code{n})

@@ -1,0 +1,200 @@
+## Process this file with autoconf to produce a configure script.
+##
+## Configure.in for RcppOctave
+##
+## Borrowed and adapted from the file configure.in for RcppGSL
+## Copyright (C) 2010 Romain Francois and Dirk Eddelbuettel
+## Licensed under GNU GPL 2 or later
+##
+## Copyright (C) 2011 Renaud Gaujoux
+
+# You will very likely need to ensure that the same C compiler and compiler 
+# flags are used in the configure tests as when compiling R or your package. 
+# Under a Unix-alike, you can achieve this by including the following fragment 
+# early in configure.ac
+#: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "RcppOctave - configure: could not determine R_HOME"
+  exit 1
+fi
+
+R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R
+RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
+
+# define substitution function
+AC_SUBST () {
+	eval AC_SUBST_VAR_ABCDE=\$$1
+	export AC_SUBST_VAR_ABCDE 
+	"${RSCRIPT}" -e "
+		vsub <- function(var, val, out = 'configure.rds'){
+			cat('Using ', var, ': ', val, '\n', sep = '')
+			varList <- list() 
+			if( file.exists(out) ){ # load file if it exists
+				varList <- readRDS(out)
+			}
+			varList[[var]] <- val
+			saveRDS(varList, file = out) 
+		}
+		var <- '$1'
+		val <- Sys.getenv('AC_SUBST_VAR_ABCDE')
+		vsub(var, val)
+	"
+	unset AC_SUBST_VAR_ABCDE
+}
+
+AC_OUTPUT () {
+	"${RSCRIPT}" -e "
+	out <- '$1'
+	tmpl <- paste0(out, '.in')
+	rds <- 'configure.rds'
+	l <- readLines(tmpl)
+	varList <- readRDS(rds)
+	cat('Substituting ', length(varList), ' variables in ', out, '\n', sep = '')
+	for( i in seq_along(varList) ){
+		var <- names(varList[i])
+		val <- varList[[i]]
+		l <- gsub(paste0('@', var, '@'), val, l, fixed = TRUE)
+	}
+	cat(l, file = out, sep = '\n')
+"
+}
+
+AC_MSG_CHECKING () {
+	echo -n "Checking $1... "
+}
+
+AC_MSG_RESULT () {
+	echo "$1"
+}
+
+AC_MSG_CHECKING "Rscript version"
+AC_MSG_RESULT `"${RSCRIPT}" --version`
+
+echo "Checking system PATH..."
+AC_MSG_RESULT `"${RSCRIPT}" -e 'a <- sapply(strsplit(Sys.getenv("PATH"), .Platform$path.sep)[[1]], message)'`
+
+# check R is a shared library
+R_LDFLAGS=`"${R_BIN}" CMD config --ldflags 2>/dev/null`
+AC_SUBST R_LDFLAGS
+
+R_CPPFLAGS=`"${R_BIN}" CMD config --cppflags 2>/dev/null`
+
+AC_MSG_CHECKING "whether R is a shared library"
+has_R_shlib=no
+if test -n "$R_LDFLAGS"; then
+   has_R_shlib=yes
+fi
+
+if test "${has_R_shlib}" = "no"; then
+	AC_MSG_RESULT "NO"
+	# add path to R headers 
+	R_CPPFLAGS="-I'${R_INCLUDE_DIR}' -I'${R_INCLUDE_DIR}${R_ARCH}'"
+else
+   AC_MSG_RESULT "YES"
+fi
+AC_SUBST R_CPPFLAGS
+
+# get R compilation flags
+CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
+AC_SUBST CC
+CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
+AC_SUBST CFLAGS
+CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
+AC_SUBST CPPFLAGS
+CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
+AC_SUBST CXXFLAGS
+
+# get Rcpp compilation flags
+AC_MSG_CHECKING "Rcpp LIBS"
+RCPP_LIBS=`"${RSCRIPT}" -e "Rcpp:::LdFlags()"`
+AC_MSG_RESULT "${RCPP_LIBS}"
+#AC_SUBST RCPP_LIBS
+ 
+AC_MSG_CHECKING "Rcpp CXXFLAGS"
+RCPP_CXXFLAGS=`"${RSCRIPT}" -e "Rcpp:::CxxFlags()"`
+AC_MSG_RESULT "${RCPP_CXXFLAGS}"
+#AC_SUBST RCPP_CXXFLAGS
+
+# pass R flags down to makefile in modules/
+#AC_SUBST R_CPPFLAGS
+#AC_SUBST R_LDFLAGS
+
+## Use octave-config to find arguments for compiler and linker flags
+##
+## Check for non-standard programs: 
+## octave-config
+#AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
+AC_MSG_CHECKING "Octave binary directory"
+OCTAVE_BINDIR=`"${RSCRIPT}" -e '
+	cat(gsub("\\\\", "/", shell("octave-config -p BINDIR", intern=TRUE, mustWork = FALSE), fixed = TRUE))
+	' `
+AC_MSG_RESULT "${OCTAVE_BINDIR}"
+
+## If octave-config was found, let's use it
+if test "${OCTAVE_BINDIR}" != ""; then
+	
+	OCTAVE_CONFIG="${OCTAVE_BINDIR}/octave-config"
+	AC_SUBST OCTAVE_CONFIG
+    
+    ## mkoctfile
+	#AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+	OCTAVE_MKOCTFILE="${OCTAVE_BINDIR}/mkoctfile"
+	AC_SUBST OCTAVE_MKOCTFILE
+    
+    # Use octave-config for header and linker arguments
+    echo "Checking Octave include directory... "
+    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
+    AC_MSG_RESULT "    ${OCTINCLUDEDIR}"
+    OCTINCLUDEDIR2=`${OCTAVE_CONFIG} -p INCLUDEDIR`
+    AC_MSG_RESULT "    ${OCTINCLUDEDIR2}"
+    
+    AC_MSG_CHECKING "Octave library directory"
+    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
+    AC_MSG_RESULT "${OCTLIBDIR}"
+    
+    AC_MSG_CHECKING "Octave system library directory"
+    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
+    AC_MSG_RESULT "${OCT_SYSLIBDIR}"
+        
+    # check Octave version to know whether one should infer output names:
+    # it works for Octave >= 3.4.3
+    AC_MSG_CHECKING "Octave version"
+    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
+    AC_MSG_RESULT "${OCTVERSION}"
+    
+    CMPV="3.4.3"
+    AC_MSG_CHECKING "whether to infer output names for Octave function (>= ${CMPV})"
+    OCT_POST_3_4_0=`"${RSCRIPT}" -e "cat(utils::compareVersion('${OCTVERSION}', '${CMPV}'))"`
+    if test "${OCT_POST_3_4_0}" != "-1"; then
+     	AC_MSG_RESULT "YES"
+     else 
+		AC_MSG_RESULT "NO"
+	fi
+    
+else
+    echo "octave-config not found, is Octave installed?
+    
+    -> Check that Octave is installed and that its bin/ sub-directory
+       is in Windows PATH.
+    "
+    exit 2
+fi
+
+# Now substitute these variables in src/Makevars.in to create src/Makevars
+AC_SUBST OCTINCLUDEDIR
+AC_SUBST OCTINCLUDEDIR2
+AC_SUBST OCTLIBDIR
+AC_SUBST OCT_SYSLIBDIR
+AC_SUBST OCT_POST_3_4_0
+
+# Module path
+AC_MSG_CHECKING "RcppOctave Octave module directory"
+OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules
+AC_MSG_RESULT "${OCT_MODULES_PATH}"
+AC_SUBST OCT_MODULES_PATH
+
+# Configure libRrng
+#AC_CONFIG_SUBDIRS([src/modules])
+
+AC_OUTPUT src/Makevars.win
+AC_OUTPUT src/modules/Makefile

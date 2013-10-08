@@ -40,9 +40,9 @@
   \code{rand} that shadow Octave built-in functions. These
   functions are defined in the Octave module
   \code{Rrng.oct} that is stored in the package
-  \emph{modules/} sub-directory (call
-  \code{OctaveConfig()}) to see the exact path to this
-  location).
+  \emph{modules/} sub-directory. Call
+  \code{OctaveConfig('modules')} to see this directory's
+  full path.
 }
 
 \section{Octave Documentation for \emph{rand}}{

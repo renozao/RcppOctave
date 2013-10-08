@@ -24,10 +24,10 @@ OCT_OBJECTS = utils.oct $(OCT_SOURCES:.cc=.oct)
 all: $(OCT_OBJECTS)
 
 utils.oct: utils.cc
-	@OCTAVE_MKOCTFILE@ -v utils.cc
+	"@OCTAVE_MKOCTFILE@" -v utils.cc
 
 .cc.oct:
-	@OCTAVE_MKOCTFILE@ -v ${R_CPPFLAGS} $(PKG_CPPFLAGS) ${R_LDFLAGS} $(PKG_LIBS) $<
+	"@OCTAVE_MKOCTFILE@" -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
 	
 clean:
 	rm -vf *.o *~

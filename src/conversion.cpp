@@ -1,5 +1,12 @@
 #include "rcpp_octave.h"
 
+#define R_NO_REMAP
+#include <Rdefines.h>
+#define getAttrib Rf_getAttrib
+
+#include <octave/ov-base.h>
+#include <octave/ov-scalar.h>
+#include <octave/ov-struct.h>
 #include <octave/ov-null-mat.h>
 
 #include <string.h>
