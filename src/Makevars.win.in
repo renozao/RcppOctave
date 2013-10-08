@@ -9,8 +9,8 @@ OCT_POST_3_4_0=@OCT_POST_3_4_0@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 
 ## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()") -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft 
-PKG_CPPFLAGS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") -fmax-errors=10 -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR2)" -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../"
+PKG_LIBS := $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()") -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft 
+PKG_CPPFLAGS := $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") -fmax-errors=10 -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR2)" -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../"
 
 .PHONY: all OctaveModule
 
