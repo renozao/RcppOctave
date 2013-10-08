@@ -60,16 +60,21 @@ AC_OUTPUT () {
 }
 
 AC_MSG_CHECKING () {
-	echo -n "Checking $1..."
+	echo -n "Checking $1... "
 }
 
 AC_MSG_RESULT () {
 	echo "$1"
 }
 
+AC_MSG_CHECKING "Rscript version"
+AC_MSG_RESULT `"${RSCRIPT}" --version`
+
+echo "Checking system PATH..."
+AC_MSG_RESULT `"${RSCRIPT}" -e 'a <- sapply(strsplit(Sys.getenv("PATH"), .Platform$path.sep)[[1]], message)'`
+
 # check R is a shared library
 R_LDFLAGS=`"${R_BIN}" CMD config --ldflags 2>/dev/null`
-R_LDFLAGS=`echo -n "${R_LDFLAGS} -lR"`
 AC_SUBST R_LDFLAGS
 
 R_CPPFLAGS=`"${R_BIN}" CMD config --cppflags 2>/dev/null`
@@ -100,12 +105,15 @@ CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
 AC_SUBST CXXFLAGS
 
 # get Rcpp compilation flags
-#RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
-#AC_SUBST RCPP_LIBS 
-#RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
+AC_MSG_CHECKING "Rcpp LIBS"
+RCPP_LIBS=`"${RSCRIPT}" -e "Rcpp:::LdFlags()"`
+AC_MSG_RESULT "${RCPP_LIBS}"
+#AC_SUBST RCPP_LIBS
+ 
+AC_MSG_CHECKING "Rcpp CXXFLAGS"
+RCPP_CXXFLAGS=`"${RSCRIPT}" -e "Rcpp:::CxxFlags()"`
+AC_MSG_RESULT "${RCPP_CXXFLAGS}"
 #AC_SUBST RCPP_CXXFLAGS
-#echo "Using Rcpp LIBS: ${RCPP_LIBS}"
-#echo "Using Rcpp CXXFLAGS: ${RCPP_CXXFLAGS}"
 
 # pass R flags down to makefile in modules/
 #AC_SUBST R_CPPFLAGS
@@ -116,15 +124,23 @@ AC_SUBST CXXFLAGS
 ## Check for non-standard programs: 
 ## octave-config
 #AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
-OCTAVE_CONFIG=octave-config
-AC_SUBST OCTAVE_CONFIG
-## mkoctfile
-#AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
-OCTAVE_MKOCTFILE=mkoctfile
-AC_SUBST OCTAVE_MKOCTFILE
+AC_MSG_CHECKING "Octave binary directory"
+OCTAVE_BINDIR=`"${RSCRIPT}" -e '
+	cat(gsub("\\\\", "/", shell("octave-config -p BINDIR", intern=TRUE, mustWork = FALSE), fixed = TRUE))
+	' `
+AC_MSG_RESULT "${OCTAVE_BINDIR}"
 
 ## If octave-config was found, let's use it
-if test "${OCTAVE_CONFIG}" != ""; then
+if test "${OCTAVE_BINDIR}" != ""; then
+	
+	OCTAVE_CONFIG="${OCTAVE_BINDIR}/octave-config"
+	AC_SUBST OCTAVE_CONFIG
+    
+    ## mkoctfile
+	#AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+	OCTAVE_MKOCTFILE="${OCTAVE_BINDIR}/mkoctfile"
+	AC_SUBST OCTAVE_MKOCTFILE
+    
     # Use octave-config for header and linker arguments
     echo "Checking Octave include directory... "
     OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
@@ -158,7 +174,7 @@ if test "${OCTAVE_CONFIG}" != ""; then
 else
     echo "octave-config not found, is Octave installed?
     
-    -> On Windows please check that Octave is installed and that its bin/ sub-directory
+    -> Check that Octave is installed and that its bin/ sub-directory
        is in Windows PATH.
     "
     exit 2
