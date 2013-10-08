@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>OctaveConfig. RcppOctave 0.10</title>
+<title>OctaveConfig. RcppOctave 0.10.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.10</a>
+      <a class="brand" href="index.html">RcppOctave 0.10.2</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -48,19 +48,19 @@
         
       </header>
       
-      <h1>Cached RcppOctave Configuration Paths</h1>
+      <h1>Octave-RcppOctave Configuration</h1>
 
 <div class="row">
   <div class="span8">
     <div class="description">
       <h2>Description</h2>
       
-      <p><p>Cached RcppOctave Configuration Paths</p></p>
+      <p><p>Configures Octave and load RcppOctave</p></p>
   
     </div>
     
     <h2>Usage</h2>
-    <pre>OctaveConfig(name, ..., reset = FALSE)</pre>
+    <pre>OctaveConfig(name, ..., path = NULL)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -70,6 +70,8 @@
       <dd>extra names to be concatenated to the result
   with <code><a href='http://www.inside-r.org/r-doc/base/file.path'>file.path</a></code>. Only used when <code>name</code>
   is not missing.</dd>
+      <dt>path</dt>
+      <dd>path to Octave bin/ sub-directory</dd>
     </dl>
     
     <div class="Value">
@@ -85,7 +87,13 @@
 OctaveConfig()
 </code></pre>
 
-<pre><code>## $lib
+<pre><code>## $bin
+##     BINDIR 
+## &quot;/usr/bin&quot; 
+## 
+## $lib
+##                                   BINDIR 
+##                               &quot;/usr/bin&quot; 
 ##                                   LIBDIR 
 ##              &quot;/usr/lib/x86_64-linux-gnu&quot; 
 ##                                OCTLIBDIR 
@@ -96,20 +104,32 @@ OctaveConfig()
 ##                     &quot;/usr/include&quot; &quot;/usr/include/octave-3.6.4/octave&quot; 
 ## 
 ## $modules
-## [1] &quot;/tmp/RtmpOTcd3b/file1f9f4796c1a/RcppOctave/modules&quot;
+## [1] &quot;/tmp/Rtmp9bBHZl/file28f13730e9ab/RcppOctave/modules&quot;
 </code></pre>
 
 <pre><code class="r">OctaveConfig(&#39;lib&#39;)
 </code></pre>
 
-<pre><code>## [1] &quot;/usr/lib/x86_64-linux-gnu&quot;             
-## [2] &quot;/usr/lib/x86_64-linux-gnu/octave/3.6.4&quot;
+<pre><code>##                                   BINDIR 
+##                               &quot;/usr/bin&quot; 
+##                                   LIBDIR 
+##              &quot;/usr/lib/x86_64-linux-gnu&quot; 
+##                                OCTLIBDIR 
+## &quot;/usr/lib/x86_64-linux-gnu/octave/3.6.4&quot;
 </code></pre>
 
 <pre><code class="r">OctaveConfig(&#39;include&#39;)
 </code></pre>
 
-<pre><code>## [1] &quot;/usr/include&quot;                     &quot;/usr/include/octave-3.6.4/octave&quot;
+<pre><code>##                         INCLUDEDIR                      OCTINCLUDEDIR 
+##                     &quot;/usr/include&quot; &quot;/usr/include/octave-3.6.4/octave&quot;
+</code></pre>
+
+<pre><code class="r">OctaveConfig(&#39;modules&#39;)
+</code></pre>
+
+<pre><code>##   /tmp/Rtmp9bBHZl/file28f13730e9ab/RcppOctave/modules 
+## &quot;/tmp/Rtmp9bBHZl/file28f13730e9ab/RcppOctave/modules&quot;
 </code></pre>
 
 <pre><code class="r">

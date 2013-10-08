@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>as.mfile. RcppOctave 0.10</title>
+<title>as.mfile. RcppOctave 0.10.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.10</a>
+      <a class="brand" href="index.html">RcppOctave 0.10.2</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -57,20 +57,12 @@
       
       <p><p><code>as.mfile</code> converts source code or .m filenames into
   real paths to .m files that can be sourced with
-  <code><a href='http://www.inside-r.org/r-doc/RcppOctave/o_source'>o_source</a></code>.</p>
-<p><code>system.mfile</code> is a shortcut for:
-  <span class = "samp">system.file('m-files', ..., package = package)</span> As
-  such it returns empty strings if the requested file does
-  not exist. If no arguments besides <code>package</code> are
-  passed, it returns the full path to the package's
-  sub-directory <em>m-files/</em> -- if it exists.</p></p>
+  <code><a href='http://www.inside-r.org/r-doc/RcppOctave/o_source'>o_source</a></code>.</p></p>
   
     </div>
     
     <h2>Usage</h2>
-    <pre>as.mfile(..., pattern = "mfile_", dir = tempdir())
-
-system.mfile(..., package = "base")</pre>
+    <pre>as.mfile(..., pattern = "mfile_", dir = tempdir())</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -83,21 +75,14 @@ system.mfile(..., package = "base")</pre>
       <dt>dir</dt>
       <dd>existing directory where to write the .m files
   generated from the plain code elements of <var>x</var>.</dd>
-      <dt>...</dt>
-      <dd>arguments passed to
-  <code><a href='http://www.inside-r.org/r-doc/base/system.file'>system.file</a></code>.</dd>
       <dt>pattern</dt>
       <dd>a non-empty character vector giving the
   initial part of the name.</dd>
-      <dt>package</dt>
-      <dd>a character string with the name of a
-  single package.  An error occurs if more than one package
-  name is given.</dd>
     </dl>
           </div>
   <div class="span4">
     <!-- <ul>
-      <li>as.mfile</li><li>system.mfile</li>
+      <li>as.mfile</li>
     </ul>
     <ul>
       
