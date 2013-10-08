@@ -37,8 +37,6 @@ setClass("Octave", contains='character')
 #' 
 .O <- new("Octave")
 
-setGeneric('show', package='methods')
-
 #' Show method for \code{\linkS4class{Octave}} objects
 #' @export
 setMethod('show', 'Octave',
