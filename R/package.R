@@ -51,15 +51,14 @@ NULL
 #			}, Depends = Depends, Makevars = Makevars, Makevars.win = Makevars.win)
 #}
 
-#' Cached RcppOctave Configuration Paths
+#' Octave-RcppOctave Configuration
+#' 
+#' Configures Octave and load RcppOctave  
 #' 
 #' @param name Name of an RcppOctave path variable
 #' @param ... extra names to be concatenated to the result with \code{\link{file.path}}.
 #' Only used when \code{name} is not missing.
-#' @param reset logical that indicates if the configuration should be reloaded
-#' @param check logical that indicates if the presence of a working version of 
-#' the \code{octave-config} binary should be tested before trying to load the
-#' configuration. 
+#' @param path path to Octave bin/ sub-directory
 #' @return  a list (if \code{name is missing}) or a single character string.
 #' 
 #' @keywords internal
@@ -74,175 +73,179 @@ NULL
 OctaveConfig <- local({
 	# config cache
 	.OctaveConfig <- NULL
-	function(name, ..., reset=FALSE, check = FALSE){
-	
-    if( check ){
-        if( is.null(oconfig('VERSION', mustWork = FALSE, warn = FALSE)) ){
-            return()
-        }
-    }
-                    
-		            
-	# return the whole config list if no name is provided
-	if( is.null(.OctaveConfig) || missing(name) || reset ){
+	function(name, ..., path=NULL){
+		    
+        do_init <- FALSE
+    	# return the whole config list if no name is provided
+    	if( is.null(.OctaveConfig) || !is.null(path) ){
+            
+            do_init <- TRUE
+            # save Octave bin path
+            if( !is.null(path) ) options(octave.path = path)
+                        
+            # create the config list at first call
+    		conf <- list(bin =  octave_config('BINDIR')
+                        , lib = octave_config(c('BINDIR', 'LIBDIR', 'OCTLIBDIR'))
+    					, include = octave_config(c('INCLUDEDIR', 'OCTINCLUDEDIR'))
+    			)
+    		
+    		# add a configuration variable for the module path
+    		conf$modules <- packagePath('modules')
+    		if( pkgmaker::isDevNamespace() ){ # fix module path due changes in devtools compilation step
+    			conf$modules <- file.path(tempdir(), packageName(), 'modules')
+    			# create module directory
+    			if( !file.exists(conf$modules) ){
+    				message("Faking devtools compilation directory '", conf$modules, "'")					
+    				dir.create(conf$modules, recursive=TRUE)
+    				src <- packagePath('src/modules')
+    				file.copy(file.path(src, c('PKG_ADD', list.files(src, pattern="*.oct$"))), conf$modules)
+    			}				
+    		} 
+    		
+            # save configuration
+    		.OctaveConfig <<- conf
+            
+    	}
         
-        # create the config list at first call
-		if( is.null(.OctaveConfig) || reset ){
-			conf <- list(lib=oconfig(c('BINDIR', 'LIBDIR', 'OCTLIBDIR'))
-						, include=oconfig(c('INCLUDEDIR', 'OCTINCLUDEDIR'))
-				)
-			
-			# add a configuration variable for the module path
-			conf$modules <- packagePath('modules')
-			if( pkgmaker::isDevNamespace() ){ # fix module path due changes in devtools compilation step
-				conf$modules <- file.path(tempdir(), packageName(), 'modules')
-				# create module directory
-				if( !file.exists(conf$modules) ){
-					message("Faking devtools compilation directory '", conf$modules, "'")					
-					dir.create(conf$modules, recursive=TRUE)
-					src <- packagePath('src/modules')
-					file.copy(file.path(src, c('PKG_ADD', list.files(src, pattern="*.oct$"))), conf$modules)
-				}				
-			} 
-			
-			.OctaveConfig <<- conf
-		}
-		
-		if( missing(name) ) return(.OctaveConfig)
-	}
-		
-	settings <- .OctaveConfig[[name]]
-    # settings may contain more than one path => sapply
-	unlist(sapply(settings, file.path, ...), use.names = FALSE)
+        # setup/initialise library and modules if necessary
+        if( do_init ){
+            if( isTRUE(.OctaveInit()) )
+                .splash_message()
+        }
+        
+        if( missing(name) ){
+            if( !is.null(path) ) return( invisible(.OctaveConfig) )
+            else return( .OctaveConfig )
+        }
+    		
+    	settings <- .OctaveConfig[[name]]
+        # settings may contain more than one path => sapply
+    	unlist(sapply(settings, file.path, ...), use.names = FALSE)
 	}
 })
 
 # Load/Unload Octave Libraries
-.OctaveLibs <- local({
-    .libs <- NULL
-    function(load = NULL){
-    		
-        if( is.null(load) ) return( .libs )
-    	            
-    	dyn.fun <- function(x, dlls){
-    		if( !x %in%  dlls ){
-                # add platform depend extension
-    			libname <- paste(x, .Platform$dynlib.ext, sep='')
-                
-                # On windows: Octave GCC dll files end with .a
-                if( .Platform$OS.type == 'windows' ){
-                    libname <- c(libname, paste(x, '-1', .Platform$dynlib.ext, sep = ''))
-                }
-                #
-                
-                # look-up and load dll files in the
-    			libs <- OctaveConfig('lib', libname)
-    			for( l in libs ){
-    				if( utils::file_test('-f', l) ){
-                        if( isTRUE(load) ) dyn.load(l) else dyn.unload(l)
-    					return( l )
-    				}
-    			}
-                # error if none of the expected path exist
-    			stop("Could not find Octave library '", x, "' in ", str_out(unique(dirname(libs)), Inf)
-                    , ".\n  File(s) looked up: ", str_out(basename(libs), Inf))
-    		}
-    	}
-    	
-        # load/unload required Octave libraries
-    	octlibs <- c('libcruft', 'liboctave', 'liboctinterp')
-        if( isFALSE(load) ) octlibs <- rev(octlibs)
-    	.libs <<- sapply(octlibs, dyn.fun, names(base::getLoadedDLLs()))    
-    }
-})
+#.OctaveLibs <- local({
+#    .libs <- NULL
+#    function(load = NULL){
+#    		
+#        if( is.null(load) ) return( .libs )
+#    	            
+#    	dyn.fun <- function(x, dlls){
+#    		if( !x %in%  dlls ){
+#                # add platform depend extension
+#    			libname <- paste(x, .Platform$dynlib.ext, sep='')
+#                
+#                # On windows: Octave GCC dll files end with .a
+#                if( .Platform$OS.type == 'windows' ){
+#                    libname <- c(libname, paste(x, '-1', .Platform$dynlib.ext, sep = ''))
+#                }
+#                #
+#                
+#                # look-up and load dll files in the
+#    			libs <- OctaveConfig('lib', libname)
+#    			for( l in libs ){
+#    				if( utils::file_test('-f', l) ){
+#                        if( isTRUE(load) ) dyn.load(l) else dyn.unload(l)
+#    					return( l )
+#    				}
+#    			}
+#                # error if none of the expected path exist
+#    			stop("Could not find Octave library '", x, "' in ", str_out(unique(dirname(libs)), Inf)
+#                    , ".\n  File(s) looked up: ", str_out(basename(libs), Inf))
+#    		}
+#    	}
+#    	
+#        # load/unload required Octave libraries
+#    	octlibs <- c('libcruft', 'liboctave', 'liboctinterp')
+#        if( isFALSE(load) ) octlibs <- rev(octlibs)
+#    	.libs <<- sapply(octlibs, dyn.fun, names(base::getLoadedDLLs()))    
+#    }
+#})
 
-hook_Sys.path <- local({
-    .opath <- NULL 
-    .addon <- NULL
-    function(dir, snapshot.only = FALSE){
+.OctaveInit <- local({
+    .ncall <- 0L
+    .initialised <- FALSE
+    function(libname = NULL, pkgname = NULL){
+    
+        # do not call recursively
+        if( .ncall > 0L || .initialised ) return()
+        .ncall <<- .ncall + 1L
+        on.exit( .ncall <<- .ncall - 1L )
+        #
         
-        path <- Sys.getenv('PATH')
-        spath <- strsplit(path, .Platform$path.sep)[[1]]
+        # force libname and pkgname when called from OctaveConfig
+        if( is.null(pkgname) ) pkgname <- packageName() 
+        if( is.null(libname) ) libname <- dirname(path.package(pkgname))
+        #
         
-        if( isTRUE(snapshot.only) ){
-            if( !is.null(.opath) ){
-                spath.old <- strsplit(.opath, .Platform$path.sep)[[1]]
-                .addon <<- setdiff(spath, spath.old)
-            }
+        # check Octave configuration is reachable
+        if( is.null(octave_bindir <- octave_config('BINDIR', mustWork = FALSE)) ){
             return()
         }
         
-        if( !is.null(dir) ){
-            .opath <<- path
-            if( !dir %in% spath ){
-                Sys.setenv(PATH = paste(dir, path, sep = .Platform$path.sep))
-            }
-        }else if( length(.addon) ){
-            cpath <- setdiff(spath, .addon)
-            Sys.setenv(PATH = paste(cpath, collapse = .Platform$path.sep))
+    	# load required Octave libraries _before_ loading the package's library
+    	#.OctaveLibs(TRUE)
+        
+        dlls <- base::getLoadedDLLs()
+    	if ( !pkgname %in%  names(dlls) ){
+        
+            # setup path restoration for .onUnload
+            on.exit( Sys.path$commit(), add = TRUE)
+            Sys.path$append(octave_bindir)
+                
+            # load compiled library normally or in devmode
+        	if( !isDevNamespace() ) library.dynam(pkgname, pkgname, libname)
+        	else dyn.load(packagePath('src', paste0(pkgname, .Platform$dynlib.ext)))
         }
+        
+    	# start Octave session
+    	octave_start()
+        
+    	# load Octave modules
+    	octave_modules()
+        
+        # return TRUE
+        .initialised <<- TRUE
     }
 })
 
-#' Initialise Octave
-#' 
-#' Starts an Octave session through the \pkg{RcppOctave} package.
-#' 
-#' This function is normally not meant to be called by the end-user, 
-#' except when the \pkg{RcppOctave} package fails to detect 
-#' Octave configuration when first loading.
-#' Calling \code{OctaveInit} after correctly setting the path or option
-#' \code{'octave.path'} should fix the issue, and start a fresh 
-#' Octave session.
-#' 
-#' If an Octave session has already successfully started, then this function
-#' has no effect.
-#' 
-#' @export
-OctaveInit <- function(){
-    .onLoad(NULL, NULL)
-}
-
 .onLoad <- function(libname, pkgname){
     
-    message <- if( isLoadingNamespace() ) packageStartupMessage else base::message
-    # try loading Octave configuration
-    if( is.null(OctaveConfig(check = TRUE)) ){
-        message("RcppOctave [", utils::packageVersion('RcppOctave') , "] - Octave (not configured)"
-                , "\nNOTE: path to Octave binaries should be in the system path or set in option 'octave.path'")
-        return()
-    }
+    # save initial PATH state to enable restoration in .onUnload
+    Sys.path$init()
     
-    # display info about config  
-    octave_bindir <- oconfig('BINDIR')
-    message("RcppOctave [", utils::packageVersion('RcppOctave') , "] - "
-            , o_version_string()
-            , "\nOctave path: ", octave_bindir)
-	
-	# load required Octave libraries _before_ loading the package's library
-	#.OctaveLibs(TRUE)
-    hook_Sys.path(octave_bindir)
-	
-	# load compiled library normally or in devmode
-    if( is.null(pkgname) ) pkgname <- packageName() 
-    if( is.null(libname) ) libname <- dirname(path.package(pkgname))
-    dlls <- base::getLoadedDLLs()
-	if ( !pkgname %in%  names(dlls) ){
-    	if( !isDevNamespace() ) library.dynam(pkgname, pkgname, libname)
-    	else dyn.load(packagePath('src', paste0(pkgname, .Platform$dynlib.ext)))
-    }
-    
-	# start Octave session
-	ostart()
-	# load Octave modules
-	omodules()	
-    
-    hook_Sys.path(snapshot.only = TRUE)
+    # Initialise 
+    .OctaveInit(libname, pkgname)
+}
 
+.onAttach <- function(libname, pkgname){
+    
+    .splash_message()
+    
+}
+
+.splash_message <- function(){
+    
+    if( is.null(octave_bindir <- octave_config('BINDIR', mustWork = FALSE)) ){
+        packageStartupMessage("RcppOctave [", utils::packageVersion('RcppOctave') , "] - Octave (not configured)"
+                , "\nNOTE: Octave binaries were probably not found. See ?octave_config.")
+    }else{
+        # display info about config
+        packageStartupMessage("RcppOctave [", utils::packageVersion('RcppOctave') , "] - "
+                , octave_version_string()
+                , "\nOctave path: ", octave_bindir)
+    }
 }
 
 .onUnload <- function(libpath) {
 	
+    # cleanup path on exit
+    on.exit( Sys.path$revert("Reverting Octave changes to system PATH") )
+    
+    # terminate Octave session
+    octave_end()
+    
 	# unload compiled library normally or in devmode
 	dlls <- base::getLoadedDLLs()
 	pname <- 'RcppOctave'
@@ -252,8 +255,6 @@ OctaveInit <- function(){
 	}
 	
 	# unload required Octave libraries 
-	#.OctaveLibs(FALSE)
-    # cleanup path
-    hook_Sys.path(NULL)
+	#.OctaveLibs(FALSE)    
 }
 
