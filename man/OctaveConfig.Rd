@@ -1,8 +1,8 @@
 \name{OctaveConfig}
 \alias{OctaveConfig}
-\title{Cached RcppOctave Configuration Paths}
+\title{Octave-RcppOctave Configuration}
 \usage{
-  OctaveConfig(name, ..., reset = FALSE, check = FALSE)
+  OctaveConfig(name, ..., path = NULL)
 }
 \arguments{
   \item{name}{Name of an RcppOctave path variable}
@@ -11,19 +11,14 @@
   with \code{\link{file.path}}. Only used when \code{name}
   is not missing.}
 
-  \item{reset}{logical that indicates if the configuration
-  should be reloaded}
-
-  \item{check}{logical that indicates if the presence of a
-  working version of the \code{octave-config} binary should
-  be tested before trying to load the configuration.}
+  \item{path}{path to Octave bin/ sub-directory}
 }
 \value{
   a list (if \code{name is missing}) or a single character
   string.
 }
 \description{
-  Cached RcppOctave Configuration Paths
+  Configures Octave and load RcppOctave
 }
 \examples{
 OctaveConfig()

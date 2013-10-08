@@ -1,21 +1,22 @@
-\name{ostart}
-\alias{oconfig}
-\alias{oend}
-\alias{omodules}
-\alias{ostart}
-\alias{overbose}
+\name{octave_start}
+\alias{octave_config}
+\alias{octave_end}
+\alias{octave_modules}
+\alias{octave_start}
+\alias{octave_verbose}
 \title{Low-level Function Interfacing with Octave}
 \usage{
-  ostart(verbose = FALSE, warnings = FALSE, force = FALSE)
+  octave_start(verbose = FALSE, warnings = FALSE,
+    force = FALSE)
 
-  oend()
+  octave_end()
 
-  overbose(value)
+  octave_verbose(value)
 
-  oconfig(varname, verbose = FALSE, warn = TRUE,
-    mustWork = TRUE)
+  octave_config(varname, verbose = FALSE, warn = TRUE,
+    mustWork = TRUE, bindir = getOption("octave.path"))
 
-  omodules(verbose = getOption("verbose"))
+  octave_modules(verbose = getOption("verbose"))
 }
 \arguments{
   \item{verbose}{logical value used as the inital verbosity
@@ -43,25 +44,39 @@
 
   \item{mustWork}{logical that indicates if an error should
   be thrown if failing to load Octave configuration.}
+
+  \item{bindir}{path to Octave bin/ sub-directory where to
+  look for \code{octave-config}. If \code{NULL} or
+  \code{NA}, then the system PATH is used.}
 }
 \description{
-  \code{ostart} Initialize an Octave session.
+  \code{octave_start} Initialize an Octave session.
 
-  \code{oend} clears and terminates the current Octave
-  session.
+  \code{octave_end} clears and terminates the current
+  Octave session.
 
-  \code{overbose} toggles the verbosity of RcppOctave
+  \code{octave_verbose} toggles the verbosity of RcppOctave
   calls: messages tracks any function call, or conversion
   of objects between R and Octave (e.g. arguments and
   results).
 
-  Failure to load Octave configuration is generally due to
-  Octave binaries not being found. Users should ensure that
-  Octave binary directory is in the PATH or set the option
-  'octave.path' to the path to the relevant directory.
+  \code{octave_config} uses the \code{octave-config} system
+  utility that ships with Octave to query details about the
+  local Octave installation. Failure to load Octave
+  configuration is generally due to this Octave binary not
+  being found in the system PATH. Users should ensure that
+  the PATH contains Octave binary directory path.
+  Alternatively one may use option 'octave.path' to specify
+  the directory where to find \code{octave-config}:
 
-  \code{omodules} add the Octave modules shipped with
-  RcppOctave to Octave path.
+  \code{octave_modules} add the Octave modules that ship
+  with RcppOctave to Octave loading path.
+}
+\details{
+  \samp{options(octave.path =
+  '/absolute/path/to/octave/bin')}
+
+  Note that in this case, the system PATH is not used.
 }
 \seealso{
   OctaveConfig
