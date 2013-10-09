@@ -34,7 +34,9 @@
 #include <octave/pt-all.h>
 #include <octave/symtab.h>
 #include <octave/parse.h>
+#if OCTAVE_API_VERSION_NUMBER < 45
 #include <octave/unwind-prot.h>
+#endif
 #include <octave/toplev.h>
 #include <octave/error.h>
 #include <octave/quit.h>
