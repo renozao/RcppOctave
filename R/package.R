@@ -227,12 +227,13 @@ OctaveConfig <- local({
 
 .splash_message <- function(){
     
+    pversion <- utils::packageVersion('RcppOctave')
     if( is.null(octave_bindir <- octave_config('BINDIR', mustWork = FALSE)) ){
-        packageStartupMessage("RcppOctave [", utils::packageVersion('RcppOctave') , "] - Octave (not configured)"
+        packageStartupMessage("RcppOctave [", pversion, "] - Octave (not configured)"
                 , "\nNOTE: Octave binaries were probably not found. See ?octave_config.")
     }else{
         # display info about config
-        packageStartupMessage("RcppOctave [", utils::packageVersion('RcppOctave') , "] - "
+        packageStartupMessage("RcppOctave [", pversion, "] - "
                 , octave_version_string()
                 , "\nOctave path: ", octave_bindir)
     }
