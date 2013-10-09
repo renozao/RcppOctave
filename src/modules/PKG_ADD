@@ -8,3 +8,6 @@ autoload('getseed', which('Rrng.oct'));
 
 % utility functions
 autoload('identity', which('utils.oct'));
+
+% R callback functions
+autoload('R_feval', which('RcppOctave.oct'));

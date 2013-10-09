@@ -16,7 +16,12 @@ CXXFLAGS = @CXXFLAGS@ -fPIC -Wportability -O6
 R_CPPFLAGS = @R_CPPFLAGS@
 R_LDFLAGS = @R_LDFLAGS@
 
-OCT_SOURCES = Rrng.cc
+# Get flags for Rcpp
+RCPP_CXXFLAGS = @RCPP_CXXFLAGS@
+RCPP_LIBS = @RCPP_LIBS@
+
+
+OCT_SOURCES = Rrng.cc RcppOctave.cc
 OCT_OBJECTS = utils.oct $(OCT_SOURCES:.cc=.oct)
 
 .SUFFIXES: .cc .oct
@@ -25,6 +30,11 @@ all: $(OCT_OBJECTS)
 
 utils.oct: utils.cc
 	"@OCTAVE_MKOCTFILE@" -v utils.cc
+
+RcppOctave.oct: RcppOctave.cc
+	pwd
+	ls ..
+	"@OCTAVE_MKOCTFILE@" -o RcppOctave.oct -v ${R_CPPFLAGS} ${RCPP_CXXFLAGS} ${R_LDFLAGS} ${RCPP_LIBS} -L"${R_LIBRARY_DIR}/${R_PACKAGE_NAME}/libs" "`pwd`/../rcpp_octave.o" "`pwd`/../conversion.o" RcppOctave.cc
 
 .cc.oct:
 	"@OCTAVE_MKOCTFILE@" -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
