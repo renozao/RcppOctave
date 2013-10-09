@@ -18,7 +18,7 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 
-R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R
+R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R.exe
 RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
 
 # define substitution function
