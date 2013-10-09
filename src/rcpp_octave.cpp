@@ -152,20 +152,20 @@ bool octave_session(bool start=true, bool with_warnings = true){
 		VERBOSE_LOG("Starting Octave interpreter\n");
 		// instantiate the Octave interpreter
 		int narg = 4;
-		string_vector argv(narg);
-		argv(0) = "Roctave";
-		argv(1) = "--quiet";
+		string_vector cmd_args(narg);
+		cmd_args(0) = std::string("RcppOctave");
+		cmd_args(1) = std::string("--quiet");
 		// Try avoid corruption of R console with Octave console outputs
 		// [suggested by Albert Graef]
-		argv(2) = "--no-line-editing";
-		argv(3) = "--no-history";
+		cmd_args(2) = std::string("--no-line-editing");
+		cmd_args(3) = std::string("--no-history");
 
 		// catch stderr
 		ostringstream stderr_stream;
 		Redirect stderrRedirect(stderr_stream, 2);
 
 		// try starting Octave
-		bool started_ok = octave_main(narg, argv.c_str_vec(), true /*embedded*/);
+		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 
 		const string& stderr_str = stderr_stream.str();
 		if( !started_ok ){
