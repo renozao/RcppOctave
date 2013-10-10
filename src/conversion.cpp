@@ -150,6 +150,27 @@ SEXP wrap(const Cell& x, bool simplify = true){
 }
 
 /**
+ * Creates an RObject object from an octave map
+ */
+Rcpp::RObject R_new(const Rcpp::List& x){
+
+	using namespace Rcpp;
+	Environment base_env = Environment::base_env();
+	Function R_do_call = base_env["do.call"];
+
+	return R_do_call("new", x);
+}
+
+typedef vector<string> std_string_vector;
+vector<string> R_slotNames(Rcpp::RObject x){
+	using namespace Rcpp;
+	Environment _env = Environment("package:methods");
+	Function fun = _env["slotNames"];
+
+	return as<std_string_vector>(fun(x));
+}
+
+/**
  * Converts an Octave object into an R object.
  */
 template <> SEXP Rcpp::wrap( const octave_value& val){
@@ -245,7 +266,7 @@ template <> SEXP Rcpp::wrap( const octave_value& val){
 
 		return R_NilValue;
 
-	} else if( val.is_map() ){ // Maps are converted into lists
+	} else if( val.is_map() ){ // Maps are converted into lists or S4 Objects
 
 		VERBOSE_LOG("(map) -> ");
 
@@ -273,6 +294,20 @@ template <> SEXP Rcpp::wrap( const octave_value& val){
 					continue;
 				}
 				res[k] = ::wrap(cell);
+			}
+
+			// convert to S4 object if intended
+			const string& k0 = keys[0];
+			const Cell& cell0 = m.contents(k0);
+			if( k0.length() == 0 && cell0.is_cellstr() && cell0.length() == 1 ){
+				const string& cl_elmt = cell0(0).string_value();
+				const string prefix("S4::");
+				if( !cl_elmt.compare(0, prefix.size(), prefix) ){
+					string cl(cl_elmt.substr(prefix.size()));
+					VERBOSE_LOG("> Wrapping into S4 Object<%s>\n", cl.c_str());
+					res[0] = wrap(cl);
+					return R_new(res);
+				}
 			}
 			return res;
 		}
@@ -469,9 +504,25 @@ template <> octave_value Rcpp::as( SEXP x ){
 			return octave_value(m);
 		}
 	}
-	else{
+	else if( Rf_isS4(x) ){// S4 objects are converted into map with first element "class::CLASSNAME"
+
+		const string cl = as<string>(GET_CLASS(x));
+		VERBOSE_LOG("S4<%s> -> Special Octave map\n", cl.c_str());
+		S4 s4_obj = as<S4>(x);
+		// extract slot names
+		const vector<string> slots = R_slotNames(s4_obj);
+		List res(1);
+		res[0] = wrap(string("S4::") + cl);
+		for(vector<string>::const_iterator it = slots.begin(); it != slots.end(); it++){
+			const string& a = *it;
+			VERBOSE_LOG("$'%s'\t: ", a.c_str());
+			SEXP at = wrap(s4_obj.attr(a));
+			res[a.c_str()] = at;
+		}
+		return( as<octave_value>(wrap(res)) );
+	}else{
 		std::ostringstream err;
-		err << " - R type `" << TYPEOF(x) << "` is not supported.";
+		err << "R type '" << sexp_to_name(TYPEOF(x)) << "' [" << TYPEOF(x) << "] is not supported.";
 		AS_ERROR(err.str().c_str());
 	}
 
