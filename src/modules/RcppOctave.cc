@@ -28,12 +28,14 @@
 
 extern bool RCPP_OCTAVE_VERBOSE;
 
-void obj_print(Rcpp::RObject x){
+// Prints an R object
+template <typename T> void R_print(const T obj){
 	using namespace Rcpp;
 	BEGIN_RCPP
+	RObject x = as<RObject>(wrap(obj));
 	Environment base_env = Environment::base_env();
-	Function R_print = base_env["print"];
-	R_print(x);
+	Function R_fun = base_env["print"];
+	R_fun(x);
 	VOID_END_RCPP
 }
 
@@ -48,34 +50,23 @@ DEFUN_DLD (R_feval, args, nargout,
   octave_value_list retval;
 
   // number of arguments supplied
-  int nargs = args.length ();
+  int nargs = args.length();
 
   // if wrong arguments, show message
-  if (nargs < 2) {
-    usage("Wrong number of argument: expecting at least arguments 'package' and 'fun'");
+  if (nargs < 1) {
+    usage("R_feval - Wrong number of argument: expecting at least one arguments (the function's name)");
     // and return empty
     return retval;
   }
 
   using namespace Rcpp;
-  try{
-	  const std::string s_package(args(0).string_value());
-	  const std::string s_fun(args(1).string_value());
-
-	  const std::string pkg_path(std::string("package:") + s_package);
-	  Environment fun_env(pkg_path.c_str());
-//	  if( s_package == ".GlobalEnv" ){
-//		  fun_env = Environment::global_env();
-//	  }else{
-//		  fun_env = Environment((std::string("package:") + s_package).c_str());
-//	  }
-	  Function R_fun = fun_env[s_fun.c_str()];
-
+//  try{
+	  const std::string s_fun(args(0).string_value());
 	  // Create R argument list: skip package and function name
 	  List all_args = as<List>(wrap(args));
-	  List R_args(nargs - 2);
-	  for(int i=2; i<nargs; ++i){
-		  R_args(i-2) = all_args(i);
+	  List R_args(nargs - 1);
+	  for(int i=1; i<nargs; ++i){
+		  R_args(i-1) = all_args(i);
 	  }
 
 	  // call the R function using base::do.call
@@ -83,21 +74,23 @@ DEFUN_DLD (R_feval, args, nargout,
 	  Function R_do_call = base_env["do.call"];
 	  if( RCPP_OCTAVE_VERBOSE ){
 		  Rprintf("Arguments:\n");
-		  obj_print(R_args);
+		  R_print(R_args);
 	  }
-	  // call function
-	  RObject R_res = R_do_call(s_fun, R_args);
+	  // call R function
+	  CharacterVector R_fun = as<CharacterVector>(wrap(s_fun));
+	  RObject R_res = R_do_call(R_fun, R_args);
 	  if( RCPP_OCTAVE_VERBOSE ){
 		  Rprintf("Output:\n");
-		  obj_print(R_res);
+		  R_print(R_res);
 	  }
 
-	  // wrap into an Octave value
-	  return as<octave_value>( wrap(R_res) );
+	  // return result as an Octave value
+	  retval(0) = as<octave_value>( wrap(R_res) );
+	  return retval;
 
-	} catch( std::exception& __ex__ ){
-		usage( __ex__.what() ) ;
-	} catch(...){
-		usage( "c++ exception (unknown reason)" ) ;
-	}
+//	} catch( std::exception& __ex__ ){
+//		usage( __ex__.what() ) ;
+//	} catch(...){
+//		usage( "c++ exception (unknown reason)" ) ;
+//	}
 }

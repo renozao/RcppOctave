@@ -32,9 +32,9 @@ utils.oct: utils.cc
 	"@OCTAVE_MKOCTFILE@" -v utils.cc
 
 RcppOctave.oct: RcppOctave.cc
-	pwd
-	ls ..
-	"@OCTAVE_MKOCTFILE@" -o RcppOctave.oct -v ${R_CPPFLAGS} ${RCPP_CXXFLAGS} ${R_LDFLAGS} ${RCPP_LIBS} -L"${R_LIBRARY_DIR}/${R_PACKAGE_NAME}/libs" "`pwd`/../rcpp_octave.o" "`pwd`/../conversion.o" RcppOctave.cc
+	"@OCTAVE_MKOCTFILE@" -o RcppOctave.oct -v ${R_CPPFLAGS} ${RCPP_CXXFLAGS} ${R_LDFLAGS} ${RCPP_LIBS} \
+	-L"${R_LIBRARY_DIR}/${R_PACKAGE_NAME}/libs" \
+	../rcpp_octave.o ../conversion.o RcppOctave.cc
 
 .cc.oct:
 	"@OCTAVE_MKOCTFILE@" -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
