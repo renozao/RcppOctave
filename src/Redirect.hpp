@@ -70,7 +70,7 @@ public:
 
 		// Error/Warning
 		const std::string stderr_str = _cerr.str();
-		if( stderr_str.length() > 0 ){
+		if( stop || stderr_str.length() > 0 ){
 			std::ostringstream err;
 			const char* msg = stop ? emsg : wmsg;
 			if( msg != NULL ) err << msg << ":" << std::endl << "  ";
