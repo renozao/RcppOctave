@@ -9,7 +9,7 @@
 ## Copyright (C) 2011 Renaud Gaujoux
 
 # The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.10.2)
+AC_INIT([RcppOctave], 0.11)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -43,8 +43,34 @@ else
    AC_MSG_RESULT(yes)
 fi
 
-AC_MSG_RESULT([Using R LDFLAGS: ${R_LDFLAGS}])
-AC_MSG_RESULT([Using R CPPFLAGS: ${R_CPPFLAGS}])
+# Mac OS support
+# inspired/partially borrowed from package rgl
+AC_MSG_CHECKING([type of Operating System])
+OStype=`uname`
+AC_MSG_RESULT(${OStype})
+
+AC_MSG_CHECKING([whether OS is Mac OS (Darwin)])
+if test "$OStype" == "Darwin" ; then
+  darwin="yes"
+  
+  ## adapt R_LDFLAGS aimed at mkoctfile: substitute -F/-framework it with -L/-l flags
+  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)/-L\1\/Libraries/'`
+  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-framework \([[^ ]]*\)/-l\1/'`
+  
+  ## we want the *build* cputype and not the host one.
+  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
+  if test -n "$cmd"; then
+    have_64bit="yes"
+  else
+    have_64bit="no"
+  fi 
+else
+  darwin="no"
+fi
+AC_MSG_RESULT(${darwin})
+
+AC_MSG_RESULT([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
+AC_MSG_RESULT([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
 
 # get compilation flags
 CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`

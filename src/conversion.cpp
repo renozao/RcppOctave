@@ -20,7 +20,7 @@ extern bool RCPP_OCTAVE_VERBOSE;
 		, val.is_int32_type(), val.is_int64_type() \
 		, val.is_integer_type());
 
-#define WRAP_ERROR(err) RcppOctave_error("as", err);
+#define WRAP_ERROR(err) RcppOctave_error("wrap", err);
 
 /**
 * Converts an Octave Array into an R matrix or vector.

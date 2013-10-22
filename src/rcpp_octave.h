@@ -50,8 +50,8 @@ namespace Rcpp {
 #define RcppOctave_error(funame, err) \
 	{\
 	std::ostringstream s;\
-	s << R_PACKAGE_NAME << "::" << funame << " - " << err;\
-	Rf_error(s.str().c_str());\
+	s << R_PACKAGE_NAME << "::" << funame << " " << err;\
+	throw std::string(s.str());\
 	}
 
 /**
@@ -72,11 +72,12 @@ RcppExport SEXP octave_verbose(SEXP value);
  * @param output specifies the output values to extract: it can be a single integer giving the
  * number of output values, or a character vector that specifies the output names.
  * @param unlit logical that indicates if the output should be unlisted it consists in a single value
- * @param buffer_stderr logical that indicates if messages sent to stderr should be buffered and
- * displayed at the end of the computation (TRUE) or as they come (FALSE).
+ * @param buffer logical that indicates if stdout and stderr should be buffered and
+ * displayed at the end of the computation: 0 not buffered, 1 stdout buffered, 2, stderr buffered,
+ * 3 both stdout and stderr buffered.
  *
  */
-RcppExport SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist, SEXP buffer_stderr);
+RcppExport SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist, SEXP buffer);
 
 /**
  * Start an Octave session from R.

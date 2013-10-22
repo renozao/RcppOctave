@@ -18,7 +18,7 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 
-R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R
+R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R.exe
 RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
 
 # define substitution function
@@ -75,8 +75,6 @@ AC_MSG_RESULT `"${RSCRIPT}" -e 'a <- sapply(strsplit(Sys.getenv("PATH"), .Platfo
 
 # check R is a shared library
 R_LDFLAGS=`"${R_BIN}" CMD config --ldflags 2>/dev/null`
-AC_SUBST R_LDFLAGS
-
 R_CPPFLAGS=`"${R_BIN}" CMD config --cppflags 2>/dev/null`
 
 AC_MSG_CHECKING "whether R is a shared library"
@@ -92,7 +90,6 @@ if test "${has_R_shlib}" = "no"; then
 else
    AC_MSG_RESULT "YES"
 fi
-AC_SUBST R_CPPFLAGS
 
 # get R compilation flags
 CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
@@ -116,8 +113,8 @@ AC_MSG_RESULT "${RCPP_CXXFLAGS}"
 #AC_SUBST RCPP_CXXFLAGS
 
 # pass R flags down to makefile in modules/
-#AC_SUBST R_CPPFLAGS
-#AC_SUBST R_LDFLAGS
+AC_SUBST R_CPPFLAGS
+AC_SUBST R_LDFLAGS
 
 ## Use octave-config to find arguments for compiler and linker flags
 ##

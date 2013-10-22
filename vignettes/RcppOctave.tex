@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_159c2863f553/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_29ec7fbe55b9/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -147,8 +147,8 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.10.2
-[October  8, 2013]\footnote{This vignette was built using \octave
+\date{\Rpkg{RcppOctave} -- Version 0.11
+[October 22, 2013]\footnote{This vignette was built using \octave
 3.6.4}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -201,7 +201,7 @@ Also, a direct interface allows users to stick to their preferred computing
 environment, in which they are more comfortable and productive.
 
 An \proglang{R} package called \pkgname{ROctave}
-\footnote{\url{http://www.omegahat.org/ROctave}} do exist, and intends to
+\footnote{\url{http://www.omegahat.org/ROctave}} does exist, and intends to
 provide an interface between \proglang{R} and \octave, but appears
 to be outdated (2002), and does not work out of the box with recent version of
 \octave.
@@ -241,6 +241,88 @@ from \proglang{R} with:
 
 Future development should provide similar reverse capabilities, i.e. an out
 of the box embedded R session, typically via the \CRANpkg{RInside}.
+
+\section{OS requirements}
+
+The package has been developped and tested under Linux (Ubuntu), and has
+notably been reported to work fine on other Linux distributions.
+Developments to make it run on Windows and Mac recently started, and has
+been so far relatively successful. 
+
+\subsection{Linux}
+The only requirement on Linux machines is to have Octave $\geq 3.2.4$
+and its development files installed, although a more recent version ($\geq
+3.6$) is recommended to get full functionnalities.
+
+On Debian/Ubuntu this amounts to:
+
+\begin{description}
+  \item[Octave $\geq$ 3.6:] (works out of the box):
+  
+\begin{verbatim}
+# install octave and development files
+sudo apt-get install octave liboctave-dev
+# install as usual in R
+Rscript -e "install.packages('RcppOctave')"
+\end{verbatim}
+
+\item[Octave 3.2.4:] (might require extra command)
+\begin{verbatim}
+# install octave and development files
+sudo apt-get install octave3.2 octave3.2-headers
+# requires to explicitly export Octave lib directory 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`octave-config -p OCTLIBDIR`
+# install as usual in R
+Rscript -e "install.packages('RcppOctave')"
+\end{verbatim}
+
+\end{description}
+
+\subsection{Windows}
+
+Support for Windows started with version \emph{0.11}.
+Developments and tests are performed on Windows 7 using the following
+settings:
+
+\begin{description}
+  \item[Rtools:] the package contains C++ source files that need to be
+  compiled, which means that \emph{Rtools} needs to be installed, with its
+  \texttt{bin/} sub-directory in the system PATH.
+  
+  See \url{http://cran.r-project.org/bin/windows/Rtools/} for how to install the
+  version of \emph{Rtools} compatible with your \emph{R} version;
+  \item[Octave:] development was performed using the \emph{mingw} version of
+  Octave, which can be installed as decribed in the Octave wiki:
+
+\url{http://wiki.octave.org/Octave_for_Windows#Octave-3.6.4-mingw_.2B_octaveforge_pkgs}
+
+  Octave binary \texttt{bin/} sub-directory (e.g.,
+  \texttt{C:\textbackslash Octave\textbackslash Octave3.6.4\_gcc4.6.2\textbackslash bin}) must be in the system PATH as well, preferably after
+  \emph{Rtools} own \texttt{bin/} sub-directory.
+\end{description}
+
+\subsection{Mac OS}
+Support for Mac OS is not yet official, but is currently being investigating.
+Preliminary discussion(s) on how to install and run under Mac can be found here:
+
+\url{http://lists.r-forge.r-project.org/pipermail/rcppoctave-user/2013-October/000024.html}
+
+The installation procedure under investigation is based on the Octave version
+provided by \emph{homebrew}\footnote{\url{http://brew.sh/}}:
+
+\begin{enumerate}
+  \item install XCode and its Command Line Tools
+  \item install homebrew
+  \item add the homebrew/science repository (tap in brewing language):
+
+\begin{verbatim}
+brew tap homebrew/science
+brew update && brew upgrade
+brew tap --repair #may not be necessary
+brew install gfortran
+brew install octave
+\end{verbatim}
+\end{enumerate}
 
 \section{Accessing Octave from R}
 
@@ -312,7 +394,7 @@ Hence, a call to an \octave function requires passing both its parameters and
 the number of desired output values.
 
 The following sample code illustrates this concept using the function
-\code{svd}\footnote{The sample code is extracted from the manpage for
+\code{svd}\footnote{This sample code is extracted from the manpage for
 \code{svd}. See \code{o\_help(svd)} for more details.}:
 
 \begin{Verbatim}[frame=single]
@@ -323,7 +405,7 @@ S = svd(A);
 [U, S, V] = svd(A);
 \end{Verbatim}
 
-The default behaviour of \code{.CallOctave} \code{.CallOctave} is to try to
+The default behaviour of \code{.CallOctave} is to try to
 detect the maximum number of output variables, as well as their names, and
 return them all.
 This should be suitable for most common cases, especially for functions
@@ -416,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.6731 0.1740 0.2698 0.4927
+## [1] 0.49578 0.36585 0.86504 0.02759
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -424,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.4659 0.4523 0.7261 0.9424
+## [1] 0.4906 0.9838 0.1747 0.4525
 ## 
 ## $b
-##         [,1]   [,2]   [,3]
-## [1,] 0.02497 0.9257 0.1341
-## [2,] 0.14479 0.2100 0.9898
+##        [,1]   [,2]   [,3]
+## [1,] 0.6927 0.6934 0.5792
+## [2,] 0.7933 0.5902 0.6916
 ## 
 ## $c
 ## [1] "some text"
@@ -437,7 +519,17 @@ functionalities:
 \begin{alltt}
 \hlcom{# no output value}
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_noargout"}\hlstd{,} \hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## % Printed from Octave: x= 1
+\end{verbatim}
+\begin{alltt}
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_noargout"}\hlstd{,} \hlstr{"abc"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## % Printed from Octave: x=abc
+\end{verbatim}
+\begin{alltt}
 \hlcom{# variable number of arguments}
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun_varargin"}\hlstd{)}
 \end{alltt}
@@ -836,18 +928,18 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.7247
-## [2,] 0.4470
-## [3,] 0.1064
+## [1,] 1.7675
+## [2,] 0.6036
+## [3,] 0.1163
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.7247
-## [2,] 0.4470
-## [3,] 0.1064
+## [1,] 1.7675
+## [2,] 0.6036
+## [3,] 0.1163
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -856,13 +948,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.9732 0.9189
+## [1] 0.1853 0.0615
 ## 
 ## [[2]]
-## [1] 1.191615 0.001826
+## [1] -0.6053  0.1943
 ## 
 ## [[3]]
-## [1] 0.6360 0.6695 0.9828
+## [1] 0.8657 0.2403 0.8826
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -881,7 +973,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.9732 0.9189
+## [1] 0.1853 0.0615
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -894,7 +986,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.9732 0.9189
+## [1] 0.1853 0.0615
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1093,8 +1185,11 @@ Currently these templates are not exported, but will probably be in the future.
 
 \section{Calling R functions from Octave}
 
-This is currently not implemented but is on the TODO list for future
-developments.
+This is currently under development.
+Interested users can find this feature under the branch \code{feature/Rfun} in
+the GitHub repository:
+
+\url{https://github.com/renozao/RcppOctave/tree/feature/Rfun}
 
 \section{Examples}
 \subsection{Comparing implementations}
@@ -1125,9 +1220,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 3.012 0.89 0.519 0.336 0.104
-##  $ u: num [1:5, 1:5] -0.443 -0.411 -0.557 -0.407 -0.399 ...
-##  $ v: num [1:5, 1:5] -0.37 -0.533 -0.492 -0.333 -0.476 ...
+##  $ d: num [1:5] 2.66863 0.80214 0.34803 0.13703 0.00858
+##  $ u: num [1:5, 1:5] -0.406 -0.395 -0.436 -0.426 -0.554 ...
+##  $ v: num [1:5, 1:5] -0.623 -0.468 -0.536 -0.149 -0.289 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1141,8 +1236,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 3.17e-16"
-## [2] "Component 3: Mean relative difference: 3.56e-16"
+## [1] "Component 2: Mean relative difference: 3.135e-16"
+## [2] "Component 3: Mean relative difference: 2.634e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1217,18 +1312,55 @@ end
  called with a single output variable.
  For obtaining more outputs, the user must specify argument \code{argout}
  accordingly.
- \item Errors and warnings thrown by \octave do not show up in Sweave documents
- processed using the \citeCRANpkg{knitr} -- like this vignette.
- The issue needs further investigation.
 \end{itemize}
+
+\section{News and changes}
+
+{\scriptsize
+\begin{verbatim}
+********************
+Changes in 0.11
+********************
+NEW FEATURES
+    o The package have successfully been installed on Windows machines, 
+    although only basic functionalities have been tested (see README file).
+    o Support for Mac have also started, although even more slightly, using
+    the Octave version available from homebrew.
+
+CHANGES
+    o Moved all developments/bug reports/static docs to GitHub repository:
+    https://github.com/renozao/RcppOctave/ 
+    o Octave functions' stdout and stderr messages are now buffered by default, so 
+    that it does not bypass R own i/o functions.
+    All messages/warnings sent to stdout/stderr from Octave are displayed on 
+    exiting the function call.
+    o function .CallOctave gains a new argument buffer.std to enable/disable 
+    stdout and/or stderr buffering (see ?.CallOctave).
+    o Octave startup warnings (e.g. shadowing of core functions by Octave modules) 
+    are not shown anymore.
+    o Minor adaptations to pass new CRAN checks
+    o The package now depends on R >= 3.0.0 to properly handle the knitr vignettes.
+    o Errors are now more properly handled, thanks to hints found in this 
+    old post by Romain François:
+    http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html
+
+********************
+Changes in 0.9.3
+********************
+CHANGES
+    o Conditional use of function packageName: use the one from pkgmaker 
+    in R <= 2.15.3, or the one exported by utils in R >= 3.0. 
+
+\end{verbatim}
+}
 
 \section*{Session information}
 {\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-R Under development (unstable) (2013-09-09 r63889)
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R version 3.0.2 (2013-09-25)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 locale:
  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -1242,12 +1374,12 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.10.2 pkgmaker_0.17.4   registry_0.2      Rcpp_0.10.4      
-[5] knitr_1.4.1      
+[1] RcppOctave_0.11 pkgmaker_0.17.4 registry_0.2    Rcpp_0.10.5    
+[5] knitr_1.5      
 
 loaded via a namespace (and not attached):
-[1] codetools_0.2-8 digest_0.6.3    evaluate_0.4.7  formatR_0.9    
-[5] highr_0.2.1     stringr_0.6.2   tools_3.1.0     xtable_1.7-1   
+[1] codetools_0.2-8 digest_0.6.3    evaluate_0.5.1  formatR_0.9    
+[5] highr_0.2.1     stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

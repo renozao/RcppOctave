@@ -1,16 +1,28 @@
 ********************
-Changes in 0.10
+Changes in 0.11
 ********************
+NEW FEATURES
+    o The package have successfully been installed on Windows machines, 
+    although only basic functionalities have been tested (see README file).
+    o Support for Mac have also started, although even more slightly, using
+    the Octave version available from homebrew.
+
 CHANGES
-    o Octave functions' stderr output is now buffered by default, so 
+    o Moved all developments/bug reports/static docs to GitHub repository:
+    https://github.com/renozao/RcppOctave/ 
+    o Octave functions' stdout and stderr messages are now buffered by default, so 
     that it does not bypass R own i/o functions.
-    All messages/warnings sent to stderr from Octave are displayed on 
+    All messages/warnings sent to stdout/stderr from Octave are displayed on 
     exiting the function call.
-    o function .CallOctave gains a new argument buffer_stderr to disable stderr 
-    buffering (see above).
+    o function .CallOctave gains a new argument buffer.std to enable/disable 
+    stdout and/or stderr buffering (see ?.CallOctave).
     o Octave startup warnings (e.g. shadowing of core functions by Octave modules) 
     are not shown anymore.
     o Minor adaptations to pass new CRAN checks
+    o The package now depends on R >= 3.0.0 to properly handle the knitr vignettes.
+    o Errors are now more properly handled, thanks to hints found in this 
+    old post by Romain François:
+    http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html
 
 ********************
 Changes in 0.9.3

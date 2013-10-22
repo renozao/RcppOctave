@@ -135,8 +135,27 @@ test.assign <- function(){
 
 test.redirection <- function(){
     
+    # Output
+    out <- 'This is some Octave text output'
+    checkIdentical(capture.output(dummy <- .CallOctave('printf', out)), out, "Octave output is correctly captured")
+    checkIdentical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = 1)), out, "Octave output is correctly captured (buffer.std = 1)")
+    # no buffering
+    checkTrue(!identical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = -1)), out), "Octave output is NOT captured if stdout is not buffered")
+    
+    # Errors
+    oerr <- 'This is an Octave error indeed!!!'
+    checkException(.CallOctave('error', oerr), "R error is raised by Octave error")
+    checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R")
+    checkException(.CallOctave('error', oerr), "R error is raised by Octave error (buffer.std = 2)")
+    checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R (buffer.std = 2)")
+    # no buffering
+    checkException(.CallOctave('error', oerr, buffer.std = -2), "R error is raised by Octave error even when stderr is not buffered")
+    checkTrue(!grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is NOT passed to R if stderr is not buffered")
+    
+    # Warnings
     checkWarning(.CallOctave('warning', 'aaaa'), "warning: aaa", "Default call buffer warnings")
-    checkWarning(.CallOctave('warning', 'aaaa', buffer.stderr=FALSE)
-                                               , FALSE, "No warning buffering if buffer_stderr=FALSE")
+    checkWarning(.CallOctave('warning', 'aaaa', buffer.std = 2), "warning: aaa", "Default call buffer warnings (buffer.std = 2)")
+    checkWarning(.CallOctave('warning', 'aaaa', buffer.std=-2)
+                                               , FALSE, "No warning buffering if not buffering stderr")
     
 }
