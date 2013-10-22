@@ -1,18 +1,20 @@
 ## Use the R_HOME indirection to support installations of multiple R version
 
-# set by configure
+# set by configure.win
 OCTINCLUDEDIR=@OCTINCLUDEDIR@
+OCTINCLUDEDIR2=@OCTINCLUDEDIR2@
 OCTLIBDIR=@OCTLIBDIR@
 OCT_SYSLIBDIR=@OCT_SYSLIBDIR@
 OCT_POST_3_4_0=@OCT_POST_3_4_0@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 
-PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft
-PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../" -I"$(OCTINCLUDEDIR)/octave"
+## Use the R_HOME indirection to support installations of multiple R version
+PKG_LIBS := $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()") -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft 
+PKG_CPPFLAGS := $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") -fmax-errors=10 -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR2)" -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../"
 
 .PHONY: all OctaveModule
 
-all: OctaveModule	
+all: OctaveModule
 
 OctaveModule:
 	@cd modules;\
@@ -20,14 +22,14 @@ OctaveModule:
 	echo "# Copying Octave module directory '$(OCT_MODULES_PATH)'"; \
 	mkdir -p "$(OCT_MODULES_PATH)"; \
 	cp -f PKG_ADD *.oct "$(OCT_MODULES_PATH)";
-
+	
 clean:
 	rm *.o; \
 	cd modules; \
 	make clean;
 
 clean-all: clean
-	rm *.so; \
+	rm *.dll; \
 	cd modules; \
 	make clean-all;
 

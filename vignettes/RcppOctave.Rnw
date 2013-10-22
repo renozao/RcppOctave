@@ -112,7 +112,7 @@ Also, a direct interface allows users to stick to their preferred computing
 environment, in which they are more comfortable and productive.
 
 An \proglang{R} package called \pkgname{ROctave}
-\footnote{\url{http://www.omegahat.org/ROctave}} do exist, and intends to
+\footnote{\url{http://www.omegahat.org/ROctave}} does exist, and intends to
 provide an interface between \proglang{R} and \octave, but appears
 to be outdated (2002), and does not work out of the box with recent version of
 \octave.
@@ -152,6 +152,88 @@ from \proglang{R} with:
 
 Future development should provide similar reverse capabilities, i.e. an out
 of the box embedded R session, typically via the \CRANpkg{RInside}.
+
+\section{OS requirements}
+
+The package has been developped and tested under Linux (Ubuntu), and has
+notably been reported to work fine on other Linux distributions.
+Developments to make it run on Windows and Mac recently started, and has
+been so far relatively successful. 
+
+\subsection{Linux}
+The only requirement on Linux machines is to have Octave $\geq 3.2.4$
+and its development files installed, although a more recent version ($\geq
+3.6$) is recommended to get full functionnalities.
+
+On Debian/Ubuntu this amounts to:
+
+\begin{description}
+  \item[Octave $\geq$ 3.6:] (works out of the box):
+  
+\begin{verbatim}
+# install octave and development files
+sudo apt-get install octave liboctave-dev
+# install as usual in R
+Rscript -e "install.packages('RcppOctave')"
+\end{verbatim}
+
+\item[Octave 3.2.4:] (might require extra command)
+\begin{verbatim}
+# install octave and development files
+sudo apt-get install octave3.2 octave3.2-headers
+# requires to explicitly export Octave lib directory 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`octave-config -p OCTLIBDIR`
+# install as usual in R
+Rscript -e "install.packages('RcppOctave')"
+\end{verbatim}
+
+\end{description}
+
+\subsection{Windows}
+
+Support for Windows started with version \emph{0.11}.
+Developments and tests are performed on Windows 7 using the following
+settings:
+
+\begin{description}
+  \item[Rtools:] the package contains C++ source files that need to be
+  compiled, which means that \emph{Rtools} needs to be installed, with its
+  \texttt{bin/} sub-directory in the system PATH.
+  
+  See \url{http://cran.r-project.org/bin/windows/Rtools/} for how to install the
+  version of \emph{Rtools} compatible with your \emph{R} version;
+  \item[Octave:] development was performed using the \emph{mingw} version of
+  Octave, which can be installed as decribed in the Octave wiki:
+
+\url{http://wiki.octave.org/Octave_for_Windows#Octave-3.6.4-mingw_.2B_octaveforge_pkgs}
+
+  Octave binary \texttt{bin/} sub-directory (e.g.,
+  \texttt{C:\textbackslash Octave\textbackslash Octave3.6.4\_gcc4.6.2\textbackslash bin}) must be in the system PATH as well, preferably after
+  \emph{Rtools} own \texttt{bin/} sub-directory.
+\end{description}
+
+\subsection{Mac OS}
+Support for Mac OS is not yet official, but is currently being investigating.
+Preliminary discussion(s) on how to install and run under Mac can be found here:
+
+\url{http://lists.r-forge.r-project.org/pipermail/rcppoctave-user/2013-October/000024.html}
+
+The installation procedure under investigation is based on the Octave version
+provided by \emph{homebrew}\footnote{\url{http://brew.sh/}}:
+
+\begin{enumerate}
+  \item install XCode and its Command Line Tools
+  \item install homebrew
+  \item add the homebrew/science repository (tap in brewing language):
+
+\begin{verbatim}
+brew tap homebrew/science
+brew update && brew upgrade
+brew tap --repair #may not be necessary
+brew install gfortran
+brew install octave
+\end{verbatim}
+\end{enumerate}
 
 \section{Accessing Octave from R}
 
@@ -194,7 +276,7 @@ Hence, a call to an \octave function requires passing both its parameters and
 the number of desired output values.
 
 The following sample code illustrates this concept using the function
-\code{svd}\footnote{The sample code is extracted from the manpage for
+\code{svd}\footnote{This sample code is extracted from the manpage for
 \code{svd}. See \code{o\_help(svd)} for more details.}:
 
 \begin{Verbatim}[frame=single]
@@ -205,7 +287,7 @@ S = svd(A);
 [U, S, V] = svd(A);
 \end{Verbatim}
 
-The default behaviour of \code{.CallOctave} \code{.CallOctave} is to try to
+The default behaviour of \code{.CallOctave} is to try to
 detect the maximum number of output variables, as well as their names, and
 return them all.
 This should be suitable for most common cases, especially for functions
@@ -535,8 +617,11 @@ Currently these templates are not exported, but will probably be in the future.
 
 \section{Calling R functions from Octave}
 
-This is currently not implemented but is on the TODO list for future
-developments.
+This is currently under development.
+Interested users can find this feature under the branch \code{feature/Rfun} in
+the GitHub repository:
+
+\url{https://github.com/renozao/RcppOctave/tree/feature/Rfun}
 
 \section{Examples}
 \subsection{Comparing implementations}
@@ -632,10 +717,17 @@ identical(Rf(), Of())
  called with a single output variable.
  For obtaining more outputs, the user must specify argument \code{argout}
  accordingly.
- \item Errors and warnings thrown by \octave do not show up in Sweave documents
- processed using the \citeCRANpkg{knitr} -- like this vignette.
- The issue needs further investigation.
 \end{itemize}
+
+\section{News and changes}
+
+{\scriptsize
+\begin{verbatim}
+<<news, echo=FALSE, results='asis'>>=
+cat(paste(readLines(system.file('NEWS', package='RcppOctave')), collapse="\n"))
+@
+\end{verbatim}
+}
 
 \section*{Session information}
 {\small

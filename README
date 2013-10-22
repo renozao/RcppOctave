@@ -1,0 +1,39 @@
+# Installation on Windows
+
+You will need to have:
+
+  * Rtools: the package contains C++ source files that need to be
+  compiled, which means that Rtools needs to be installed, with its
+  bin/ sub-directory in the system PATH.
+  
+  See http://cran.r-project.org/bin/windows/Rtools/ for how to install the
+  version of Rtools compatible with your R version;
+  
+  * Octave: development was performed using the mingw version of
+  Octave, which can be installed as decribed in the Octave wiki:
+
+    http://wiki.octave.org/Octave_for_Windows#Octave-3.6.4-mingw_.2B_octaveforge_pkgs
+
+  Octave binary bin/ sub-directory (e.g.,C:\Octave\Octave3.6.4\gcc4.6.2\bin}) must be 
+  in the system PATH as well, preferably after Rtools own bin/ sub-directory.
+
+  
+# Installation on Mac OS
+
+Support for Mac OS is not yet official, but is currently being investigating.
+Preliminary discussion(s) on how to install and run under Mac can be found here:
+
+http://lists.r-forge.r-project.org/pipermail/rcppoctave-user/2013-October/000024.html
+
+The installation procedure under investigation is based on the Octave version
+provided by homebrew (http://brew.sh/):
+
+  1. install XCode and its Command Line Tools
+  2. install homebrew
+  3. add the homebrew/science repository (tap in brewing language):
+
+    $ brew tap homebrew/science
+    $ brew update && brew upgrade
+    $ brew tap --repair #may not be necessary
+    $ brew install gfortran
+    $ brew install octave

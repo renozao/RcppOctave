@@ -87,4 +87,59 @@ check.equal <- function(x, y, msg){
 	invisible()
 }
 
-packageName <- if( pkgmaker::testRversion("> 2.15.3") ) utils::packageName else pkgmaker:::packageName
+packageName <- function() 'RcppOctave' #if( pkgmaker::testRversion("> 2.15.3") ) utils::packageName else pkgmaker:::packageName
+
+# split system PATH into a character vector
+str_syspath <- function(path = Sys.getenv('PATH'), clean = FALSE){
+    path <- strsplit(path, .Platform$path.sep)[[1]]
+    if( clean ) path <- path[nzchar(path)]
+    path
+}
+
+# prototype object to manage system PATH
+Sys.path <- local({
+    .init_state <- NULL # initial PATH value
+    .commits <- list() # successive changes in the PATH
+    
+    .get <- function() Sys.getenv('PATH')
+    .set <- function(x, clean = TRUE){
+        if( clean ){
+            sep <- .Platform$path.sep
+            x <- gsub(sprintf("%s[ %s]+", sep, sep), '', x)
+        }
+        Sys.setenv(PATH = x)
+    }
+    
+    list(
+        get = .get
+        , set = .set
+        , init = function(){ # store initial state
+            .init_state <<- .get()
+        }
+        , append = function(x){
+            .set(paste(.get(), x, sep = .Platform$path.sep))
+        }
+        , prepend = function(){
+            .set(paste(x, .get(), sep = .Platform$path.sep))
+        }
+        , rm = function(){
+            
+        }
+        , commit = function(){
+            init <- str_syspath(.init_state)
+            cur <- str_syspath(.get())
+            .commits <<- c(.commits, list(setdiff(cur, init)))
+        }
+        , revert = function(msg = NULL){
+            if( !length(.commits) ) return()
+            addon <- tail(.commits, 1L)[[1L]]
+            if( !is.null(msg) ) message(msg, "... ", appendLF = FALSE)
+            cur <- str_syspath(.get())
+            p <- paste(setdiff(cur, addon), collapse = .Platform$path.sep)
+            .set(p, clean = TRUE)
+            if( !is.null(msg) ) message("OK")
+            .commits <<- .commits[-length(.commits)]
+        }
+    )
+            
+})

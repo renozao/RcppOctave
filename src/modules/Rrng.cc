@@ -29,17 +29,15 @@
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Octave includes
-#include <octave/config.h>
-#include <octave/oct-obj.h>
-#include <octave/oct-map.h>
+#include <octave/oct.h>
 #include <octave/defun-dld.h>
 
 // STD includes
 #include <limits.h>
 
 #ifndef LIBRRNG_STANDALONE
-//#include <RcppCommon.h>
-//#include <Rdefines.h>
+
+#define R_NO_REMAP
 #include <Rmath.h>
 #include <R_ext/Random.h>
 #else
@@ -238,6 +236,6 @@ RCPP_OCTAVE_HELP_NOTE)
   double shape = args(0).double_value();
   double scale(nArgs >= 4 && !args(3).is_empty() ? args(3).double_value() : 1);
 
-  RAND_RESULT(rgamma(shape, scale))\
+  RAND_RESULT(Rf_rgamma(shape, scale))\
 }
 

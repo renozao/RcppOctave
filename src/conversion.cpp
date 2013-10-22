@@ -1,5 +1,12 @@
 #include "rcpp_octave.h"
 
+#define R_NO_REMAP
+#include <Rdefines.h>
+#define getAttrib Rf_getAttrib
+
+#include <octave/ov-base.h>
+#include <octave/ov-scalar.h>
+#include <octave/ov-struct.h>
 #include <octave/ov-null-mat.h>
 
 #include <string.h>
@@ -13,7 +20,7 @@ extern bool RCPP_OCTAVE_VERBOSE;
 		, val.is_int32_type(), val.is_int64_type() \
 		, val.is_integer_type());
 
-#define WRAP_ERROR(err) RcppOctave_error("as", err);
+#define WRAP_ERROR(err) RcppOctave_error("wrap", err);
 
 /**
 * Converts an Octave Array into an R matrix or vector.
