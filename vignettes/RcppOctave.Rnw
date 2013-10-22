@@ -155,11 +155,10 @@ of the box embedded R session, typically via the \CRANpkg{RInside}.
 
 \section{OS requirements}
 
-\subsection{Linux}
 The package has been developped and tested under Linux (Ubuntu), and has
 notably been reported to work fine on other Linux distributions.
-Developments to run on Windows and Mac have recently started, and have been
-quite succesful so far.
+Developments to make it run on Windows and Mac recently started, and has
+been so far relatively successful. 
 
 \subsection{Linux}
 The only requirement on Linux machines is to have Octave $\geq 3.2.4$

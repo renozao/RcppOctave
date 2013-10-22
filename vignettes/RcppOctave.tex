@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_64032a9aaaf9/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_29ec7fbe55b9/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -244,11 +244,10 @@ of the box embedded R session, typically via the \CRANpkg{RInside}.
 
 \section{OS requirements}
 
-\subsection{Linux}
 The package has been developped and tested under Linux (Ubuntu), and has
 notably been reported to work fine on other Linux distributions.
-Developments to run on Windows and Mac have recently started, and have been
-quite succesful so far.
+Developments to make it run on Windows and Mac recently started, and has
+been so far relatively successful. 
 
 \subsection{Linux}
 The only requirement on Linux machines is to have Octave $\geq 3.2.4$
@@ -499,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.9192 0.7639 0.6833 0.5467
+## [1] 0.49578 0.36585 0.86504 0.02759
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -507,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.31240 0.04233 0.31967 0.02991
+## [1] 0.4906 0.9838 0.1747 0.4525
 ## 
 ## $b
-##        [,1]    [,2]    [,3]
-## [1,] 0.9680 0.83901 0.04277
-## [2,] 0.5511 0.02082 0.69347
+##        [,1]   [,2]   [,3]
+## [1,] 0.6927 0.6934 0.5792
+## [2,] 0.7933 0.5902 0.6916
 ## 
 ## $c
 ## [1] "some text"
@@ -928,19 +927,19 @@ can also evaluate a list of statements sequentially:
 \hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##         [,1]
-## [1,] 1.44156
-## [2,] 0.34252
-## [3,] 0.04942
+##        [,1]
+## [1,] 1.7675
+## [2,] 0.6036
+## [3,] 0.1163
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-##         [,1]
-## [1,] 1.44156
-## [2,] 0.34252
-## [3,] 0.04942
+##        [,1]
+## [1,] 1.7675
+## [2,] 0.6036
+## [3,] 0.1163
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -949,13 +948,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.6865 0.5970
+## [1] 0.1853 0.0615
 ## 
 ## [[2]]
-## [1] -0.05474 -1.46514
+## [1] -0.6053  0.1943
 ## 
 ## [[3]]
-## [1] 0.9497 0.1793 0.7042
+## [1] 0.8657 0.2403 0.8826
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -974,7 +973,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.6865 0.5970
+## [1] 0.1853 0.0615
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -987,7 +986,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.6865 0.5970
+## [1] 0.1853 0.0615
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1221,9 +1220,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.4708 0.9751 0.2519 0.1879 0.0818
-##  $ u: num [1:5, 1:5] -0.373 -0.482 -0.387 -0.579 -0.378 ...
-##  $ v: num [1:5, 1:5] -0.497 -0.441 -0.533 -0.272 -0.448 ...
+##  $ d: num [1:5] 2.66863 0.80214 0.34803 0.13703 0.00858
+##  $ u: num [1:5, 1:5] -0.406 -0.395 -0.436 -0.426 -0.554 ...
+##  $ v: num [1:5, 1:5] -0.623 -0.468 -0.536 -0.149 -0.289 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1237,8 +1236,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 3.506e-16"
-## [2] "Component 3: Mean relative difference: 3.051e-16"
+## [1] "Component 2: Mean relative difference: 3.135e-16"
+## [2] "Component 3: Mean relative difference: 2.634e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
