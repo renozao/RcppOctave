@@ -106,8 +106,8 @@ bool octave_session(bool start=true, bool with_warnings = true){
 		cmd_args(2) = std::string("--no-line-editing");
 		cmd_args(3) = std::string("--no-history");
 
-		// redirect stderr and stdout
-		Redirect redirect(0);
+		// redirect both stderr and stdout
+		Redirect redirect(3);
 
 		// try starting Octave
 		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
