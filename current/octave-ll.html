@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>ostart. RcppOctave 0.10</title>
+<title>octave_start. RcppOctave 0.11</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.10</a>
+      <a class="brand" href="index.html">RcppOctave 0.11</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -55,29 +55,36 @@
     <div class="description">
       <h2>Description</h2>
       
-      <p><p><code>ostart</code> Initialize an Octave session.</p>
-<p><code>oend</code> clears and terminates the current Octave
-  session.</p>
-<p><code>overbose</code> toggles the verbosity of RcppOctave
+      <p><p><code>octave_start</code> Initialize an Octave session.</p>
+<p><code>octave_end</code> clears and terminates the current
+  Octave session.</p>
+<p><code>octave_verbose</code> toggles the verbosity of RcppOctave
   calls: messages tracks any function call, or conversion
   of objects between R and Octave (e.g. arguments and
   results).</p>
-<p><code>oconfig</code> retrieves Octave configuration variables.</p>
-<p><code>omodules</code> add the Octave modules shipped with
-  RcppOctave to Octave path.</p></p>
+<p><code>octave_config</code> uses the <code>octave-config</code> system
+  utility that ships with Octave to query details about the
+  local Octave installation. Failure to load Octave
+  configuration is generally due to this Octave binary not
+  being found in the system PATH. Users should ensure that
+  the PATH contains Octave binary directory path.
+  Alternatively one may use option 'octave.path' to specify
+  the directory where to find <code>octave-config</code>:</p>
+<p><code>octave_modules</code> add the Octave modules that ship
+  with RcppOctave to Octave loading path.</p></p>
   
     </div>
     
     <h2>Usage</h2>
-    <pre>ostart(verbose = FALSE, warnings = FALSE)
+    <pre>octave_start(verbose = FALSE, warnings = FALSE, force = FALSE)
 
-oend()
+octave_end()
 
-overbose(value)
+octave_verbose(value)
 
-oconfig(varname, verbose = FALSE, warn = TRUE)
+octave_config(varname, verbose = FALSE, warn = TRUE, mustWork = TRUE, bindir = getOption("octave.path"))
 
-omodules(verbose = getOption("verbose"))</pre>
+octave_modules(verbose = getOption("verbose"))</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -86,7 +93,12 @@ omodules(verbose = getOption("verbose"))</pre>
   status.</dd>
       <dt>warnings</dt>
       <dd>logical that indicates if Octave startup
-  warnings should be shown.</dd>
+  warnings</dd>
+      <dt>force</dt>
+      <dd>logical that indicates if Octave session
+  should be reinitialised, even if one was previously
+  started (not meant to be used by end-users). should be
+  shown.</dd>
       <dt>value</dt>
       <dd>logical value to toggle verbosity</dd>
       <dt>varname</dt>
@@ -99,11 +111,28 @@ omodules(verbose = getOption("verbose"))</pre>
       <dd>logical that indicates if a warning should be
   thrown when a variable is returned empty, which generally
   means that <code>x</code> is not a valid config variable name.</dd>
+      <dt>mustWork</dt>
+      <dd>logical that indicates if an error should
+  be thrown if failing to load Octave configuration.</dd>
+      <dt>bindir</dt>
+      <dd>path to Octave bin/ sub-directory where to
+  look for <code>octave-config</code>. If <code>NULL</code> or
+  <code>NA</code>, then the system PATH is used.</dd>
     </dl>
-          </div>
+    
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p><span class = "samp">options(octave.path =
+  '/absolute/path/to/octave/bin')</span></p>
+  
+      <p>Note that in this case, the system PATH is not used.</p>
+  
+    </div>
+      </div>
   <div class="span4">
     <!-- <ul>
-      <li>oconfig</li><li>oend</li><li>omodules</li><li>ostart</li><li>overbose</li>
+      <li>octave_config</li><li>octave_end</li><li>octave_modules</li><li>octave_start</li><li>octave_verbose</li>
     </ul>
     <ul>
       

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>.CallOctave. RcppOctave 0.10</title>
+<title>.CallOctave. RcppOctave 0.11</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.10</a>
+      <a class="brand" href="index.html">RcppOctave 0.11</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -61,7 +61,7 @@
     </div>
     
     <h2>Usage</h2>
-    <pre>.CallOctave(.NAME, ..., argout = -1, unlist = !is.character(argout), buffer.stderr = TRUE)</pre>
+    <pre>.CallOctave(.NAME, ..., argout = -1, unlist = !is.character(argout), buffer.std = 3L)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -91,11 +91,23 @@
   of length one should be simplified and returned as a
   single value or kept as a list. The default is to unlist
   unless output names were passed in <code>argout</code>.</dd>
-      <dt>buffer.stderr</dt>
-      <dd>logical that indicates if messages
-  sent to stderr should be buffered and displayed at the
-  end of the computation (<code>TRUE</code>) or as they come
-  (<code>FALSE</code>).</dd>
+      <dt>buffer.std</dt>
+      <dd>logical that indicates if Octave stdout
+  or stderr should be buffered. If <code>TRUE</code>
+  output/errors/warnings are displayed at the end of the
+  computation. If <code>FALSE</code> they are directly displayed
+  by Octave. It is also possible to selectively buffer
+  either one of stdout or stderr, via the following integer
+  codes: <ul>
+<li> <code>0</code>: no buffering; </li>
+<li>
+  <code>1</code> or <code>-2</code>: only stdout is buffered; </li>
+<li>
+  <code>2</code> or <code>-1</code>: only stderr is buffered; </li>
+<li>
+  <code>3</code>: both stdout and stderr are buffered. </li>
+</ul>
+</dd>
     </dl>
     
     <div class="Value">

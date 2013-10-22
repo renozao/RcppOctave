@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>show,Octave-method. RcppOctave 0.11</title>
+<title>system.mfile. RcppOctave 0.11</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -48,33 +48,50 @@
         
       </header>
       
-      <h1>Show method for <code><a href='Octave-class.html'>Octave-class</a></code> objects</h1>
+      <h1>Path to Package M-files Standard Location</h1>
 
 <div class="row">
   <div class="span8">
     <div class="description">
       <h2>Description</h2>
       
-      <p><p>Show method for <code><a href='Octave-class.html'>Octave-class</a></code> objects</p></p>
+      <p><p><code>system.mfile</code> returns paths to .m files installed
+  with packages.</p></p>
   
     </div>
     
     <h2>Usage</h2>
-    <pre><span class="label label-important">S4</span> (Octave)
-`show`(object)</pre>
+    <pre>system.mfile(..., package = "base")</pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>object</dt>
-      <dd>Any R object</dd>
+      <dt>...</dt>
+      <dd>arguments passed to
+  <code><a href='http://www.inside-r.org/r-doc/base/system.file'>system.file</a></code>.</dd>
+      <dt>package</dt>
+      <dd>a character string with the name of a
+  single package.  An error occurs if more than one package
+  name is given.</dd>
     </dl>
-          </div>
+    
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p><code>system.mfile</code> is a shortcut for:
+  <span class = "samp">system.file('m-files', ..., package = package)</span> As
+  such it returns empty strings if the requested file does
+  not exist. If no arguments besides <code>package</code> are
+  passed, it returns the full path to the package's
+  sub-directory <em>m-files/</em> -- if it exists.</p>
+  
+    </div>
+      </div>
   <div class="span4">
     <!-- <ul>
-      <li>show,Octave-method</li>
+      <li>system.mfile</li>
     </ul>
     <ul>
-      <li>methods</li>
+      
     </ul> -->
       
         

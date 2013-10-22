@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Benchmark comparison of Kalman Filter implementations. RcppOctave 0.10</title>
+<title>Benchmark comparison of Kalman Filter implementations. RcppOctave 0.11</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">RcppOctave 0.10</a>
+      <a class="brand" href="index.html">RcppOctave 0.11</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="PAGE-DEMOS.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -565,13 +565,13 @@ end
 </div><div class='input'>print(res)
 </div>
 <div class='output'>                test replications elapsed relative
-7  KalmanOctave(pos)          100   1.590    1.000
-4   KalmanRfunC(pos)          100   3.362    2.114
-2      KalmanRC(pos)          100   3.406    2.142
-3    KalmanRfun(pos)          100   3.792    2.385
-1       KalmanR(pos)          100   3.839    2.414
-6 FirstKalmanRC(pos)          100   4.096    2.576
-5  FirstKalmanR(pos)          100   4.534    2.852
+7  KalmanOctave(pos)          100   1.573    1.000
+4   KalmanRfunC(pos)          100   3.377    2.147
+2      KalmanRC(pos)          100   3.498    2.224
+1       KalmanR(pos)          100   3.907    2.484
+3    KalmanRfun(pos)          100   3.921    2.493
+6 FirstKalmanRC(pos)          100   4.207    2.675
+5  FirstKalmanR(pos)          100   4.656    2.960
 </div><div class='input'></div><div class='input'></div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanCpp(pos), col='green', pch=20)</div><div class='input'>#plot(pos, col='blue', pch=20)</div><div class='input'>#points(KalmanR(pos), col='green', pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Set1'))</div><div class='input'>#c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")</div><div class='input'>#plot(pos, col='#377EB8', pch=20)</div><div class='input'>#points(KalmanR(pos), col="#E41A1C", pch=20)</div><div class='input'></div><div class='input'>#R> dput(brewer.pal(4, 'Paired'))</div><div class='input'>#c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C")</div><div class='input'></div><div class='input'>## doPdfPlot <- function() {</div><div class='input'>##     pdf("../images/kalmanExample.pdf")</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=18,</div><div class='input'>##          main="Object Trajectory and Kalman Filter Estimate")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3DD', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4DD", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3DD", "#1F78B4DD"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div><div class='input'></div><div class='input'>## doEpsPlot <- function() {</div><div class='input'>##     setEPS()</div><div class='input'>##     postscript("../images/kalmanExample.eps")</div><div class='input'>##     op <- par(mar=c(4,4,1,1))</div><div class='input'>##     plot(pos, col='#A6CEE3', pch=22)</div><div class='input'>##     points(KalmanR(pos), col="#1F78B4", pch=20)</div><div class='input'>##     legend("topleft", c("Trajectory", "Estimate"), bty="n",</div><div class='input'>##            col=c("#A6CEE3", "#1F78B4"), pch=c(22,20), cex=0.9)</div><div class='input'>##     par(op)</div><div class='input'>##     dev.off()</div><div class='input'>## }</div>
   </pre>
 </div></div>
