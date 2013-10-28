@@ -72,6 +72,9 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+#----------
+# o_assign
+#----------
 \dontshow{o_clear()}
 
 ## directly assign variables
@@ -90,6 +93,10 @@ o_get()
 e <- list2env(setNames(x, paste('env', names(x), sep='_')))
 o_assign(e)
 o_get(pattern="^env_")
+
+#----------
+# o_get
+#----------
 \dontshow{o_clear();}
 
 # get all currently defined variables
