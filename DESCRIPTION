@@ -1,7 +1,7 @@
 Package: RcppOctave
 Type: Package
 Title: Seamless Interface to Octave -- and Matlab
-Version: 0.11.2
+Version: 0.11.3
 Date: 2013-09-17
 Authors@R: c( person("Renaud", "Gaujoux", role=c("aut", "cre"),
     email="renaud@tx.technion.ac.il"), person("Dirk", "Eddelbuettel",
@@ -20,7 +20,7 @@ BugReports: http://github.com/renozao/RcppOctave/issues
 LazyLoad: yes
 SystemRequirements: Octave (>= 3.2.4) and its development files
 Depends:
-    R (>= 3.0.0),	
+    R (>= 3.0.0),
     methods,
     utils,
     stats,
