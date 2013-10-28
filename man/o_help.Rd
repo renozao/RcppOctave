@@ -75,6 +75,9 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+#----------
+# o_help
+#----------
 \dontshow{
 	if( interactive() ){
 		o_help <- function(..., show=FALSE){
@@ -97,6 +100,10 @@ o_help('rand')
 o_help(rand, format=TRUE)
 o_help(rand, format='HTML')
 o_help(rand, format='latex')
+
+#----------
+# o_doc
+#----------
 o_doc(text)
 # or equivalently
 o_doc('text')
