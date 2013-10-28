@@ -2906,6 +2906,15 @@ fi
 # check R is a shared library
 R_LDFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config --ldflags 2>/dev/null`
 R_CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config --cppflags 2>/dev/null`
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Original R_LDFLAGS: ${R_LDFLAGS}" >&5
+$as_echo "Original R_LDFLAGS: ${R_LDFLAGS}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Original R_CPPFLAGS: ${R_CPPFLAGS}" >&5
+$as_echo "Original R_CPPFLAGS: ${R_CPPFLAGS}" >&6; }
+
+# remove -fopenmp flag that breaks mkoctfile (effectively used when R shared library)
+R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-fopenmp//'`
+
 has_R_shlib=no
 if test -n "$R_LDFLAGS"; then
    has_R_shlib=yes
@@ -2959,10 +2968,12 @@ $as_echo "Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}" >&6; }
 $as_echo "Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6; }
 
 # get compilation flags
-CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
-CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
-CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
-CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
+if test -n "${R_HOME}"; then
+  CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
+  CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
+  CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
+  CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
+fi
 
 # pass R flags down to makefile in modules/
 
