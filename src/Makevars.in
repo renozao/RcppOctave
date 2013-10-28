@@ -15,10 +15,10 @@ PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` -DO
 all: OctaveModule	
 
 OctaveModule:
-	@cd modules;\
-	make; \
-	echo "# Copying Octave module directory '$(OCT_MODULES_PATH)'"; \
-	mkdir -p "$(OCT_MODULES_PATH)"; \
+	@cd modules && \
+	make && \
+	echo "# Copying Octave module directory '$(OCT_MODULES_PATH)'" && \
+	mkdir -p "$(OCT_MODULES_PATH)" && \
 	cp -f PKG_ADD *.oct "$(OCT_MODULES_PATH)";
 
 clean:
