@@ -1,12 +1,11 @@
 Package: RcppOctave
 Type: Package
 Title: Seamless Interface to Octave -- and Matlab
-Version: 0.11.3
+Version: 0.13
 Date: 2013-09-17
+Author: Renaud Gaujoux
 Authors@R: c( person("Renaud", "Gaujoux", role=c("aut", "cre"),
-    email="renaud@tx.technion.ac.il"), person("Dirk", "Eddelbuettel",
-    role="ctb", comment="Helped with configure and Rcpp"), person("Dominick",
-    "Samperi", role="ctb", comment="Helped with Windows/Mac port"))
+    email="renaud@tx.technion.ac.il") )
 Description: Direct interface to Octave. The primary goal is to facilitate the
     port of Matlab/Octave scripts to R. The package enables to call any Octave
     functions from R and as well as browsing their documentation, passing
