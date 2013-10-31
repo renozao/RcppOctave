@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_ls. RcppOctave 0.11.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.11.3</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Listing Objects from the Current Octave Session</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>The function <code>o_ls</code> is an enhanced listing function,
+  which also lists user-defined functions, as opposed to
+  <code><a href='o_who.html'>o_who</a></code> or <code><a href='o_whos.html'>o_whos</a></code>, which only
+  list variables. Note that this function works properly on
+  Octave >= 3.6.1, but is known not to list user-defined
+  functions on Octave 3.4.1 (for some unknown reason the
+  Octave function <code>completion_matches</code> does not return
+  the names of user-defined functions).</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>o_ls(long = FALSE, rm.ans = TRUE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>rm.ans</dt>
+      <dd>a logical that indicates if the automatic
+  Octave variable <code>ans</code> should be included in the
+  result. Default (<code>TRUE</code>) is not to include it.</dd>
+      <dt>long</dt>
+      <dd>logical that indicates the desired type of
+  output: if <code>FALSE</code> (default) then only the names of
+  the variables are returned (like dispatched
+  <code>o_who</code>), otherwise a list with more detailed
+  information about each variable is returned (like
+  <code><a href='o_whos.html'>o_whos</a></code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>a character vector or a list depending on the value of
+  argument <code>long</code>.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre><code class="r">
+## Don&#39;t show: 
+ o_clear(all=TRUE) 
+## End Don&#39;t show
+
+# only variables
+o_assign(list(a=1, b=2, c=5))
+o_ls()
+</code></pre>
+
+<pre><code>## Warning: warning: function name &#39;fun1&#39; does not agree with function file
+## name &#39;/tmp/RtmpAMtEPT/file6fd56a4cfbfd/RcppOctave/scripts/ex_functions.m&#39;
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+<pre><code class="r"># compare with the output of standard Octave functions
+o_who() # should be the same output
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+<pre><code class="r">o_whos()
+</code></pre>
+
+<pre><code>##  &lt;Octave session: 3 object(s)&gt;
+##  name size bytes  class global sparse complex nesting persistent
+##     a  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+##     b  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+##     c  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+</code></pre>
+
+<pre><code class="r">
+# variables and user-defined functions
+o_clear(all=TRUE) # first clear Octave session
+o_source(system.file(&#39;scripts/ex_source.m&#39;, package=&#39;RcppOctave&#39;))
+o_ls()
+</code></pre>
+
+<pre><code>## Warning: warning: function name &#39;fun1&#39; does not agree with function file
+## name &#39;/tmp/RtmpAMtEPT/file6fd56a4cfbfd/RcppOctave/scripts/ex_functions.m&#39;
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot;   &quot;b&quot;   &quot;c&quot;   &quot;abc&quot;
+</code></pre>
+
+<pre><code class="r">o_ls(long=TRUE)
+</code></pre>
+
+<pre><code>##  &lt;Octave session: 4 object(s)&gt;
+##  name size bytes    class global sparse complex nesting persistent
+##     a  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##     b  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##     c  1x1     8   double  FALSE  FALSE   FALSE       1      FALSE
+##   abc   NA    NA function   TRUE     NA      NA       1         NA
+</code></pre>
+
+<pre><code class="r"># compare with the output of standard Octave functions
+o_who()
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+<pre><code class="r">o_whos()
+</code></pre>
+
+<pre><code>##  &lt;Octave session: 3 object(s)&gt;
+##  name size bytes  class global sparse complex nesting persistent
+##     a  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+##     b  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+##     c  1x1     8 double  FALSE  FALSE   FALSE       1      FALSE
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_ls</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other listoct: <code><a href='o_who.html'>o_who</a></code>, <code><a href='o_whos.html'>o_whos</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

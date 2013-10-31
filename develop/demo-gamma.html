@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Reproducible RNG draws between R and Octave: gamma example. RcppOctave 0.11.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-DEMOS.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.11.3</span>
+      &nbsp;<span style="background-color:red" class="badge label-danger">devel</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Reproducible RNG draws between R and Octave: gamma example</h1><br />
+
+<div class="row"><div class="span8">
+  <pre>
+  <div class='input'></div><div class='input'>library(RcppOctave)
+</div><div class='input'></div><div class='input'>## define a Gamma RNG draw function</div><div class='input'>o_source(text="
+  function x = orngg(a, b, n)
+    x = b * randg(a, n, 1);
+  end
+")
+</div><div class='input'></div><div class='input'>N <- 50000
+</div><div class='input'></div><div class='input'>set.seed(42)
+</div><div class='input'>x1 <- c(.O$orngg(9,1,N))
+</div><div class='input'>x2 <- c(.O$orngg(4,1,N))
+</div><div class='input'>x3 <- c(.O$orngg(1,4,N))
+</div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>y1 <- rgamma(N,9,1)
+</div><div class='input'>y2 <- rgamma(N,4,1)
+</div><div class='input'>y3 <- rgamma(N,1,1,4)
+</div>
+<strong class='error'>Error in rgamma(N, 1, 1, 4): specify 'rate' or 'scale' but not both</strong><div class='input'></div><div class='input'>#NOTE: RcppOctave's Octave function randg already has a scale parameter:</div><div class='input'>set.seed(42)
+</div><div class='input'>z1 <- c(.O$randg(9,N,1,1))
+</div><div class='input'>z2 <- c(.O$randg(4,N,1,1))
+</div><div class='input'>z3 <- c(.O$randg(1,N,1,4))
+</div><div class='input'></div><div class='input'>stopifnot(all.equal(x1,z1))
+</div><div class='input'>stopifnot(all.equal(x2,z2))
+</div><div class='input'>stopifnot(all.equal(x3,z3))
+</div><div class='input'># see also wrapper function ?o_rgamma, that is more similar to the other o_* RNG functions</div><div class='input'># in term of parameter order.</div><div class='input'></div><div class='input'>stopifnot(all.equal(x1,y1))
+</div><div class='input'>stopifnot(all.equal(x2,y2))
+</div><div class='input'>stopifnot(all.equal(x3,y3))
+</div>
+<strong class='error'>Error in mode(current): object 'y3' not found</strong><div class='input'></div><div class='input'>op <- par(mfcol=c(2,1), lwd=2, mar=c(4,3,3,1))
+</div><div class='input'>plot(density(x1), main="Calling randg from Octave",
+     col="orange", ylim=c(0,0.23), xlim=c(-1,22))
+</div><p><img src='gamma-demo1.png' alt='' width='400' height='400' /></p><div class='input'>lines(density(x2), col='mediumblue')
+</div><div class='input'>lines(density(x3), col='brown')
+</div><div class='input'></div><div class='input'>plot(density(y1), main="Calling rgamma from R",
+     col="orange", ylim=c(0,0.23), xlim=c(-1,22))
+</div><div class='input'>lines(density(y2), col='mediumblue')
+</div><div class='input'>lines(density(y3), col='brown')
+</div>
+<strong class='error'>Error in density(y3): object 'y3' not found</strong><div class='input'>par(op)
+</div>
+  </pre>
+</div></div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

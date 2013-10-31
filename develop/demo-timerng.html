@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Timing foe RNGs. RcppOctave 0.11.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-DEMOS.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.11.3</span>
+      &nbsp;<span style="background-color:red" class="badge label-danger">devel</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Timing foe RNGs</h1><br />
+
+<div class="row"><div class="span8">
+  <pre>
+  <div class='input'></div><div class='input'>library(RcppOctave)
+</div><div class='input'>require(rbenchmark)			# to benchmark examples
+</div><div class='input'></div><div class='input'>## define a Gamma RNG draw function</div><div class='input'>o_source(text="
+  function x = orndg(a, b, n)
+    x = b * randg(a, n, 1);
+  end
+")
+</div><div class='input'></div><div class='input'>## define a Normal RNG draw function</div><div class='input'>o_source(text="
+  function x = orndn(n)
+    x = randn(n,1);
+  end
+")
+</div><div class='input'></div><div class='input'>N <- 500
+</div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>x1 <- c(.O$orndg(9,1,N))
+</div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>y1 <- rgamma(N,9,1)
+</div><div class='input'>stopifnot(all.equal(x1, y1))
+</div><div class='input'></div><div class='input'>res <- benchmark(.O$orndg(9,1,N),
+                 rgamma(N,9,1),
+                 o_rgamma(9,N,1),
+                 columns = c("test", "replications", "elapsed", "relative"),
+                 order="relative",
+                 replications=1000)
+</div><div class='input'>print(res)
+</div>
+<div class='output'>               test replications elapsed relative
+2   rgamma(N, 9, 1)         1000   0.075    1.000
+3 o_rgamma(9, N, 1)         1000   0.796   10.613
+1 .O$orndg(9, 1, N)         1000   1.767   23.560
+</div><div class='input'></div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>x1 <- c(.O$orndn(N,1))
+</div><div class='input'>set.seed(42)  # reset RNG
+</div><div class='input'>y1 <- rnorm(N)
+</div><div class='input'>stopifnot(all.equal(x1, y1))
+</div><div class='input'></div><div class='input'>res <- benchmark(.O$orndn(N),
+                 rnorm(N),
+                 o_rnorm(N,1),
+                 columns = c("test", "replications", "elapsed", "relative"),
+                 order="relative",
+                 replications=1000)
+</div><div class='input'>print(res)</div>
+<div class='output'>           test replications elapsed relative
+2      rnorm(N)         1000   0.056    1.000
+3 o_rnorm(N, 1)         1000   0.087    1.554
+1   .O$orndn(N)         1000   1.734   30.964
+</div>
+  </pre>
+</div></div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

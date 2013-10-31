@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_help. RcppOctave 0.11.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.11.3</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Accessing Octave Help and Documentation Pages</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p><code>o_help</code> retrieves the Octave help page associated
+  with a given symbol. By default the page is printed out,
+  but may also be silently retrieved or formatted for
+  direct inclusion in R documentation files (i.e. Rd
+  files).</p>
+<p><code>o_doc</code> displays documentation for the function
+  FUNCTION_NAME directly from an on-line version of the
+  printed manual, using the GNU Info browser. Type `q` to
+  quit the browser.</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>o_help(NAME, character.only = FALSE, show = interactive(), format = c("plain", "rd", 
+  "txt", "latex", "HTML"))
+
+o_doc(FUNCTION_NAME)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>NAME</dt>
+      <dd>Octave symbol (e.g. command, function,
+  operator) passed to Octave function <code>help</code> to
+  retrieve the related documentation.</dd>
+      <dt>character.only</dt>
+      <dd>a logical indicating whether
+  <code>NAME</code> can be assumed to be a character string
+  (<code>TRUE</code>) or should be substituted with
+  <code><a href='http://www.inside-r.org/r-doc/base/substitute'>substitute</a></code> before using them (default).</dd>
+      <dt>show</dt>
+      <dd>logical that specifies if the help page
+  should be shown using the as R documentation file
+  (default), e.g. using a pager, or only returned as a
+  single string. Note that when <code>show=TRUE</code>, the
+  string is still returned but invisibly.</dd>
+      <dt>format</dt>
+      <dd>a specification of the output format. If
+  <code>TRUE</code> or <code>'rd'</code>, the result is Rd code that
+  wraps the Octave documentation string and is suitable for
+  inclusion into Rd files. If one of the strings
+  <code>'txt', 'latex'</code> or <code>'HTML'</code>, then the result
+  is formated using the corresponding Rd conversion
+  function from the <span class = "pkg">tools</span> package
+  <code>Rd2txt</code>, <code>Rd2latex</code> or
+  <code>Rd2HTML</code>.</dd>
+      <dt>FUNCTION_NAME</dt>
+      <dd>the name of the function from which
+  to show the documentation. See the relevant <em>Octave
+  Documentation</em> section below.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>this function is usually called for its side effect of
+  printing the help page on standard output (argument
+  <code>show=TRUE</code>), but it invisibly returns the help page
+  as a single character string.</p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;help&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;help&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command: help NAME
+ -- Command: help '--list'
+     Display the help text for NAME.  For example, the command 'help
+     help' prints a short message describing the 'help' command.
+
+     Given the single argument '--list', list all operators, keywords,
+     built-in functions, and loadable functions available in the current
+     session of Octave.
+
+     If invoked without any arguments, 'help' display instructions on
+     how to access help from the command line.
+
+     The help command can give you information about operators, but not
+     the comma and semicolons that are used as command separators.  To
+     get help for those, you must type 'help comma' or 'help semicolon'.
+
+     See also: doc, lookfor, which
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-10-31 16:21:39
+]</em></p>
+  
+    </div>
+
+    <div class="Octave Documentation for &lt;em&gt;doc&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;doc&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Command: doc FUNCTION_NAME
+     Display documentation for the function FUNCTION_NAME directly from
+     an online version of the printed manual, using the GNU Info
+     browser.  If invoked without any arguments, the manual is shown
+     from the beginning.
+
+     For example, the command 'doc rand' starts the GNU Info browser at
+     the 'rand' node in the online version of the manual.
+
+     Once the GNU Info browser is running, help for using it is
+     available using the command 'C-h'.
+
+     See also: help
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.6.4
+ on
+  2013-10-31 16:21:40
+]</em></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre><code class="r">
+#----------
+# o_help
+#----------
+## Don&#39;t show: 
+    if( interactive() ){
+        o_help &lt;- function(..., show=FALSE){
+            RcppOctave::o_help(..., show=show)
+        }
+    }
+## End Don&#39;t show
+
+o_help(print)
+</code></pre>
+
+<pre><code>## [1] &quot; -- Function File: print ()\n -- Function File: print (OPTIONS)\n -- Function File: print (FILENAME, OPTIONS)\n -- Function File: print (H, FILENAME, OPTIONS)\n     Print a graph, or save it to a file\n\n     FILENAME defines the file name of the output file.  If the file\n     name has no suffix, one is inferred from the specified device and\n     appended to the file name.  If no filename is specified, the output\n     is sent to the printer.\n\n     H specifies the figure handle.  If no handle is specified the\n     handle for the current figure is used.\n\n     OPTIONS:\n\n     &#39;-fH&#39;\n          Specify the handle, H, of the figure to be printed.  The\n          default is the current figure.\n\n     &#39;-PPRINTER&#39;\n          Set the PRINTER name to which the graph is sent if no FILENAME\n          is specified.\n\n     &#39;-GGHOSTSCRIPT_COMMAND&#39;\n          Specify the command for calling Ghostscript.  For Unix and\n          Windows, the defaults are &#39;gs&#39; and &#39;gswin32c&#39;, respectively.\n\n     &#39;-color&#39;\n     &#39;-mono&#39;\n          Monochrome or color output.\n\n     &#39;-solid&#39;\n     &#39;-dashed&#39;\n          Forces all lines to be solid or dashed, respectively.\n\n     &#39;-portrait&#39;\n     &#39;-landscape&#39;\n          Specify the orientation of the plot for printed output.  For\n          non-printed output the aspect ratio of the output corresponds\n          to the plot area defined by the \&quot;paperposition\&quot; property in\n          the orientation specified.  This options is equivalent to\n          changing the figure&#39;s \&quot;paperorientation\&quot; property.\n\n     &#39;-dDEVICE&#39;\n          Output device, where DEVICE is one of:\n          &#39;ps&#39;\n          &#39;ps2&#39;\n          &#39;psc&#39;\n          &#39;psc2&#39;\n               Postscript (level 1 and 2, mono and color).  The FLTK\n               graphics toolkit generates Postscript level 3.0.\n\n          &#39;eps&#39;\n          &#39;eps2&#39;\n          &#39;epsc&#39;\n          &#39;epsc2&#39;\n               Encapsulated postscript (level 1 and 2, mono and color).\n               The FLTK graphic toolkit generates Postscript level 3.0.\n\n          &#39;tex&#39;\n          &#39;epslatex&#39;\n          &#39;epslatexstandalone&#39;\n          &#39;pstex&#39;\n          &#39;pslatex&#39;\n          &#39;pdflatex&#39;\n               Generate a LaTeX (or TeX) file for labels, and eps/ps/pdf\n               for graphics.  The file produced by &#39;epslatexstandalone&#39;\n               can be processed directly by LaTeX.  The other formats\n               are intended to be included in a LaTeX (or TeX) document.\n               The &#39;tex&#39; device is the same as the &#39;epslatex&#39; device.\n               The &#39;pdflatex&#39; device is only available for the FLTK\n               graphics toolkit.\n\n          &#39;tikz&#39;\n               Generate a LaTeX file using PGF/TikZ.  For the FLTK the\n               result is PGF.\n\n          &#39;ill&#39;\n          &#39;aifm&#39;\n               Adobe Illustrator (Obsolete for Gnuplot versions &gt; 4.2)\n\n          &#39;cdr&#39;\n          &#39;corel&#39;\n               CorelDraw\n\n          &#39;dxf&#39;\n               AutoCAD\n\n          &#39;emf&#39;\n          &#39;meta&#39;\n               Microsoft Enhanced Metafile\n\n          &#39;fig&#39;\n               XFig.  For the Gnuplot graphics toolkit, the additional\n               options &#39;-textspecial&#39; or &#39;-textnormal&#39; can be used to\n               control whether the special flag should be set for the\n               text in the figure (default is &#39;-textnormal&#39;).\n\n          &#39;hpgl&#39;\n               HP plotter language\n\n          &#39;mf&#39;\n               Metafont\n\n          &#39;png&#39;\n               Portable network graphics\n\n          &#39;jpg&#39;\n          &#39;jpeg&#39;\n               JPEG image\n\n          &#39;gif&#39;\n               GIF image (only available for the Gnuplot graphics\n               toolkit)\n\n          &#39;pbm&#39;\n               PBMplus\n\n          &#39;svg&#39;\n               Scalable vector graphics\n\n          &#39;pdf&#39;\n               Portable document format\n\n               NOTE: The gnuplot binary as shipped by Debian cannot\n               create PDF files, see http://bugs.debian.org/478677\n\n          If the device is omitted, it is inferred from the file\n          extension, or if there is no filename it is sent to the\n          printer as postscript.\n\n     &#39;-dGHOSTSCRIPT_DEVICE&#39;\n          Additional devices are supported by Ghostscript.  Some\n          examples are;\n\n          &#39;ljet2p&#39;\n               HP LaserJet IIP\n\n          &#39;ljet3&#39;\n               HP LaserJet III\n\n          &#39;deskjet&#39;\n               HP DeskJet and DeskJet Plus\n\n          &#39;cdj550&#39;\n               HP DeskJet 550C\n\n          &#39;paintjet&#39;\n               HP PointJet\n\n          &#39;pcx24b&#39;\n               24-bit color PCX file format\n\n          &#39;ppm&#39;\n               Portable Pixel Map file format\n\n          &#39;pdfwrite&#39;\n               Produces pdf output from eps\n\n          For a complete list, type &#39;system (\&quot;gs -h\&quot;)&#39; to see what\n          formats and devices are available.\n\n          When Ghostscript output is sent to a printer the size is\n          determined by the figure&#39;s \&quot;papersize\&quot; property.  When the\n          output is sent to a file the size is determined by the plot\n          box defined by the figure&#39;s \&quot;paperposition\&quot; property.\n\n     &#39;-append&#39;\n          Appends the PS, or PDF output to a pre-existing file of the\n          same type.\n\n     &#39;-rNUM&#39;\n          Resolution of bitmaps in pixels per inch.  For both metafiles\n          and SVG the default is the screen resolution, for other it is\n          150 dpi.  To specify screen resolution, use \&quot;-r0\&quot;.\n\n     &#39;-tight&#39;\n          Forces a tight bounding box for eps-files.\n\n     &#39;-PREVIEW&#39;\n          Adds a preview to eps-files.  Supported formats are;\n\n          &#39;-interchange&#39;\n               Provides an interchange preview.\n\n          &#39;-metalfile&#39;\n               Provides a metafile preview.\n\n          &#39;-pict&#39;\n               Provides pict preview.\n\n          &#39;-tiff&#39;\n               Provides a tiff preview.\n\n     &#39;-SXSIZE,YSIZE&#39;\n          Plot size in pixels for EMF, GIF, JPEG, PBM, PNG and SVG.  For\n          PS, EPS, PDF, and other vector formats the plot size is in\n          points.  This option is equivalent to changing the size of the\n          plot box associated with \&quot;paperposition\&quot; property.  Using the\n          command form of the print function, you must quote the\n          XSIZE,YSIZE option.  For example, by writing &#39;\&quot;-S640,480\&quot;&#39;.\n\n     &#39;-FFONTNAME&#39;\n     &#39;-FFONTNAME:SIZE&#39;\n     &#39;-F:SIZE&#39;\n          Associates all text with the FONTNAME and/or FONTSIZE.\n          FONTNAME is ignored for some devices; dxf, fig, hpgl, etc.\n\n     The filename and options can be given in any order.\n\n     Example: Print to a file, using the svg device.\n\n          figure (1);\n          clf ();\n          surf (peaks);\n          print -dsvg figure1.svg\n\n     Example: Print to an HP Deskjet 550C.\n\n          figure (1);\n          clf ();\n          surf (peaks);\n          print -dcdj550\n\n     See also: figure, orient, saveas\n\n&quot;
+</code></pre>
+
+<pre><code class="r">o_help(rand)
+</code></pre>
+
+<pre><code>## [1] &quot;USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function &#39;runif&#39; -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n&quot;
+</code></pre>
+
+<pre><code class="r"># or equivalently
+o_help(&#39;rand&#39;)
+</code></pre>
+
+<pre><code>## [1] &quot;USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function &#39;runif&#39; -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n&quot;
+</code></pre>
+
+<pre><code class="r">
+# to include in Rd files, use argument rd=TRUE in an \Sexpr:
+## Not run: 
+##D  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(rand, format=&#39;rd&#39;)}
+## End(Not run)
+
+# to see the included Rd code
+o_help(rand, format=TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;\\if{html}{\\out{&lt;pre&gt;USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function &#39;runif&#39; -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n&lt;/pre&gt;}}\n\\if{text}{\\preformatted{USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function &#39;runif&#39; -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n}}\n\\if{latex}{\\out{\\begin{verbatim}USAGE: U = rand( n [, k])\n\nGenerates uniform random variates as R function &#39;runif&#39; -- using the current RNG from R.\n\nPossible calls:\nrand(n, k)   returns a n*k matrix with uncorrelated U(0, 1) deviates drawn in columns\nrand(n)      returns a n*n matrix with uncorrelated U(0, 1) deviates drawn in columns\n\n\nNOTE:\nThis function substitutes Octave original function in calls from RcppOctave\n\n\\end{verbatim}}}\n&quot;
+</code></pre>
+
+<pre><code class="r">o_help(rand, format=&#39;HTML&#39;)
+o_help(rand, format=&#39;latex&#39;)
+
+#----------
+# o_doc
+#----------
+o_doc(text)
+# or equivalently
+o_doc(&#39;text&#39;)
+
+</code></pre>
+
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_doc</li><li>o_help</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
