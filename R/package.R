@@ -217,7 +217,12 @@ OctaveConfig <- local({
 .onLoad <- function(libname, pkgname){
 
     # setup finalizer
-    reg.finalizer(.octave_end_trigger, function(e) octave_end(), TRUE)
+    f <- function(e){
+        dlls <- base::getLoadedDLLs()
+	    if ( 'RcppOctave' %in%  names(dlls) ) octave_end()
+    }
+    reg.finalizer(.octave_end_trigger, f, TRUE)
+    
     # save initial PATH state to enable restoration in .onUnload
     Sys.path$init()
     
