@@ -91,7 +91,7 @@ SEXP octave_verbose(SEXP value){
 	return( Rcpp::wrap(res) );
 }
 
-bool octave_session(bool start=true, bool with_warnings = true){
+bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
 	if( start && !OCTAVE_INITIALIZED ){
@@ -120,10 +120,12 @@ bool octave_session(bool start=true, bool with_warnings = true){
 
 	}
 	else if( !start && OCTAVE_INITIALIZED ){
-		if( RCPP_OCTAVE_VERBOSE )
-			REprintf("Terminating Octave interpreter\n");
+		if( RCPP_OCTAVE_VERBOSE || verbose )
+			REprintf("Terminating Octave interpreter... ");
 		// terminate interpreter
 		do_octave_atexit();
+		if( RCPP_OCTAVE_VERBOSE || verbose )
+			REprintf("OK\n");
 		OCTAVE_INITIALIZED = false;
 	}
 	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
@@ -139,8 +141,10 @@ SEXP octave_start(SEXP verbose, SEXP with_warnings){
 	return Rcpp::wrap(octave_session(true, _warnings));
 }
 
-SEXP octave_end(){
-	return Rcpp::wrap(octave_session(false));
+SEXP octave_end(SEXP verbose = R_NilValue){
+
+	bool b_verbose = !Rf_isNull(verbose) ? Rcpp::as<bool>(verbose) : false;
+	return Rcpp::wrap(octave_session(false, true, b_verbose));
 }
 
 void R_init_RcppOctave(DllInfo *info)

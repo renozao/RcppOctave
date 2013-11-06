@@ -71,7 +71,8 @@ NULL
 #' 
 #' \code{octave_start} Initialize an Octave session.
 #' 
-#' @param verbose logical value used as the inital verbosity status.
+#' @param verbose logical that toggle verbosity.
+In \code{octave_start}, it is the value used as the inital global verbosity state. If \code{TRUE} all calls and conversions between R and Octave produce diagnostic messages.
 #' @param warnings logical that indicates if Octave startup warnings
 #' @param force logical that indicates if Octave session should be reinitialised, 
 #' even if one was previously started (not meant to be used by end-users).  
@@ -94,8 +95,8 @@ octave_start <- local({
 #' 
 #' @rdname octave-ll
 #' @export
-octave_end <- function(){
-	.Call("octave_end", PACKAGE='RcppOctave')
+octave_end <- function(verbose = getOption('verbose')){
+	.Call("octave_end", verbose, PACKAGE='RcppOctave')
 }
 
 #' \code{octave_verbose} toggles the verbosity of RcppOctave calls: messages tracks 

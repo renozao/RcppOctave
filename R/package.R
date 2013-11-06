@@ -210,8 +210,14 @@ OctaveConfig <- local({
     }
 })
 
+# dummy environment to trigger call to octave_end when quitting R
+# via reg.finalizer (setup is done in .onLoad)
+.octave_end_trigger <- environment()
+
 .onLoad <- function(libname, pkgname){
-    
+
+    # setup finalizer
+    reg.finalizer(.octave_end_trigger, function(e) octave_end(), TRUE)
     # save initial PATH state to enable restoration in .onUnload
     Sys.path$init()
     

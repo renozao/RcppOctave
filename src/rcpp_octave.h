@@ -89,11 +89,16 @@ RcppExport SEXP octave_start(SEXP verbose, SEXP with_warnings);
 /**
  * Terminate an Octave session from R.
  */
-RcppExport SEXP octave_end();
+RcppExport SEXP octave_end(SEXP verbose);
 
 /**
  * Returns the help string from an Octave object.
  */
 RcppExport SEXP oct_help(SEXP name);
+
+// Register init/unload routines
+RcppExport void R_init_RcppOctave(DllInfo *info);
+
+RcppExport void R_unload_RcppOctave(DllInfo *info);
 
 #endif
