@@ -4,8 +4,7 @@ Title: Seamless Interface to Octave -- and Matlab
 Version: 0.13.1
 Date: 2013-09-17
 Author: Renaud Gaujoux
-Authors@R: c( person("Renaud", "Gaujoux", role=c("aut", "cre"),
-    email="renaud@tx.technion.ac.il") )
+Maintainer: Renaud Gaujoux <renaud@tx.technion.ac.il>
 Description: Direct interface to Octave. The primary goal is to facilitate the
     port of Matlab/Octave scripts to R. The package enables to call any Octave
     functions from R and as well as browsing their documentation, passing

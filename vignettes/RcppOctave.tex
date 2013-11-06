@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_1a5471b39556/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_3141761394f6/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -147,8 +147,8 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.11.3
-[October 28, 2013]\footnote{This vignette was built using \octave
+\date{\Rpkg{RcppOctave} -- Version 0.13.1
+[November  6, 2013]\footnote{This vignette was built using \octave
 3.6.4}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -498,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.4912 0.9499 0.6864 0.1499
+## [1] 0.7249 0.3890 0.1136 0.6571
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -506,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.04044 0.47447 0.30631 0.12975
+## [1] 0.4322 0.1305 0.9560 0.8662
 ## 
 ## $b
-##        [,1]    [,2]   [,3]
-## [1,] 0.1501 0.35766 0.2943
-## [2,] 0.4487 0.07778 0.3626
+##        [,1]   [,2]   [,3]
+## [1,] 0.4062 0.5852 0.7100
+## [2,] 0.3545 0.2927 0.5283
 ## 
 ## $c
 ## [1] "some text"
@@ -838,6 +838,7 @@ Variables may be assigned or retrieved individually in separate calls to
 \hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{20}\hlstd{)}
 \hlkwd{o_assign}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{aaa} \hlstd{=} \hlnum{7}\hlstd{,} \hlkwc{aab} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{)))}
+
 \hlcom{## GET get all variables}
 \hlkwd{str}\hlstd{(}\hlkwd{o_get}\hlstd{())}
 \end{alltt}
@@ -928,18 +929,18 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.9168
-## [2,] 0.2563
-## [3,] 0.0406
+## [1,] 1.7021
+## [2,] 0.3328
+## [3,] 0.1279
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.9168
-## [2,] 0.2563
-## [3,] 0.0406
+## [1,] 1.7021
+## [2,] 0.3328
+## [3,] 0.1279
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -948,13 +949,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.5933 0.3847
+## [1] 0.4294 0.7055
 ## 
 ## [[2]]
-## [1] -1.3482 -0.4398
+## [1] -1.8866  0.4505
 ## 
 ## [[3]]
-## [1] 0.7872 0.5593 0.1420
+## [1] 0.4388 0.6044 0.5027
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -973,7 +974,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5933 0.3847
+## [1] 0.4294 0.7055
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -986,7 +987,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5933 0.3847
+## [1] 0.4294 0.7055
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1210,8 +1211,10 @@ following code, which defines a wrapper functions to format the output of
     \hlstd{res}\hlopt{$}\hlstd{d} \hlkwb{<-} \hlkwd{diag}\hlstd{(res}\hlopt{$}\hlstd{d)}
     \hlstd{res[}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{3}\hlstd{)]}
 \hlstd{\}}
+
 \hlcom{# define random data}
 \hlstd{X} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{25}\hlstd{),} \hlnum{5}\hlstd{)}
+
 \hlcom{# run SVD in R}
 \hlstd{svd.R} \hlkwb{<-} \hlkwd{svd}\hlstd{(X)}
 \hlcom{# run SVD in Octave}
@@ -1220,9 +1223,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.7787 0.6654 0.4976 0.1559 0.0698
-##  $ u: num [1:5, 1:5] -0.449 -0.489 -0.326 -0.495 -0.455 ...
-##  $ v: num [1:5, 1:5] -0.338 -0.366 -0.587 -0.512 -0.381 ...
+##  $ d: num [1:5] 2.55347 1.18633 0.72513 0.64495 0.00172
+##  $ u: num [1:5, 1:5] -0.473 -0.426 -0.501 -0.368 -0.456 ...
+##  $ v: num [1:5, 1:5] -0.414 -0.542 -0.353 -0.523 -0.369 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1236,8 +1239,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 4.04e-16" 
-## [2] "Component 3: Mean relative difference: 2.647e-16"
+## [1] "Component 2: Mean relative difference: 3.344e-16"
+## [2] "Component 3: Mean relative difference: 2.779e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1265,6 +1268,7 @@ algorithms (e.g. simulations, MCMC-based estimations):
         \hlstd{y} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{rnorm}\hlstd{(}\hlnum{100}\hlstd{),} \hlnum{10}\hlstd{)}
         \hlstd{(x} \hlopt{*} \hlstd{y)} \hlopt{%*%} \hlstd{(x} \hlopt{/} \hlstd{y)}
 \hlstd{\}}
+
 \hlstd{Of} \hlkwb{<-} \hlstd{\{}
 \hlcom{# define Octave function}
 \hlkwd{o_source}\hlstd{(}\hlkwc{text}\hlstd{=}\hlstr{"
@@ -1277,6 +1281,7 @@ end
 \hlcom{# return the function}
 \hlstd{.O}\hlopt{$}\hlstd{test}
 \hlstd{\}}
+
 \hlcom{# run both computations with a common seed  }
 \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.R} \hlkwb{<-} \hlkwd{Rf}\hlstd{()}
 \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.O} \hlkwb{<-} \hlkwd{Of}\hlstd{()}
@@ -1374,12 +1379,12 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.11.3 pkgmaker_0.18.2   registry_0.2      Rcpp_0.10.5      
+[1] RcppOctave_0.13.1 pkgmaker_0.18.2   registry_0.2      Rcpp_0.10.6      
 [5] knitr_1.5        
 
 loaded via a namespace (and not attached):
-[1] codetools_0.2-8 digest_0.6.3    evaluate_0.5.1  formatR_0.9    
-[5] highr_0.2.1     stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
+[1] codetools_0.2-8 digest_0.6.3    evaluate_0.5.1  formatR_0.10   
+[5] highr_0.3       stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

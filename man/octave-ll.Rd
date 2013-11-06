@@ -9,7 +9,7 @@
   octave_start(verbose = FALSE, warnings = FALSE,
     force = FALSE)
 
-  octave_end()
+  octave_end(verbose = getOption("verbose"))
 
   octave_verbose(value)
 
@@ -19,8 +19,11 @@
   octave_modules(verbose = getOption("verbose"))
 }
 \arguments{
-  \item{verbose}{logical value used as the inital verbosity
-  status.}
+  \item{verbose}{logical that toggle verbosity. In
+  \code{octave_start}, it is the value used as the initial
+  global verbosity state. If \code{TRUE} all calls and
+  conversions between R and Octave produce diagnostic
+  messages.}
 
   \item{warnings}{logical that indicates if Octave startup
   warnings}
