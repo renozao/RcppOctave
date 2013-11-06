@@ -131,6 +131,9 @@ Sys.path <- local({
             .commits <<- c(.commits, list(setdiff(cur, init)))
         }
         , revert = function(msg = NULL){
+            # no message in non verbose mode
+            if( !getOption('verbose') ) msg <- NULL
+            
             if( !length(.commits) ) return()
             addon <- tail(.commits, 1L)[[1L]]
             if( !is.null(msg) ) message(msg, "... ", appendLF = FALSE)
