@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>octave_start. RcppOctave 0.13</title>
+<title>octave_start. RcppOctave 0.13.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -51,7 +51,7 @@
     </form>--> 
     <ul class="nav navbar-nav navbar-right">
       <li><p class="navbar-text">
-      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.13</span>
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.13.1</span>
       &nbsp;</p></li>
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -92,7 +92,7 @@
     <h2>Usage</h2>
     <pre>octave_start(verbose = FALSE, warnings = FALSE, force = FALSE)
 
-octave_end()
+octave_end(verbose = getOption("verbose"))
 
 octave_verbose(value)
 
@@ -103,8 +103,11 @@ octave_modules(verbose = getOption("verbose"))</pre>
     <h2>Arguments</h2>
     <dl>
       <dt>verbose</dt>
-      <dd>logical value used as the inital verbosity
-  status.</dd>
+      <dd>logical that toggle verbosity. In
+  <code>octave_start</code>, it is the value used as the initial
+  global verbosity state. If <code>TRUE</code> all calls and
+  conversions between R and Octave produce diagnostic
+  messages.</dd>
       <dt>warnings</dt>
       <dd>logical that indicates if Octave startup
   warnings</dd>
