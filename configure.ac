@@ -61,7 +61,7 @@ if test "$OStype" == "Darwin" ; then
   darwin="yes"
   
   ## adapt R_LDFLAGS aimed at mkoctfile: substitute -F/-framework it with -L/-l flags
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)/-L\1\/Libraries/'`
+  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)\/\.\./-L\1\/Libraries/'`
   R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-framework \([[^ ]]*\)/-l\1/'`
   
   ## we want the *build* cputype and not the host one.
