@@ -72,7 +72,8 @@ NULL
 #' \code{octave_start} Initialize an Octave session.
 #' 
 #' @param verbose logical that toggle verbosity.
-In \code{octave_start}, it is the value used as the inital global verbosity state. If \code{TRUE} all calls and conversions between R and Octave produce diagnostic messages.
+#' In \code{octave_start}, it is the value used as the initial global verbosity state. 
+#' If \code{TRUE} all calls and conversions between R and Octave produce diagnostic messages.
 #' @param warnings logical that indicates if Octave startup warnings
 #' @param force logical that indicates if Octave session should be reinitialised, 
 #' even if one was previously started (not meant to be used by end-users).  
