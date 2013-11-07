@@ -9,7 +9,7 @@
 ## Copyright (C) 2011 Renaud Gaujoux
 
 # The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.13.2)
+AC_INIT([RcppOctave], 0.13.3)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -62,7 +62,7 @@ if test "$OStype" == "Darwin" ; then
   
   ## adapt R_LDFLAGS aimed at mkoctfile: pass them via flag -Wl
   ## multiple options must be separated by commas
-  R_LDFLAGS=`echo "-Wl,$R_LDFLAGS" | sed 's/ /,/'`
+  R_LDFLAGS=-Wl,"\"$R_LDFLAGS\""
   
   ## we want the *build* cputype and not the host one.
   cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
