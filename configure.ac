@@ -108,20 +108,22 @@ AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
 AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
 
 ## If octave-config was found, let's use it
-if test "${OCTAVE_CONFIG}" != ""; then	
-    # Use octave-config for header and linker arguments
-    AC_MSG_CHECKING([Octave include directory])
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    AC_MSG_RESULT([${OCTINCLUDEDIR}])
+if test "${OCTAVE_MKOCTFILE}" != ""; then	
+    # Use mkoctfile for compiler and linker arguments
+    AC_MSG_CHECKING([Octave include flags])
+    OCT_CPPFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
+    AC_MSG_RESULT([${OCT_CPPFLAGS}])
     
-    AC_MSG_CHECKING([Octave library directory])
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    AC_MSG_RESULT([${OCTLIBDIR}])
+    AC_MSG_CHECKING([Octave -L flags])
+    OCT_LDFLAGS=`${OCTAVE_MKOCTFILE} --print LFLAGS`
+    AC_MSG_RESULT([${OCT_LDFLAGS}])
     
-    AC_MSG_CHECKING([Octave system library directory])
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    AC_MSG_RESULT([${OCT_SYSLIBDIR}])
-        
+    AC_MSG_CHECKING([Octave libraries])
+    OCTAVE_LIBS=`${OCTAVE_MKOCTFILE} --print OCTAVE_LIBS`
+    AC_MSG_RESULT([${OCTAVE_LIBS}])
+    # add to LDFLAGS
+    OCT_LDFLAGS+=" ${OCTAVE_LIBS}"
+    
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
     AC_MSG_CHECKING([Octave version])
@@ -132,9 +134,11 @@ if test "${OCTAVE_CONFIG}" != ""; then
     AC_MSG_CHECKING([whether to infer output names for Octave function (>= ${CMPV})])
     AS_VERSION_COMPARE(${OCTVERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
     AS_IF([test "${OCT_POST_3_4_0}" != "-1"], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
-    
-else
-    AC_MSG_ERROR([octave-config not found, is Octave installed?
+    # add to CPPFLAGS
+    OCT_CPPFLAGS+=" -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
+
+elif test "$darwin" == "no" ; then
+    AC_MSG_ERROR([mkoctfile not found, is Octave installed?
     
     -> On Debian/Ubuntu please check that the required packages are installed:
     
@@ -150,13 +154,24 @@ else
         # install as usual in R
         install.packages('RcppOctave')
     ])
+else
+	AC_MSG_ERROR([mkoctfile not found, is Octave installed?
+    
+    -> On Mac OS please check that the required packages are installed:
+    
+      * octave package from homebrew (works out of the box):
+        $ brew install gfortran octave
+        
+        # install as usual in R
+        > install.packages('RcppOctave')
+    ])
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST(OCTINCLUDEDIR)
-AC_SUBST(OCTLIBDIR)
-AC_SUBST(OCT_SYSLIBDIR)
-AC_SUBST(OCT_POST_3_4_0)
+AC_MSG_RESULT([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
+AC_SUBST(OCT_LDFLAGS)
+AC_MSG_RESULT([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
+AC_SUBST(OCT_CPPFLAGS)
 
 # Module path
 AC_MSG_CHECKING([RcppOctave Octave module directory])

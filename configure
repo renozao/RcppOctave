@@ -644,10 +644,8 @@ PACKAGE_URL=''
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 OCT_MODULES_PATH
-OCT_POST_3_4_0
-OCT_SYSLIBDIR
-OCTLIBDIR
-OCTINCLUDEDIR
+OCT_CPPFLAGS
+OCT_LDFLAGS
 OCTAVE_MKOCTFILE
 OCTAVE_CONFIG
 R_LDFLAGS
@@ -3074,25 +3072,27 @@ fi
 
 
 ## If octave-config was found, let's use it
-if test "${OCTAVE_CONFIG}" != ""; then
-    # Use octave-config for header and linker arguments
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave include directory" >&5
-$as_echo_n "checking Octave include directory... " >&6; }
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCTINCLUDEDIR}" >&5
-$as_echo "${OCTINCLUDEDIR}" >&6; }
+if test "${OCTAVE_MKOCTFILE}" != ""; then
+    # Use mkoctfile for compiler and linker arguments
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave include flags" >&5
+$as_echo_n "checking Octave include flags... " >&6; }
+    OCT_CPPFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCT_CPPFLAGS}" >&5
+$as_echo "${OCT_CPPFLAGS}" >&6; }
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave library directory" >&5
-$as_echo_n "checking Octave library directory... " >&6; }
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCTLIBDIR}" >&5
-$as_echo "${OCTLIBDIR}" >&6; }
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave -L flags" >&5
+$as_echo_n "checking Octave -L flags... " >&6; }
+    OCT_LDFLAGS=`${OCTAVE_MKOCTFILE} --print LFLAGS`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCT_LDFLAGS}" >&5
+$as_echo "${OCT_LDFLAGS}" >&6; }
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave system library directory" >&5
-$as_echo_n "checking Octave system library directory... " >&6; }
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCT_SYSLIBDIR}" >&5
-$as_echo "${OCT_SYSLIBDIR}" >&6; }
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave libraries" >&5
+$as_echo_n "checking Octave libraries... " >&6; }
+    OCTAVE_LIBS=`${OCTAVE_MKOCTFILE} --print OCTAVE_LIBS`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCTAVE_LIBS}" >&5
+$as_echo "${OCTAVE_LIBS}" >&6; }
+    # add to LDFLAGS
+    OCT_LDFLAGS+=" ${OCTAVE_LIBS}"
 
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
@@ -3125,9 +3125,11 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
+    # add to CPPFLAGS
+    OCT_CPPFLAGS+=" -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
 
-else
-    as_fn_error $? "octave-config not found, is Octave installed?
+elif test "$darwin" == "no" ; then
+    as_fn_error $? "mkoctfile not found, is Octave installed?
 
     -> On Debian/Ubuntu please check that the required packages are installed:
 
@@ -3143,12 +3145,25 @@ else
         # install as usual in R
         install.packages('RcppOctave')
     " "$LINENO" 5
+else
+	as_fn_error $? "mkoctfile not found, is Octave installed?
+
+    -> On Mac OS please check that the required packages are installed:
+
+      * octave package from homebrew (works out of the box):
+        $ brew install gfortran octave
+
+        # install as usual in R
+        > install.packages('RcppOctave')
+    " "$LINENO" 5
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&5
+$as_echo "Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&6; }
 
-
-
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&5
+$as_echo "Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&6; }
 
 
 # Module path
