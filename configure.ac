@@ -60,9 +60,9 @@ AC_MSG_CHECKING([whether OS is Mac OS (Darwin)])
 if test "$OStype" == "Darwin" ; then
   darwin="yes"
   
-  ## adapt R_LDFLAGS aimed at mkoctfile: substitute -F/-framework it with -L/-l flags
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)\/\.\./-L\1\/Libraries/'`
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-framework \([[^ ]]*\)/-l\1/'`
+  ## adapt R_LDFLAGS aimed at mkoctfile: pass them via flag -Wl
+  ## multiple options must be separated by commas
+  R_LDFLAGS=`echo "-Wl,$R_LDFLAGS" | sed 's/ /,/'`
   
   ## we want the *build* cputype and not the host one.
   cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
