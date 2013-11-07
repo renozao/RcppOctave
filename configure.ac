@@ -9,7 +9,7 @@
 ## Copyright (C) 2011 Renaud Gaujoux
 
 # The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.13.1)
+AC_INIT([RcppOctave], 0.13.2)
 
 # Checks for common programs using default macros
 AC_PROG_CC
