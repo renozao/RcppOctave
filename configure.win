@@ -138,20 +138,22 @@ if test "${OCTAVE_BINDIR}" != ""; then
 	OCTAVE_MKOCTFILE="${OCTAVE_BINDIR}/mkoctfile"
 	AC_SUBST OCTAVE_MKOCTFILE
     
-    # Use octave-config for header and linker arguments
-    echo "Checking Octave include directory... "
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    AC_MSG_RESULT "    ${OCTINCLUDEDIR}"
-    OCTINCLUDEDIR2=`${OCTAVE_CONFIG} -p INCLUDEDIR`
-    AC_MSG_RESULT "    ${OCTINCLUDEDIR2}"
+    # Use mkoctfile for compiler and linker arguments
+    AC_MSG_CHECKING "Octave include flags"
+    OCT_CPPFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
+    AC_MSG_RESULT "${OCT_CPPFLAGS}"
+    OCT_CPPFLAGS=`echo ${OCT_CPPFLAGS} | sed 's/\\\\/\\//g'`
     
-    AC_MSG_CHECKING "Octave library directory"
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    AC_MSG_RESULT "${OCTLIBDIR}"
+    AC_MSG_CHECKING "Octave -L flags"
+    OCT_LDFLAGS=`${OCTAVE_MKOCTFILE} --print LFLAGS`
+    AC_MSG_RESULT "${OCT_LDFLAGS}"
+    OCT_LDFLAGS=`echo ${OCT_LDFLAGS} | sed 's/\\\\/\\//g'`
     
-    AC_MSG_CHECKING "Octave system library directory"
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    AC_MSG_RESULT "${OCT_SYSLIBDIR}"
+    AC_MSG_CHECKING "Octave libraries"
+    OCTAVE_LIBS=`${OCTAVE_MKOCTFILE} --print OCTAVE_LIBS`
+    AC_MSG_RESULT "${OCTAVE_LIBS}"
+    # add to LDFLAGS
+    OCT_LDFLAGS="${OCT_LDFLAGS} ${OCTAVE_LIBS}"
         
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
@@ -167,6 +169,8 @@ if test "${OCTAVE_BINDIR}" != ""; then
      else 
 		AC_MSG_RESULT "NO"
 	fi
+	# add to CPPFLAGS
+    OCT_CPPFLAGS="${OCT_CPPFLAGS} -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
     
 else
     echo "octave-config not found, is Octave installed?
@@ -178,11 +182,8 @@ else
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST OCTINCLUDEDIR
-AC_SUBST OCTINCLUDEDIR2
-AC_SUBST OCTLIBDIR
-AC_SUBST OCT_SYSLIBDIR
-AC_SUBST OCT_POST_3_4_0
+AC_SUBST OCT_LDFLAGS
+AC_SUBST OCT_CPPFLAGS
 
 # Module path
 AC_MSG_CHECKING "RcppOctave Octave module directory"
