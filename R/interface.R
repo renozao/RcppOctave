@@ -126,19 +126,16 @@ system_call <- function(...){
 	
 }
 
-#' \code{octave_config} retrieves Octave configuration variables. 
+#' Octave Utils: octave-config
 #' 
-#' \code{octave_config} uses the \code{octave-config} system utility that ships with 
+#' Retrieves Octave configuration variables using \code{octave-config}. 
+#' 
+#' \code{octave_config} uses the \code{octave-config} utility binary shipped with 
 #' Octave to query details about the local Octave installation.
 #' Failure to load Octave configuration is generally due to this Octave binary
-#' not being found in the system PATH.
-#' Users should ensure that the PATH contains Octave binary directory path. 
-#' Alternatively one may use option 'octave.path' to specify the directory where to 
-#' find \code{octave-config}:
-#' 
-#' \samp{options(octave.path = '/absolute/path/to/octave/bin')} 
-#' 
-#' Note that in this case, the system PATH is not used.
+#' not being found.
+#' By default, it is looked up in the \code{bin/} sub-directory of the path 
+#' returned by \code{\link{Octave.home}()}.
 #' 
 #' @param varname Name (as a character string) of the Octave configuration 
 #' variable to retrieve. It is used in following system call 
@@ -151,12 +148,15 @@ system_call <- function(...){
 #' @param mustWork logical that indicates if an error should be thrown if failing 
 #' to load Octave configuration.
 #' @param bindir path to Octave bin/ sub-directory where to look for \code{octave-config}.
-#' If \code{NULL} or \code{NA}, then the system PATH is used.
+#' If \code{NULL} or \code{NA}, then the system PATH is looked up.
 #'  
-#' @rdname octave-ll
-#' @seealso OctaveConfig
+#' @family Octave.info
 #' @export
-octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bindir = getOption('octave.path')){
+#' @examples
+#' octave_config('VERSION') 
+#' octave_config('BINDIR')
+#' 
+octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bindir = Octave.home('bin')){
 
     # use custom BINDIR if requested
     octave_config_cmd <- 'octave-config'
@@ -191,10 +191,6 @@ octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bi
     )
 }
 
-octave_version_string <- function(){
-    sprintf("Octave %s-%s (%s)", octave_config('VERSION'), octave_config('API_VERSION'), octave_config('CANONICAL_HOST_TYPE'))
-}
-
 #' \code{octave_modules} add the Octave modules that ship with RcppOctave to 
 #' Octave loading path.
 #' 
@@ -202,8 +198,8 @@ octave_version_string <- function(){
 #' @export
 octave_modules <- function(verbose=getOption('verbose')){
 	
-	path <- OctaveConfig('modules')
-	if( verbose )
+	path <- Octave.info('modules')
+    if( verbose )
 		message("Loading Octave modules for ", packageName()
 				, " from '", path, "'");
 	o_addpath(path)
