@@ -1,0 +1,19 @@
+# Project: RcppOctave
+# 
+# Octave configuration utils.
+# Some of the variables are substituted at install time by the configure script
+#
+# Author: Renaud Gaujoux
+# Created: Nov 25, 2013
+###############################################################################
+
+.OCTAVE_BINDIR <- '@OCTAVE_BINDIR@'
+.OCTAVE_PLATFORM <- '@OCTAVE_PLATFORM@'
+.OCTAVE_VERSION <- '@OCTAVE_VERSION@'
+.OCTAVE_API_VERSION <- '@OCTAVE_API_VERSION@'
+.OCTAVE_CC <- '@OCTAVE_CC@'
+.OCTAVE_F77 <- '@OCTAVE_F77@'
+.OCT_MODULES_PATH <- '@OCT_MODULES_PATH@'
+.OCTAVE_LFLAGS <- '@OCTAVE_LFLAGS@'
+.OCT_LDFLAGS <- '@OCT_LDFLAGS@'
+.OCT_CPPFLAGS <- '@OCT_CPPFLAGS@'

@@ -1,8 +1,8 @@
-\name{OctaveConfig}
-\alias{OctaveConfig}
+\name{.OctaveLibs}
+\alias{.OctaveLibs}
 \title{Octave-RcppOctave Configuration}
 \usage{
-  OctaveConfig(name, ..., path = NULL)
+  .OctaveLibs(pkgname, libname)
 }
 \arguments{
   \item{name}{Name of an RcppOctave path variable}

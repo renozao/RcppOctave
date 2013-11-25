@@ -9,7 +9,7 @@
 ## Copyright (C) 2011 Renaud Gaujoux
 
 # The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.13.3)
+AC_INIT([RcppOctave], 0.13.4)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -109,30 +109,45 @@ AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
 
 ## If octave-config was found, let's use it
 if test "${OCTAVE_MKOCTFILE}" != ""; then	
-    # Use mkoctfile for compiler and linker arguments
-    AC_MSG_CHECKING([Octave include flags])
-    OCT_CPPFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
-    AC_MSG_RESULT([${OCT_CPPFLAGS}])
+
+	AC_DEFUN([AC_OCTAVE_MKCONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_mkoct_var_$2=`${OCTAVE_MKOCTFILE} --print $2`
+		AC_SUBST([$1], [$ac_mkoct_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	AC_DEFUN([AC_OCTAVE_CONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_mkoct_var_$2=`${OCTAVE_CONFIG} --print $2`
+		AC_SUBST([$1], [$ac_mkoct_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
     
-    AC_MSG_CHECKING([Octave -L flags])
-    OCT_LDFLAGS=`${OCTAVE_MKOCTFILE} --print LFLAGS`
-    AC_MSG_RESULT([${OCT_LDFLAGS}])
-    
-    AC_MSG_CHECKING([Octave libraries])
-    OCTAVE_LIBS=`${OCTAVE_MKOCTFILE} --print OCTAVE_LIBS`
-    AC_MSG_RESULT([${OCTAVE_LIBS}])
+	# Use mkoctfile for compiler and linker arguments
+    AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [INCFLAGS], [include flags])
+    AC_OCTAVE_MKCONFIG([OCTAVE_LFLAGS], [LFLAGS], [-L flags])
+    AC_OCTAVE_MKCONFIG([OCTAVE_LIBS], [OCTAVE_LIBS], [libraries])
     # add to LDFLAGS
-    OCT_LDFLAGS+=" ${OCTAVE_LIBS}"
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
+    
+    # check Octave compilers
+    AC_OCTAVE_MKCONFIG([OCTAVE_CC], [CC], [C compiler])
+    AC_OCTAVE_MKCONFIG([OCTAVE_F77], [F77], [Fortran compiler])
+    
+    # Octave config info
+    AC_OCTAVE_CONFIG([OCTAVE_PLATFORM], [CANONICAL_HOST_TYPE], [platform])
+    AC_OCTAVE_CONFIG([OCTAVE_API_VERSION], [API_VERSION], [api version])
     
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
-    AC_MSG_CHECKING([Octave version])
-    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
-    AC_MSG_RESULT([${OCTVERSION}])
+    AC_OCTAVE_CONFIG([OCTAVE_VERSION], [VERSION], [version])
     
     CMPV="3.4.3"
     AC_MSG_CHECKING([whether to infer output names for Octave function (>= ${CMPV})])
-    AS_VERSION_COMPARE(${OCTVERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
+    AS_VERSION_COMPARE(${OCTAVE_VERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
     AS_IF([test "${OCT_POST_3_4_0}" != "-1"], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
     # add to CPPFLAGS
     OCT_CPPFLAGS+=" -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
@@ -182,5 +197,7 @@ AC_SUBST(OCT_MODULES_PATH)
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
+AC_OUTPUT(R/aaa-config.R)
 AC_OUTPUT(src/Makevars)
 AC_OUTPUT(src/modules/Makefile)
+
