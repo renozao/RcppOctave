@@ -107,13 +107,12 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		cmd_args(3) = std::string("--no-history");
 
 		// redirect both stderr and stdout
-		Redirect redirect(3);
+		Redirect redirect(7);
 
 		// try starting Octave
 		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 
-		redirect.flush(NULL, "Failed to start Octave interpreter", NULL
-							, !started_ok, with_warnings);
+		redirect.flush("Failed to start Octave interpreter", !started_ok, with_warnings);
 
 		OCTAVE_INITIALIZED = true;
 		bind_internal_variable("crash_dumps_octave_core", false);
@@ -197,7 +196,7 @@ SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SE
 	// unlist result?
 	bool do_unlist = Rf_isNull(unlist) ? true : as<bool>(unlist);
 	// buffer stdout/stderr?
-	int buffer_std = Rf_isNull(buffer) ? 3 : as<int>(buffer);
+	int buffer_std = Rf_isNull(buffer) ? -1 : as<int>(buffer);
 
 	octave_value out;
 	if( TYPEOF(output) == STRSXP ){
@@ -344,7 +343,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 	octave_initialized = true;
 
 	// setup catching of stderr to use R stderr own functions
-	Redirect redirect;
+	Redirect redirect(buffer, true);// delay until calling redirect
 	//
 
 	try {
@@ -377,7 +376,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 
 		VERBOSE_LOG("octave_feval - Calling feval now ... ");
 		// catch stderr if requested
-		redirect.redirect( buffer );
+		redirect.redirect();
 		octave_value_list out = feval(fname, args, nres);
 		if ( !error_state ){
 
@@ -441,7 +440,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 	// throw an R error
 	std::ostringstream err;
 	err << R_PACKAGE_NAME" - error in Octave function `" << fname.c_str() << "`";
-	redirect.flush(NULL, err.str().c_str(), NULL, true);
+	redirect.flush(err.str().c_str(), true);
 
 	return octave_value_list();
 }

@@ -28,17 +28,21 @@ NULL
 #' @param unlist a logical that specifies if an output list of length one 
 #' should be simplified and returned as a single value or kept as a list.
 #' The default is to unlist unless output names were passed in \code{argout}.
-#' @param buffer.std logical that indicates if Octave stdout or stderr should be buffered.
-#' If \code{TRUE} output/errors/warnings are displayed at the end of the computation.
-#' If \code{FALSE} they are directly displayed by Octave.
+#' @param buffer.std logical that indicates if Octave stdout and/or stderr should be buffered.
+#' If \code{TRUE} output/errors/warnings are all displayed at the end of the computation.
+#' If \code{FALSE} they are directly displayed as they come.
 #' It is also possible to selectively buffer either one of stdout or stderr, via 
 #' the following integer codes:
 #' \itemize{
 #' \item \code{0}: no buffering; 
 #' \item \code{1} or \code{-2}: only stdout is buffered;
 #' \item \code{2} or \code{-1}: only stderr is buffered;
-#' \item \code{3}: both stdout and stderr are buffered.
+#' \item \code{4} or \code{-3}: only warnings are buffered;
+#' \item \code{7}: all messages are buffered.
 #' }
+#' 
+#' Note that warnings are handle slightly differently than other messages, 
+#' as they are never output directly, except when \code{buffer.std = 0}.
 #' 
 #' @return the value returned by the Octave function -- converted into standard 
 #' R objects.
@@ -58,9 +62,9 @@ NULL
 #' # call Octave function 'svd' asking for 3 named output values: [U, S, V] = svd(x)
 #' .CallOctave('svd', x, argout=c('U', 'S', 'V'))
 #' 
-.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = 3L){
+.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L){
 	
-    if( isTRUE(buffer.std) ) buffer.std <- 3L
+    if( isTRUE(buffer.std) ) buffer.std <- 7L
     res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, PACKAGE='RcppOctave')
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()
 	else if( is.null(res) && argout <= 1L ) invisible()

@@ -221,7 +221,7 @@ NULL
         # display info about config
         packageStartupMessage("RcppOctave [", pversion, "] - "
                 , o_version()
-                , "\nOctave path: ", Octave.home())
+                , "\nOctave path: ", Octave.home('bin'))
     }
 }
 

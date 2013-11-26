@@ -135,6 +135,8 @@ test.assign <- function(){
 
 test.redirection <- function(){
     
+    if( .Platform$OS.type == 'windows' ) DEACTIVATED("Redirection does not currently work on Windows")
+    
     # Output
     out <- 'This is some Octave text output'
     checkIdentical(capture.output(dummy <- .CallOctave('printf', out)), out, "Octave output is correctly captured")
