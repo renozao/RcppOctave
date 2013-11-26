@@ -607,6 +607,16 @@ Once the GNU Info browser is running, help for using it is available using the
 command `Ctrl + h' -- as stated in the \octave documentation for \code{doc} (see
 \code{o\_help(doc)}).
 
+\subsection{Errors and warning handling}
+
+<<errors, try = TRUE>>=
+# error
+res <- try(.CallOctave('error', 'this is an error in Octave'))
+# warning
+res <- .CallOctave('warning', 'this is a warning in Octave')
+@
+
+
 \subsection{Low-level \textit{C/C++} interface}
 
 \pkgname{RcppOctave} builds upon the \Rpkg{Rcpp}, and defines specialisation
