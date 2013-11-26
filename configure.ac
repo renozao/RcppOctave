@@ -8,7 +8,6 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-# The version set here will propagate to other files from here
 AC_INIT([RcppOctave], 0.13.4)
 
 # Checks for common programs using default macros
@@ -119,8 +118,8 @@ if test "${OCTAVE_MKOCTFILE}" != ""; then
 	
 	AC_DEFUN([AC_OCTAVE_CONFIG],[ 
 		AC_MSG_CHECKING([Octave $3])
-		ac_mkoct_var_$2=`${OCTAVE_CONFIG} --print $2`
-		AC_SUBST([$1], [$ac_mkoct_var_$2])
+		ac_octave_var_$2=`${OCTAVE_CONFIG} --print $2`
+		AC_SUBST([$1], [$ac_octave_var_$2])
 		AC_MSG_RESULT([$$1])
 	])
 	
@@ -139,7 +138,7 @@ if test "${OCTAVE_MKOCTFILE}" != ""; then
     
     # Octave config info
     AC_OCTAVE_CONFIG([OCTAVE_PLATFORM], [CANONICAL_HOST_TYPE], [platform])
-    AC_OCTAVE_CONFIG([OCTAVE_API_VERSION], [API_VERSION], [api version])
+    AC_OCTAVE_CONFIG([OCTAVE_API_VERSION], [API_VERSION], [API version])
     
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
