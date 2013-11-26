@@ -6,10 +6,25 @@
 # Created: Nov 25, 2013
 ###############################################################################
 
-#' @include aaa-config.R
+#' @include config-vars.R
 NULL
 
 
+#' Octave Configuration and Installation Information
+#' 
+#' The functions documented here enable retrieving information 
+#' about the Octave installation used at installation or runtime
+#' -- which should normally be the same.
+#' 
+#' \code{Octave.version} is list that contains version information as determined
+#' by the configure script at installation time.
+#'  
+#' @rdname Octave.config
+#' @family Octave.info
+#' @export
+#' @examples
+#' Octave.version
+#' Octave.config
 Octave.version <- structure(list(
             platform = .OCTAVE_PLATFORM,
             version = .OCTAVE_VERSION,
@@ -17,25 +32,31 @@ Octave.version <- structure(list(
             version.string = sprintf("Octave version %s (%s)", .OCTAVE_VERSION, .OCTAVE_API_VERSION)            
         ), class = 'simple.list')
 
+#' @details \code{Octave.config} is a list that extends \code{Octave.version} with 
+#' extra information about compilers and compilation flags. 
+#' @rdname Octave.config
+#' @export
 Octave.config <- structure(c(Octave.version, list(
-                cc = .OCTAVE_CC,
-                f77 = .OCTAVE_F77,
                 home = dirname(.OCTAVE_BINDIR),
                 bindir = .OCTAVE_BINDIR,
+                modules = .OCT_MODULES_PATH,
+                cc = .OCTAVE_CC,
                 cppflags = .OCT_CPPFLAGS,
-                ldflags = .OCT_LDFLAGS
+                ldflags = .OCT_LDFLAGS,
+                f77 = .OCTAVE_F77
                 )), class = 'simple.list')
 
 #' Octave Home Directory
 #' 
 #' Returns the path to Octave home directory, i.e. the directory that contains
-#' the \code{bin/} sub-directory where Octave binaries can be found. 
+#' the \code{bin/} sub-directory where Octave binaries can be found, 
+#' e.g., typically \code{/usr/} on Linux machines. 
 #' 
 #' The path to Octave home directory is determined in the following 
 #' order:
 #' 
 #' \itemize{
-#' \item value of global option \code{'octave.path'};
+#' \item value of global option \code{'octave.home'};
 #' \item value of the environment variable \code{'OCTAVE_HOME'};
 #' \item path used during configuration/installation of \pkg{RcppOctave}.
 #' \item path returned by \code{octave-config}, which is itself looked up 
@@ -71,7 +92,7 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
     if( configure ) return(file.path(.config.path, ...))
     
     # check global R option
-    if( is.null(path <- getOption('octave.path')) ){
+    if( is.null(path <- getOption('octave.home')) ){
         # check environment variable OCTAVE_HOME
         if( !nzchar(path <- Sys.getenv('OCTAVE_HOME')) ){
             # check existence of path resolved at configure time
@@ -85,14 +106,15 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
     if( length(path) && nzchar(path) ) file.path(path, ...) 
 }
 
-#' Octave Installation Details
+#' Octave Session Details
 #' 
-#' Retrieves information about the version of Octave that is 
-#' used by the current session of \pkg{RcppOctave}. 
+#' \code{Octave.info} is a function that retrieves information about 
+#' the version of Octave that is used by the current session 
+#' of \pkg{RcppOctave}. 
 #' 
 #' @param name name of the variable to retrieve
 #' 
-#' @family Octave.info
+#' @rdname Octave.config
 #' @export
 #' @examples 
 #' Octave.info()
@@ -121,7 +143,7 @@ Octave.info <- function(name){
                 )
     
     # add some Octave configuration variables
-    live_info <- o_config_info(c(cc = 'CC', cc_version = 'CC_VERSION', f77 = 'F77'))
+    live_info <- o_config_info(c(cc = 'CC', cc.version = 'CC_VERSION', f77 = 'F77'))
     res <- structure(c(res, as.list(live_info)), class = 'simple.list')
     if( !missing(name) ){
         res <- res[[name]]

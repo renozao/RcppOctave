@@ -196,7 +196,7 @@ AC_SUBST(OCT_MODULES_PATH)
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
-AC_OUTPUT(R/aaa-config.R)
+AC_OUTPUT(R/config-vars.R)
 AC_OUTPUT(src/Makevars)
 AC_OUTPUT(src/modules/Makefile)
 

@@ -3254,7 +3254,7 @@ $as_echo "${OCT_MODULES_PATH}" >&6; }
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
-ac_config_files="$ac_config_files R/aaa-config.R"
+ac_config_files="$ac_config_files R/config-vars.R"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3961,7 +3961,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "R/aaa-config.R") CONFIG_FILES="$CONFIG_FILES R/aaa-config.R" ;;
+    "R/config-vars.R") CONFIG_FILES="$CONFIG_FILES R/config-vars.R" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -5118,7 +5118,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "R/aaa-config.R") CONFIG_FILES="$CONFIG_FILES R/aaa-config.R" ;;
+    "R/config-vars.R") CONFIG_FILES="$CONFIG_FILES R/config-vars.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -6276,7 +6276,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "R/aaa-config.R") CONFIG_FILES="$CONFIG_FILES R/aaa-config.R" ;;
+    "R/config-vars.R") CONFIG_FILES="$CONFIG_FILES R/config-vars.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
     "src/modules/Makefile") CONFIG_FILES="$CONFIG_FILES src/modules/Makefile" ;;
 

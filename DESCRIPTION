@@ -42,6 +42,6 @@ Collate:
     'base-functions.R'
     'eval.R'
     'random.R'
-    'aaa-config.R'
+    'config-vars.R'
     'config.R'
 VignetteBuilder: knitr
