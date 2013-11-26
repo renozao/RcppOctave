@@ -1,5 +1,4 @@
 export(check.equal)
-export(.OctaveLibs)
 export(.CallOctave)
 export(octave_start)
 export(octave_end)

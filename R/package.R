@@ -52,25 +52,25 @@ NULL
 #			}, Depends = Depends, Makevars = Makevars, Makevars.win = Makevars.win)
 #}
 
-##' Octave-RcppOctave Configuration
-##' 
-##' Configures Octave and load RcppOctave  
-##' 
-##' @param name Name of an RcppOctave path variable
-##' @param ... extra names to be concatenated to the result with \code{\link{file.path}}.
-##' Only used when \code{name} is not missing.
-##' @param path path to Octave bin/ sub-directory
-##' @return  a list (if \code{name is missing}) or a single character string.
-##' 
-##' @keywords internal
-##' @export
-##' @examples
-##' 
-##' OctaveConfig()
-##' OctaveConfig('lib')
-##' OctaveConfig('include')
-##' OctaveConfig('modules')
-##' 
+# ##' Octave-RcppOctave Configuration
+# ##' 
+# ##' Configures Octave and load RcppOctave  
+# ##' 
+# ##' @param name Name of an RcppOctave path variable
+# ##' @param ... extra names to be concatenated to the result with \code{\link{file.path}}.
+# ##' Only used when \code{name} is not missing.
+# ##' @param path path to Octave bin/ sub-directory
+# ##' @return  a list (if \code{name is missing}) or a single character string.
+# ##' 
+# ##' @keywords internal
+# ##' @export
+# ##' @examples
+# ##' 
+# ##' OctaveConfig()
+# ##' OctaveConfig('lib')
+# ##' OctaveConfig('include')
+# ##' OctaveConfig('modules')
+# ##' 
 #OctaveConfig <- local({
 #	# config cache
 #	.OctaveConfig <- NULL
