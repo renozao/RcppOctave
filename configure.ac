@@ -8,7 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-AC_INIT([RcppOctave], 0.13.4)
+AC_INIT([RcppOctave], 0.13.5)
 
 # Checks for common programs using default macros
 AC_PROG_CC
