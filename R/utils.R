@@ -146,3 +146,17 @@ Sys.path <- local({
     )
             
 })
+
+# wrapper call to system (Linux) or shell (Windows) to fix an issue in
+# shell when intern=TRUE and mustWork=TRUE
+system_call <- function(...){
+    if( .Platform$OS.type == 'windows' ){
+        system <- getFunction('shell', where = 'package:base')
+        res <- system(..., intern = TRUE, mustWork = TRUE)
+        if( !is.null(st <- attr(res, 'status')) && st != 0 ){
+            stop(paste(res, collapse = "\n  ")) 
+        }
+        res
+    }else base::system(..., intern = TRUE)
+	
+}
