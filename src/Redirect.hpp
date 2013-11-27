@@ -12,24 +12,24 @@ template <bool OUTPUT>
 class Octave_Rstreambuf : public Rcpp::Rstreambuf<OUTPUT> {
 
 		int _sink;
-		bool _hasOutput;
 		std::stringstream _output;
 		std::stringstream _errors;
 		std::stringstream _warnings;
 	public:
 		Octave_Rstreambuf(int sink_level = 0) :
 			Rcpp::Rstreambuf<OUTPUT>()
-			, _sink(sink_level), _hasOutput(false)
+			, _sink(sink_level)
 		{}
 
 		void flush(const char* head = NULL, bool stop = false, bool warn = true){
-			if( !_hasOutput ) return;
-			_hasOutput = false;
 
 			if( OUTPUT ){
 				if( head != NULL ) Rcpp::Rcout << head << ":" << std::endl << "  ";
-				Rcpp::Rcout << _output.str();
-				_output.clear();
+				std::string buf_msg = _output.str();
+				if( buf_msg.length() > 0 ){
+				    Rcpp::Rcout << _output.str();
+				    _output.clear();
+                 }
 			}else{
 				// Warnings
 				std::string buf_msg = _warnings.str();
@@ -63,7 +63,6 @@ template <> inline std::streamsize Octave_Rstreambuf<true>::xsputn(const char *s
 
 	// sink std Octave output
 	if( _sink & 1 ){
-		_hasOutput = _hasOutput || n > 0;
 		_output << s;
 		return(0);
 	}
@@ -73,7 +72,6 @@ template <> inline std::streamsize Octave_Rstreambuf<true>::xsputn(const char *s
 
 template <> inline std::streamsize Octave_Rstreambuf<false>::xsputn(const char *s, std::streamsize n ){
 
-	_hasOutput = _hasOutput || n > 0;
 	//detect warning/error
 	if( strstr(s, "error:") == s ){
 		_errors << s;
