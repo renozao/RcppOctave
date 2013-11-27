@@ -19,6 +19,7 @@ o_config_info('USE_64_BIT_IDX_T')
 }
 \seealso{
   Other Octave.info: \code{\link{octave_config}},
-  \code{\link{Octave.home}}, \code{\link{Octave.info}}
+  \code{\link{Octave.config}}, \code{\link{Octave.home}},
+  \code{\link{Octave.info}}, \code{\link{Octave.version}}
 }
 

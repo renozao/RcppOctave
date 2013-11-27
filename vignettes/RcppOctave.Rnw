@@ -609,9 +609,15 @@ command `Ctrl + h' -- as stated in the \octave documentation for \code{doc} (see
 
 \subsection{Errors and warning handling}
 
+All i/o messages written by Octave are redirected to R own i/o functions, with
+errors and warnings generating corresponding messages in R\footnote{On
+Windows, output redirection does not working properly and all output is
+"mysteriously`` directly displayed by Octave}:
 <<errors, try = TRUE>>=
 # error
 res <- try(.CallOctave('error', 'this is an error in Octave'))
+geterrormessage()
+
 # warning
 res <- .CallOctave('warning', 'this is a warning in Octave')
 @
@@ -727,6 +733,8 @@ identical(Rf(), Of())
  called with a single output variable.
  For obtaining more outputs, the user must specify argument \code{argout}
  accordingly.
+ \item Redirection of Octave output sent to stdout and stderr on Windows does
+ not work.
 \end{itemize}
 
 \section{News and changes}

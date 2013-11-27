@@ -1,7 +1,7 @@
 #' @include utils.R
 NULL
 
-#' Interfacing R with Octave.
+#' Seamless Interface to Octave -- and Matlab
 #' 
 #' The primary goal is to facilitate the port of Matlab/Octave scripts to R. 
 #' The package enables to call any Octave functions from R and as well as browsing 
@@ -18,13 +18,12 @@ NULL
 #' }
 #'
 #' @author
-#' Renaud Gaujoux \email{renaud@@cbio.uct.ac.za}
+#' Renaud Gaujoux \email{renaud@@tx.technion.ac.il}
 #'
-#' Maintainer: Renaud Gaujoux \email{renaud@@cbio.uct.ac.za}
+#' Maintainer: Renaud Gaujoux \email{renaud@@tx.technion.ac.il}
 #' @name RcppOctave
 #' @rdname RcppOctave-package
 #' @docType package
-#' @title Interfacing R with Octave
 #' @keywords package
 #' 
 #' @cite Eaton2002

@@ -122,7 +122,7 @@ octave_verbose <- function(value){
 #' 
 #' \code{octave_config} uses the \code{octave-config} utility binary shipped with 
 #' Octave to query details about the local Octave installation.
-#' Failure to load Octave configuration is generally due to this Octave binary
+#' Failure to retrieve such information is generally due to the binary
 #' not being found.
 #' By default, it is looked up in the \code{bin/} sub-directory of the path 
 #' returned by \code{\link{Octave.home}()}.

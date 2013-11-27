@@ -2,18 +2,16 @@
 \name{RcppOctave}
 \alias{RcppOctave}
 \alias{RcppOctave-package}
-\title{Interfacing R with Octave}
+\title{Seamless Interface to Octave -- and Matlab}
 \description{
-  Interfacing R with Octave.
-}
-\details{
   The primary goal is to facilitate the port of
   Matlab/Octave scripts to R. The package enables to call
   any Octave functions from R and as well as browsing their
   documentation, passing variables between R and Octave,
   using R core RNGs in Octave, which ensure stochastic
   computations are also reproducible.
-
+}
+\details{
   \tabular{ll}{ Package: \tab RcppOctave\cr Type: \tab
   Package\cr Version: \tab 1.0\cr Date: \tab 2011-11-01\cr
   License: \tab GPL (>= 2)\cr LazyLoad: \tab yes\cr }
@@ -23,9 +21,10 @@
 o_help('svd')
 }
 \author{
-  Renaud Gaujoux \email{renaud@cbio.uct.ac.za}
+  Renaud Gaujoux \email{renaud@tx.technion.ac.il}
 
-  Maintainer: Renaud Gaujoux \email{renaud@cbio.uct.ac.za}
+  Maintainer: Renaud Gaujoux
+  \email{renaud@tx.technion.ac.il}
 }
 \references{
   Eaton JW (2002). _GNU Octave Manual_. Network Theory

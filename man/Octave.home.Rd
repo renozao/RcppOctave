@@ -25,14 +25,15 @@
 \description{
   Returns the path to Octave home directory, i.e. the
   directory that contains the \code{bin/} sub-directory
-  where Octave binaries can be found.
+  where Octave binaries can be found, e.g., typically
+  \code{/usr/} on Linux machines.
 }
 \details{
   The path to Octave home directory is determined in the
   following order:
 
   \itemize{ \item value of global option
-  \code{'octave.path'}; \item value of the environment
+  \code{'octave.home'}; \item value of the environment
   variable \code{'OCTAVE_HOME'}; \item path used during
   configuration/installation of \pkg{RcppOctave}. \item
   path returned by \code{octave-config}, which is itself
@@ -47,6 +48,7 @@ Octave.home()
 }
 \seealso{
   Other Octave.info: \code{\link{o_config_info}},
-  \code{\link{octave_config}}, \code{\link{Octave.info}}
+  \code{\link{octave_config}}, \code{\link{Octave.config}},
+  \code{\link{Octave.info}}, \code{\link{Octave.version}}
 }
 
