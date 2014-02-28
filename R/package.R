@@ -145,8 +145,9 @@ NULL
     }
     
     # loads using custom dependencies if necessary
-    if( Octave.config[['customed']] ){
-        sapply(file.path(Octave.config[['libdir']], paste0(Octave.config[['libs']], .Platform$dynlib.ext)), dyn.load)
+    if( Octave.config[['customed']] || isDevNamespace() ){
+        dlibs <- file.path(Octave.config[['libdir']], paste0(Octave.config[['libs']], .Platform$dynlib.ext))
+        sapply(dlibs, dyn.load)
         .load()
         return(TRUE)
     }
