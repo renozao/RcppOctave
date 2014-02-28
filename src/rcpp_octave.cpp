@@ -35,7 +35,8 @@
 #include <octave/pt-all.h>
 #include <octave/symtab.h>
 #include <octave/parse.h>
-#if OCTAVE_API_VERSION_NUMBER < 45
+//#if OCTAVE_API_VERSION_NUMBER < 45
+#if !SWIG_OCTAVE_PREREQ(3,4,0)
 #include <octave/unwind-prot.h>
 #endif
 #include <octave/toplev.h>
@@ -115,14 +116,21 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		redirect.flush("Failed to start Octave interpreter", !started_ok, with_warnings);
 
 		OCTAVE_INITIALIZED = true;
+#if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
+#endif
 
 	}
 	else if( !start && OCTAVE_INITIALIZED ){
 		if( RCPP_OCTAVE_VERBOSE || verbose )
 			REprintf("Terminating Octave interpreter... ");
 		// terminate interpreter
+#if SWIG_OCTAVE_PREREQ(3,8,0)
+		octave_exit = 0;
+		clean_up_and_exit(0, true);
+#else
 		do_octave_atexit();
+#endif
 		if( RCPP_OCTAVE_VERBOSE || verbose )
 			REprintf("OK\n");
 		OCTAVE_INITIALIZED = false;
@@ -167,7 +175,8 @@ void R_unload_RcppOctave(DllInfo *info)
  */
 extern void recover_from_exception(void)
 {
-#if OCTAVE_API_VERSION_NUMBER >= 45
+//#if OCTAVE_API_VERSION_NUMBER >= 45
+#if SWIG_OCTAVE_PREREQ(3,4,0)
 #else
   // This isn't supported in the latest Octave versions. We simply leave this
   // disabled for now, which means that you'll have to use 'unwind_protect'
@@ -327,7 +336,8 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #if defined (USE_EXCEPTIONS_FOR_INTERRUPTS)
 		panic_impossible()
 #else
-	#if OCTAVE_API_VERSION_NUMBER >= 45
+	//#if OCTAVE_API_VERSION_NUMBER >= 45
+	#if SWIG_OCTAVE_PREREQ(3,4,0)
 	#else
 		//XXX FIXME XXX
 		unwind_protect::run_all ();
