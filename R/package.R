@@ -133,9 +133,22 @@ NULL
     	else dyn.load(packagePath('src', paste0(pkgname, .Platform$dynlib.ext)))
     }
     
+    .load_dep <- function( libdir = Octave.config[['libdir']] ){
+        dlibs <- file.path(libdir, paste0(Octave.config[['libs']], .Platform$dynlib.ext))
+        sapply(dlibs, dyn.load)
+    }
+    
     dlls <- base::getLoadedDLLs()
 	if ( pkgname %in%  names(dlls) ) return(TRUE)
-            
+    
+    
+    # custom installation
+    if( Octave.config[['customed']] ){
+        .load_dep()
+        .load()
+        return(TRUE)
+    }
+    
     # try directly loading the library
     if( !is(try(.load(), silent = TRUE), 'try-error') ) return(TRUE)
     
@@ -144,21 +157,18 @@ NULL
         return(FALSE)
     }
     
-    # loads using custom dependencies if necessary
-    if( Octave.config[['customed']] || isDevNamespace() ){
-        dlibs <- file.path(Octave.config[['libdir']], paste0(Octave.config[['libs']], .Platform$dynlib.ext))
-        sapply(dlibs, dyn.load)
-        .load()
-        return(TRUE)
-    }
-    
     # setup path restoration for .onUnload
     on.exit( Sys.path$commit(), add = TRUE)
     Sys.path$append(octave_bindir)
-    Sys.path$append(Octave.config[['libdir']])
+    Sys.path$append(octave_config('OCTLIBDIR', mustWork = FALSE))
     
     # try reload
+    if( !is(try(.load(), silent = TRUE), 'try-error') ) return(TRUE)
+    
+    # final try, pre-loading custom dependencies if necessary
+    .load_dep()
     .load()
+    
     
     TRUE
 }
