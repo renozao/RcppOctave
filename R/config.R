@@ -39,10 +39,13 @@ Octave.version <- structure(list(
 Octave.config <- structure(c(Octave.version, list(
                 home = dirname(.OCTAVE_BINDIR),
                 bindir = .OCTAVE_BINDIR,
+                libdir = .OCTAVE_LIBDIR,
                 modules = .OCT_MODULES_PATH,
                 cc = .OCTAVE_CC,
                 cppflags = .OCT_CPPFLAGS,
                 ldflags = .OCT_LDFLAGS,
+                libs = paste0('lib', Filter(nchar, gsub(" ", "", strsplit(.OCTAVE_LIBS, "-l", fixed = TRUE)[[1L]]))),
+                customed = .OCTAVE_CUSTOMED,
                 f77 = .OCTAVE_F77
                 )), class = 'simple.list')
 

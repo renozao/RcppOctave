@@ -144,9 +144,17 @@ NULL
         return(FALSE)
     }
     
+    # loads using custom dependencies if necessary
+    if( Octave.config[['customed']] ){
+        sapply(file.path(Octave.config[['libdir']], paste0(Octave.config[['libs']], .Platform$dynlib.ext)), dyn.load)
+        .load()
+        return(TRUE)
+    }
+    
     # setup path restoration for .onUnload
     on.exit( Sys.path$commit(), add = TRUE)
     Sys.path$append(octave_bindir)
+    Sys.path$append(Octave.config[['libdir']])
     
     # try reload
     .load()
@@ -187,15 +195,22 @@ NULL
 # dummy environment to trigger call to octave_end when quitting R
 # via reg.finalizer (setup is done in .onLoad)
 .octave_end_trigger <- environment()
+.terminate_octave <- function(e){
+    dlls <- base::getLoadedDLLs()
+	if ( 'RcppOctave' %in%  names(dlls) ) octave_end()
+    # unload dependencies
+    sapply(Octave.config[['libs']], function(x){
+                if( x %in%  names(dlls) ){
+                    dyn.unload(dlls[[x]][['path']])
+                }
+            })
+}
 
 .onLoad <- function(libname, pkgname){
 
     # setup finalizer
-    f <- function(e){
-        dlls <- base::getLoadedDLLs()
-	    if ( 'RcppOctave' %in%  names(dlls) ) octave_end()
-    }
-    reg.finalizer(.octave_end_trigger, f, TRUE)
+    
+    reg.finalizer(.octave_end_trigger, .terminate_octave, TRUE)
     
     # save initial PATH state to enable restoration in .onUnload
     Sys.path$init()
@@ -230,7 +245,7 @@ NULL
     on.exit( Sys.path$revert("Reverting Octave changes to system PATH") )
     
     # terminate Octave session
-    octave_end()
+    .terminate_octave(NULL)
     
 	# unload compiled library normally or in devmode
 	dlls <- base::getLoadedDLLs()
@@ -240,7 +255,7 @@ NULL
 		else dyn.unload(dlls[[pname]][['path']])
 	}
 	
-	# unload required Octave libraries 
+	# unload required Octave libraries
 	#.OctaveLibs(FALSE)    
 }
 

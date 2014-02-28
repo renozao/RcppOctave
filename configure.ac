@@ -8,7 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-AC_INIT([RcppOctave], 0.13.5)
+AC_INIT([RcppOctave], 0.13.6)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -102,9 +102,53 @@ AC_SUBST(R_LDFLAGS)
 ##
 ## Check for non-standard programs: 
 ## octave-config
-AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
-## mkoctfile
-AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+
+## Look up for octave binary path from a configure option
+## or an environment variable
+AC_ARG_WITH([octave],
+            AC_HELP_STRING([--with-octave=PATH],
+                           [the location of octave root directory, binary file or bin/ sub-directory]),
+            [octave_path=$withval])
+
+AC_MSG_CHECKING([Octave binary path specification])
+if test [ -n "$octave_path" ] ; then # passed as an option
+  AC_MSG_RESULT([$octave_path [[configure option]]])
+elif test [ -n "${OCTAVE_PATH}" ] ; then
+  octave_path="${OCTAVE_PATH}"
+  AC_MSG_RESULT([$octave_path [[environment]]])
+else
+  AC_MSG_RESULT([none])
+fi
+
+if test [ -n "$octave_path" ] ; then
+	if test [ -f "$octave_path" ] ; then # path is a file: use parent directory
+	  OCTAVE_BINDIR=`AS_DIRNAME(["$octave_path"])`
+	elif test [ -d "$octave_path" ] ; then # path is a directory
+      if test [ -f "$octave_path/octave-config" ] ; then # path contains octave-config
+   	    OCTAVE_BINDIR="$octave_path"
+   	  elif test [ -f "$octave_path/bin/octave-config" ] ; then # path contains bin/ sub-directory
+   	  	OCTAVE_BINDIR="$octave_path/bin"
+   	  fi
+	fi
+    # error if the path specification did not provide the correct information
+    if test [ -z "${OCTAVE_BINDIR}" ] ; then
+	  AC_MSG_ERROR([invalid Octave path specification. Must be either:
+	    * path to Octave root directory;
+	    * path to Octave bin directory;
+	    * path to Octave binary file.
+	  ])
+    fi
+	AC_MSG_RESULT([using Octave binary path ... ${OCTAVE_BINDIR}])
+	
+	# looking up octave-config and mkoctfile
+	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
+	AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile], [], ["${OCTAVE_BINDIR}"])
+else
+  AC_MSG_RESULT([using Octave binary path from \$PATH])
+  # looking up octave-config and mkoctfile
+  AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
+  AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+fi
 
 ## If octave-config was found, let's use it
 if test "${OCTAVE_MKOCTFILE}" != ""; then	
@@ -123,7 +167,16 @@ if test "${OCTAVE_MKOCTFILE}" != ""; then
 		AC_MSG_RESULT([$$1])
 	])
 	
+	# specify if one uses a custom path to Octave
+    if test [ -n "$octave_path" ] ; then
+      OCTAVE_CUSTOMED=TRUE
+    else 
+      OCTAVE_CUSTOMED=FALSE
+    fi
+    AC_SUBST(OCTAVE_CUSTOMED)
+    
 	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
+	AC_OCTAVE_CONFIG([OCTAVE_LIBDIR], [OCTLIBDIR], [Octave libraries directory])
     
 	# Use mkoctfile for compiler and linker arguments
     AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [INCFLAGS], [include flags])
