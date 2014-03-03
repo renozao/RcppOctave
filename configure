@@ -652,6 +652,7 @@ OCTAVE_F77
 OCTAVE_CC
 OCTAVE_LIBS
 OCTAVE_LFLAGS
+OCT_INCFLAGS
 OCT_CPPFLAGS
 OCTAVE_LIBDIR
 OCTAVE_BINDIR
@@ -3276,14 +3277,25 @@ $as_echo "$OCTAVE_LIBDIR" >&6; }
 
 	# Use mkoctfile for compiler and linker arguments
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave include flags" >&5
-$as_echo_n "checking Octave include flags... " >&6; }
-		ac_mkoct_var_INCFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
-		OCT_CPPFLAGS=$ac_mkoct_var_INCFLAGS
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave cpp flags" >&5
+$as_echo_n "checking Octave cpp flags... " >&6; }
+		ac_mkoct_var_CPPFLAGS=`${OCTAVE_MKOCTFILE} --print CPPFLAGS`
+		OCT_CPPFLAGS=$ac_mkoct_var_CPPFLAGS
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $OCT_CPPFLAGS" >&5
 $as_echo "$OCT_CPPFLAGS" >&6; }
 
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave include flags" >&5
+$as_echo_n "checking Octave include flags... " >&6; }
+		ac_mkoct_var_INCFLAGS=`${OCTAVE_MKOCTFILE} --print INCFLAGS`
+		OCT_INCFLAGS=$ac_mkoct_var_INCFLAGS
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $OCT_INCFLAGS" >&5
+$as_echo "$OCT_INCFLAGS" >&6; }
+
+    OCT_CPPFLAGS+=" ${OCT_INCFLAGS}"
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave -L flags" >&5
 $as_echo_n "checking Octave -L flags... " >&6; }

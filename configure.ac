@@ -179,7 +179,10 @@ if test "${OCTAVE_MKOCTFILE}" != ""; then
 	AC_OCTAVE_CONFIG([OCTAVE_LIBDIR], [OCTLIBDIR], [Octave libraries directory])
     
 	# Use mkoctfile for compiler and linker arguments
-    AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [INCFLAGS], [include flags])
+	AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [CPPFLAGS], [cpp flags])
+    AC_OCTAVE_MKCONFIG([OCT_INCFLAGS], [INCFLAGS], [include flags])
+    OCT_CPPFLAGS+=" ${OCT_INCFLAGS}"
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
     AC_OCTAVE_MKCONFIG([OCTAVE_LFLAGS], [LFLAGS], [-L flags])
     AC_OCTAVE_MKCONFIG([OCTAVE_LIBS], [OCTAVE_LIBS], [libraries])
     # add to LDFLAGS
