@@ -132,6 +132,7 @@ octave_verbose <- function(value){
 #' \samp{octave-config -p <varname>}.
 #' This function is vectorised and returns a character vector of the same length
 #' as its argument.
+#' @param verbose logical that toggles verbose messages.
 #' @param warn logical that indicates if a warning should be thrown when a 
 #' variable is returned empty, which generally means that \code{x} is not a valid 
 #' config variable name.
