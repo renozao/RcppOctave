@@ -616,7 +616,7 @@ Windows, output redirection does not working properly and all output is
 <<errors, try = TRUE>>=
 # error
 res <- try(.CallOctave('error', 'this is an error in Octave'))
-geterrormessage()
+geterrmessage()
 
 # warning
 res <- .CallOctave('warning', 'this is a warning in Octave')

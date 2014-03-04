@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_66c86b582626/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_dac1f300381/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -148,7 +148,7 @@
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
 \date{\Rpkg{RcppOctave} -- Version 0.13.6
-[February 28, 2014]\footnote{This vignette was built using \octave
+[March  4, 2014]\footnote{This vignette was built using \octave
 3.8.0}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -498,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5079 0.5180 0.4272 0.9186
+## [1] 0.7022 0.3536 0.2024 0.6223
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -506,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.3429 0.1355 0.1037 0.9409
+## [1] 0.14441 0.83731 0.04326 0.67256
 ## 
 ## $b
-##        [,1]   [,2]      [,3]
-## [1,] 0.5776 0.5187 0.0002385
-## [2,] 0.9904 0.1866 0.9064649
+##        [,1]   [,2]    [,3]
+## [1,] 0.7326 0.7040 0.44765
+## [2,] 0.0404 0.9996 0.02942
 ## 
 ## $c
 ## [1] "some text"
@@ -929,18 +929,18 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.3573
-## [2,] 0.1893
-## [3,] 0.1745
+## [1,] 1.7809
+## [2,] 0.6120
+## [3,] 0.1614
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
 ##        [,1]
-## [1,] 1.3573
-## [2,] 0.1893
-## [3,] 0.1745
+## [1,] 1.7809
+## [2,] 0.6120
+## [3,] 0.1614
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -949,13 +949,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.08024 0.87986
+## [1] 0.5254 0.7212
 ## 
 ## [[2]]
-## [1] 0.9008 1.2668
+## [1] -0.6554 -0.4380
 ## 
 ## [[3]]
-## [1] 0.5660 0.7640 0.7144
+## [1] 0.09123 0.28695 0.16945
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -974,7 +974,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.08024 0.87986
+## [1] 0.5254 0.7212
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -987,7 +987,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.08024 0.87986
+## [1] 0.5254 0.7212
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1191,11 +1191,12 @@ Windows, output redirection does not working properly and all output is
 
 
 {\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `error`:\\\#\#\ \  error: this is an error in Octave}}\begin{alltt}
-\hlkwd{geterrormessage}\hlstd{()}
+\hlkwd{geterrmessage}\hlstd{()}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}geterrormessage"{}}}\begin{alltt}
+\begin{verbatim}
+## [1] "Error in .CallOctave(\"error\", \"this is an error in Octave\") : \n  RcppOctave - error in Octave function `error`:\n  error: this is an error in Octave\n\n"
+\end{verbatim}
+\begin{alltt}
 \hlcom{# warning}
 \hlstd{res} \hlkwb{<-} \hlkwd{.CallOctave}\hlstd{(}\hlstr{"warning"}\hlstd{,} \hlstr{"this is a warning in Octave"}\hlstd{)}
 \end{alltt}
@@ -1253,9 +1254,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.5634 0.9915 0.7108 0.3483 0.0258
-##  $ u: num [1:5, 1:5] -0.475 -0.279 -0.428 -0.431 -0.572 ...
-##  $ v: num [1:5, 1:5] -0.535 -0.439 -0.517 -0.415 -0.285 ...
+##  $ d: num [1:5] 2.439 0.892 0.606 0.347 0.303
+##  $ u: num [1:5, 1:5] -0.373 -0.453 -0.475 -0.599 -0.268 ...
+##  $ v: num [1:5, 1:5] -0.464 -0.502 -0.276 -0.594 -0.323 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1269,8 +1270,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 2.98e-16"
-## [2] "Component 3: Mean relative difference: 2.14e-16"
+## [1] "Component 2: Mean relative difference: 3.909e-16"
+## [2] "Component 3: Mean relative difference: 3.284e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1356,6 +1357,19 @@ end
 {\scriptsize
 \begin{verbatim}
 ********************
+Changes in 0.14
+********************
+CHANGES
+    o added a configure option --with-octave to specify the path to a non-standard
+    Octave installation.
+    
+FIXES
+    o Some changes have been made so that the package is compatible with Octave 3.8
+    (reported by Bernard)
+    o Installation was failing when Octave was compiled with hdf5-mpi support.
+    
+    
+********************
 Changes in 0.11
 ********************
 NEW FEATURES
@@ -1411,7 +1425,7 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.13.6 pkgmaker_0.19.2   registry_0.2      Rcpp_0.11.0      
+[1] RcppOctave_0.13.6 pkgmaker_0.19.3   registry_0.2      Rcpp_0.11.0      
 [5] knitr_1.5        
 
 loaded via a namespace (and not attached):
