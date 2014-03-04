@@ -75,6 +75,10 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 #----------
 # o_help
 #----------
@@ -104,8 +108,12 @@ o_help(rand, format='latex')
 #----------
 # o_doc
 #----------
+try({ # may throw an error if Octave documentation is not installed
+
 o_doc(text)
 # or equivalently
 o_doc('text')
+
+})
 }
 

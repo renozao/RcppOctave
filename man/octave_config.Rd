@@ -12,6 +12,8 @@
   This function is vectorised and returns a character
   vector of the same length as its argument.}
 
+  \item{verbose}{logical that toggles verbose messages.}
+
   \item{warn}{logical that indicates if a warning should be
   thrown when a variable is returned empty, which generally
   means that \code{x} is not a valid config variable name.}
@@ -37,6 +39,10 @@
   \code{\link{Octave.home}()}.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 octave_config('VERSION')
 octave_config('BINDIR')
 }

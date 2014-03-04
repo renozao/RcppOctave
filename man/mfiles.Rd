@@ -23,6 +23,10 @@
   \code{\link[RcppOctave]{o_source}}.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 f <- as.mfile('test.m')
 f
 

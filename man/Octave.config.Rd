@@ -5,10 +5,10 @@
 \alias{Octave.version}
 \title{Octave Configuration and Installation Information}
 \format{List of 4
- $ platform      : chr "x86_64-pc-linux-gnu"
- $ version       : chr "3.6.4"
- $ api           : chr "api-v48+"
- $ version.string: chr "Octave version 3.6.4 (api-v48+)"
+ $ platform      : chr "x86_64-unknown-linux-gnu"
+ $ version       : chr "3.8.0"
+ $ api           : chr "api-v49+"
+ $ version.string: chr "Octave version 3.8.0 (api-v49+)"
  - attr(*, "class")= chr "simple.list"}
 \usage{
   Octave.version
@@ -40,6 +40,10 @@
   compilers and compilation flags.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 #----------
 # Octave.version
 #----------

@@ -36,6 +36,10 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 \dontshow{ o_clear() }
 o_who()
 l <- as.list(setNames(1:10, letters[1:10]))

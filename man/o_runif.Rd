@@ -54,6 +54,10 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 # Draw random uniform values (in vector form)
 set.seed(123)
 o_runif(1)

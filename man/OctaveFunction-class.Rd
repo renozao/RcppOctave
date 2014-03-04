@@ -39,6 +39,10 @@
   }
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 osvd <- OctaveFunction('svd')
 osvd
 osvd(matrix(1:9,3))

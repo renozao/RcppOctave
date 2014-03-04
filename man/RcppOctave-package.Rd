@@ -17,6 +17,10 @@
   License: \tab GPL (>= 2)\cr LazyLoad: \tab yes\cr }
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 .CallOctave('svd', matrix(1:9, 3))
 o_help('svd')
 }

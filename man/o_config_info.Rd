@@ -14,6 +14,10 @@
   \pkg{RcppOctave}.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 o_config_info()
 o_config_info('USE_64_BIT_IDX_T')
 }

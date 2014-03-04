@@ -31,6 +31,10 @@
   the names of user-defined functions).
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 \dontshow{ o_clear(all=TRUE) }
 
 # only variables

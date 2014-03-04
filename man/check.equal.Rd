@@ -25,6 +25,10 @@
   useful for comparing results obtained in R and Octave.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 X <- matrix(1:64, 8)
 ref <- svd(X)
 res <- .O$svd(X, argout=3)
