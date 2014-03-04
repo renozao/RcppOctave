@@ -272,9 +272,13 @@ o_help <- function(NAME, character.only = FALSE, show = interactive(), format = 
 #' @export
 #' @examples
 #' 
+#' try({ # may throw an error if Octave documentation is not installed
+#' 
 #' o_doc(text)
 #' # or equivalently
 #' o_doc('text')
+#' 
+#' })
 #' 
 o_doc <- function(FUNCTION_NAME){
 	# substitute FUNCTION_NAME
