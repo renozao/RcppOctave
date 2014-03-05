@@ -18,6 +18,10 @@
   effect of object conversions between R and Octave.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 o_identity(1L)
 o_identity(1:10)
 o_identity(matrix(1:10, 2,5))

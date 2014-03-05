@@ -35,6 +35,10 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 \dontshow{ o_clear() }
 # Assign a variable in Octave
 o_assign('a', 10)

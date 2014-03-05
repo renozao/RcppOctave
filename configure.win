@@ -21,52 +21,10 @@ fi
 R_BIN=${R_HOME}/bin${R_ARCH_BIN}/R.exe
 RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
 
-# define substitution function
-AC_SUBST () {
-	eval AC_SUBST_VAR_ABCDE=\$$1
-	export AC_SUBST_VAR_ABCDE 
-	"${RSCRIPT}" -e "
-		vsub <- function(var, val, out = 'configure.rds'){
-			cat('Using ', var, ': ', val, '\n', sep = '')
-			varList <- list() 
-			if( file.exists(out) ){ # load file if it exists
-				varList <- readRDS(out)
-			}
-			varList[[var]] <- val
-			saveRDS(varList, file = out) 
-		}
-		var <- '$1'
-		val <- Sys.getenv('AC_SUBST_VAR_ABCDE')
-		vsub(var, val)
-	"
-	unset AC_SUBST_VAR_ABCDE
-}
+# load m4 Windows macros
+. exec/m4.win
 
-AC_OUTPUT () {
-	"${RSCRIPT}" -e "
-	out <- '$1'
-	tmpl <- paste0(out, '.in')
-	rds <- 'configure.rds'
-	l <- readLines(tmpl)
-	varList <- readRDS(rds)
-	cat('Substituting ', length(varList), ' variables in ', out, '\n', sep = '')
-	for( i in seq_along(varList) ){
-		var <- names(varList[i])
-		val <- varList[[i]]
-		l <- gsub(paste0('@', var, '@'), val, l, fixed = TRUE)
-	}
-	cat(l, file = out, sep = '\n')
-"
-}
-
-AC_MSG_CHECKING () {
-	echo -n "Checking $1... "
-}
-
-AC_MSG_RESULT () {
-	echo "$1"
-}
-
+AC_INIT RcppOctave 0.13.7
 AC_MSG_CHECKING "Rscript version"
 AC_MSG_RESULT `"${RSCRIPT}" --version`
 
@@ -138,35 +96,56 @@ if test "${OCTAVE_BINDIR}" != ""; then
 	OCTAVE_MKOCTFILE="${OCTAVE_BINDIR}/mkoctfile"
 	AC_SUBST OCTAVE_MKOCTFILE
     
-    # Use octave-config for header and linker arguments
-    echo "Checking Octave include directory... "
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    AC_MSG_RESULT "    ${OCTINCLUDEDIR}"
-    OCTINCLUDEDIR2=`${OCTAVE_CONFIG} -p INCLUDEDIR`
-    AC_MSG_RESULT "    ${OCTINCLUDEDIR2}"
+    ## Define Octave autoconf macros
+    AC_OCTAVE_MKCONFIG () { 
+		AC_MSG_CHECKING "Octave $3"
+		eval "$1=\"`${OCTAVE_MKOCTFILE} --print $2`\""
+		eval "AC_MSG_RESULT \$$1"
+		AC_SUBST $1
+	}
+	
+	AC_OCTAVE_CONFIG () { 
+		AC_MSG_CHECKING "Octave $3"
+		eval "$1=\"`${OCTAVE_CONFIG} --print $2`\""
+		eval "AC_MSG_RESULT \$$1"
+		AC_SUBST $1
+	}
+	##
+	
+	AC_OCTAVE_CONFIG OCTAVE_BINDIR BINDIR "Octave bin directory"
+	
+	# Use mkoctfile for compiler and linker arguments
+	AC_OCTAVE_MKCONFIG OCT_CPPFLAGS CPPFLAGS "cpp flags"
+    AC_OCTAVE_MKCONFIG OCT_INCFLAGS INCFLAGS "include flags"
+    OCT_CPPFLAGS="${OCT_CPPFLAGS} ${OCT_INCFLAGS}"
     
-    AC_MSG_CHECKING "Octave library directory"
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    AC_MSG_RESULT "${OCTLIBDIR}"
+    AC_OCTAVE_MKCONFIG OCTAVE_LFLAGS LFLAGS "-L flags"
+    AC_OCTAVE_MKCONFIG OCTAVE_LIBS OCTAVE_LIBS "libraries"
+    # add to LDFLAGS
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
     
-    AC_MSG_CHECKING "Octave system library directory"
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    AC_MSG_RESULT "${OCT_SYSLIBDIR}"
-        
+    # check Octave compilers
+    AC_OCTAVE_MKCONFIG OCTAVE_CC CC "C compiler"
+    AC_OCTAVE_MKCONFIG OCTAVE_F77 F77 "Fortran compiler"
+    
+    # Octave config info
+    AC_OCTAVE_CONFIG OCTAVE_PLATFORM CANONICAL_HOST_TYPE "platform"
+    AC_OCTAVE_CONFIG OCTAVE_API_VERSION API_VERSION "API version"
+    
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
-    AC_MSG_CHECKING "Octave version"
-    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
-    AC_MSG_RESULT "${OCTVERSION}"
+    AC_OCTAVE_CONFIG OCTAVE_VERSION VERSION "version"
     
     CMPV="3.4.3"
-    AC_MSG_CHECKING "whether to infer output names for Octave function (>= ${CMPV})"
-    OCT_POST_3_4_0=`"${RSCRIPT}" -e "cat(utils::compareVersion('${OCTVERSION}', '${CMPV}'))"`
+    AC_MSG_CHECKING "whether to infer output names for Octave function (Octave >= ${CMPV}?)"
+    AS_VERSION_COMPARE OCT_POST_3_4_0 ${OCTAVE_VERSION} ${CMPV}
     if test "${OCT_POST_3_4_0}" != "-1"; then
-     	AC_MSG_RESULT "YES"
+     	AC_MSG_RESULT yes
      else 
-		AC_MSG_RESULT "NO"
+		AC_MSG_RESULT no
 	fi
+	# add to CPPFLAGS
+    OCT_CPPFLAGS="${OCT_CPPFLAGS} -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
     
 else
     echo "octave-config not found, is Octave installed?
@@ -178,11 +157,8 @@ else
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST OCTINCLUDEDIR
-AC_SUBST OCTINCLUDEDIR2
-AC_SUBST OCTLIBDIR
-AC_SUBST OCT_SYSLIBDIR
-AC_SUBST OCT_POST_3_4_0
+AC_SUBST OCT_LDFLAGS
+AC_SUBST OCT_CPPFLAGS
 
 # Module path
 AC_MSG_CHECKING "RcppOctave Octave module directory"
@@ -193,5 +169,6 @@ AC_SUBST OCT_MODULES_PATH
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
+AC_OUTPUT R/config-vars.R
 AC_OUTPUT src/Makevars.win
 AC_OUTPUT src/modules/Makefile

@@ -20,3 +20,5 @@ staticdocs
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README.md$
+^pkg/
+

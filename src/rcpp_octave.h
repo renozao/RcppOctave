@@ -21,9 +21,18 @@ namespace Rcpp {
 
 // OCTAVE STUFF
 
+// Octave libraries
+#include <octave/config.h>
+#include <octave/oct-obj.h>
+
 // define version-specific macros
+#include "swig_octave_version.h"
 #ifndef OCT_POST_3_4_0
-#define OCT_POST_3_4_0 -1
+	#if !SWIF_OCTAVE_PREREQ(3,4,0)
+		#define OCT_POST_3_4_0 -1
+	#else
+		#define OCT_POST_3_4_0 1
+	#endif
 #endif
 
 #if OCT_POST_3_4_0 < 0
@@ -34,11 +43,13 @@ namespace Rcpp {
 #define POST_3_4_0(x) x
 #endif
 
-// Octave libraries
-#include <octave/config.h>
-#include <octave/oct-obj.h>
+
 // define which class to use for Octave maps
-#define OCTAVE_MAP Octave_map
+#if SWIG_OCTAVE_PREREQ(3,8,0)
+  #define OCTAVE_MAP octave_map
+#else
+  #define OCTAVE_MAP Octave_map
+#endif
 //
 
 #define VERBOSE_LOG if( RCPP_OCTAVE_VERBOSE ) Rprintf
@@ -89,11 +100,16 @@ RcppExport SEXP octave_start(SEXP verbose, SEXP with_warnings);
 /**
  * Terminate an Octave session from R.
  */
-RcppExport SEXP octave_end();
+RcppExport SEXP octave_end(SEXP verbose);
 
 /**
  * Returns the help string from an Octave object.
  */
 RcppExport SEXP oct_help(SEXP name);
+
+// Register init/unload routines
+RcppExport void R_init_RcppOctave(DllInfo *info);
+
+RcppExport void R_unload_RcppOctave(DllInfo *info);
 
 #endif

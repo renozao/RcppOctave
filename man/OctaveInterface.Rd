@@ -13,7 +13,7 @@
 
   \S4method{[[}{Octave}(x, i, exact = TRUE)
 
-  \S4method{$}{Octave}(x, name) <- value
+  \S4method{$}{Octave}(x, name)<-value
 }
 \arguments{
   \item{exact}{logical not used.}
@@ -83,6 +83,10 @@
   }
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 .O
 # assign/get Octave variables
 .O$a <- 10

@@ -28,17 +28,21 @@ NULL
 #' @param unlist a logical that specifies if an output list of length one 
 #' should be simplified and returned as a single value or kept as a list.
 #' The default is to unlist unless output names were passed in \code{argout}.
-#' @param buffer.std logical that indicates if Octave stdout or stderr should be buffered.
-#' If \code{TRUE} output/errors/warnings are displayed at the end of the computation.
-#' If \code{FALSE} they are directly displayed by Octave.
+#' @param buffer.std logical that indicates if Octave stdout and/or stderr should be buffered.
+#' If \code{TRUE} output/errors/warnings are all displayed at the end of the computation.
+#' If \code{FALSE} they are directly displayed as they come.
 #' It is also possible to selectively buffer either one of stdout or stderr, via 
 #' the following integer codes:
 #' \itemize{
 #' \item \code{0}: no buffering; 
 #' \item \code{1} or \code{-2}: only stdout is buffered;
 #' \item \code{2} or \code{-1}: only stderr is buffered;
-#' \item \code{3}: both stdout and stderr are buffered.
+#' \item \code{4} or \code{-3}: only warnings are buffered;
+#' \item \code{7}: all messages are buffered.
 #' }
+#' 
+#' Note that warnings are handle slightly differently than other messages, 
+#' as they are never output directly, except when \code{buffer.std = 0}.
 #' 
 #' @return the value returned by the Octave function -- converted into standard 
 #' R objects.
@@ -58,9 +62,9 @@ NULL
 #' # call Octave function 'svd' asking for 3 named output values: [U, S, V] = svd(x)
 #' .CallOctave('svd', x, argout=c('U', 'S', 'V'))
 #' 
-.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = 3L){
+.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L){
 	
-    if( isTRUE(buffer.std) ) buffer.std <- 3L
+    if( isTRUE(buffer.std) ) buffer.std <- 7L
     res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, PACKAGE='RcppOctave')
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()
 	else if( is.null(res) && argout <= 1L ) invisible()
@@ -71,7 +75,9 @@ NULL
 #' 
 #' \code{octave_start} Initialize an Octave session.
 #' 
-#' @param verbose logical value used as the inital verbosity status.
+#' @param verbose logical that toggle verbosity.
+#' In \code{octave_start}, it is the value used as the initial global verbosity state. 
+#' If \code{TRUE} all calls and conversions between R and Octave produce diagnostic messages.
 #' @param warnings logical that indicates if Octave startup warnings
 #' @param force logical that indicates if Octave session should be reinitialised, 
 #' even if one was previously started (not meant to be used by end-users).  
@@ -94,8 +100,8 @@ octave_start <- local({
 #' 
 #' @rdname octave-ll
 #' @export
-octave_end <- function(){
-	.Call("octave_end", PACKAGE='RcppOctave')
+octave_end <- function(verbose = getOption('verbose')){
+	.Call("octave_end", verbose, PACKAGE='RcppOctave')
 }
 
 #' \code{octave_verbose} toggles the verbosity of RcppOctave calls: messages tracks 
@@ -110,51 +116,38 @@ octave_verbose <- function(value){
 	invisible(.Call("octave_verbose", value, PACKAGE='RcppOctave'))
 }
 
-# wrapper call to system (Linux) or shell (Windows) to fix an issue in
-# shell when intern=TRUE and mustWork=TRUE
-system_call <- function(...){
-    if( .Platform$OS.type == 'windows' ){
-        system <- getFunction('shell', where = 'package:base')
-        res <- system(..., intern = TRUE, mustWork = TRUE)
-        if( !is.null(st <- attr(res, 'status')) && st != 0 ){
-            stop(paste(res, collapse = "\n  ")) 
-        }
-        res
-    }else base::system(..., intern = TRUE)
-	
-}
-
-#' \code{octave_config} retrieves Octave configuration variables. 
+#' Octave Utils: octave-config
 #' 
-#' \code{octave_config} uses the \code{octave-config} system utility that ships with 
+#' Retrieves Octave configuration variables using \code{octave-config}. 
+#' 
+#' \code{octave_config} uses the \code{octave-config} utility binary shipped with 
 #' Octave to query details about the local Octave installation.
-#' Failure to load Octave configuration is generally due to this Octave binary
-#' not being found in the system PATH.
-#' Users should ensure that the PATH contains Octave binary directory path. 
-#' Alternatively one may use option 'octave.path' to specify the directory where to 
-#' find \code{octave-config}:
-#' 
-#' \samp{options(octave.path = '/absolute/path/to/octave/bin')} 
-#' 
-#' Note that in this case, the system PATH is not used.
+#' Failure to retrieve such information is generally due to the binary
+#' not being found.
+#' By default, it is looked up in the \code{bin/} sub-directory of the path 
+#' returned by \code{\link{Octave.home}()}.
 #' 
 #' @param varname Name (as a character string) of the Octave configuration 
 #' variable to retrieve. It is used in following system call 
 #' \samp{octave-config -p <varname>}.
 #' This function is vectorised and returns a character vector of the same length
 #' as its argument.
+#' @param verbose logical that toggles verbose messages.
 #' @param warn logical that indicates if a warning should be thrown when a 
 #' variable is returned empty, which generally means that \code{x} is not a valid 
 #' config variable name.
 #' @param mustWork logical that indicates if an error should be thrown if failing 
 #' to load Octave configuration.
 #' @param bindir path to Octave bin/ sub-directory where to look for \code{octave-config}.
-#' If \code{NULL} or \code{NA}, then the system PATH is used.
+#' If \code{NULL} or \code{NA}, then the system PATH is looked up.
 #'  
-#' @rdname octave-ll
-#' @seealso OctaveConfig
+#' @family Octave.info
 #' @export
-octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bindir = getOption('octave.path')){
+#' @examples
+#' octave_config('VERSION') 
+#' octave_config('BINDIR')
+#' 
+octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bindir = Octave.home('bin')){
 
     # use custom BINDIR if requested
     octave_config_cmd <- 'octave-config'
@@ -189,10 +182,6 @@ octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bi
     )
 }
 
-octave_version_string <- function(){
-    sprintf("Octave %s-%s (%s)", octave_config('VERSION'), octave_config('API_VERSION'), octave_config('CANONICAL_HOST_TYPE'))
-}
-
 #' \code{octave_modules} add the Octave modules that ship with RcppOctave to 
 #' Octave loading path.
 #' 
@@ -200,8 +189,8 @@ octave_version_string <- function(){
 #' @export
 octave_modules <- function(verbose=getOption('verbose')){
 	
-	path <- OctaveConfig('modules')
-	if( verbose )
+	path <- Octave.info('modules')
+    if( verbose )
 		message("Loading Octave modules for ", packageName()
 				, " from '", path, "'");
 	o_addpath(path)

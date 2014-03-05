@@ -127,6 +127,24 @@ o_version <- function(version){
 	else v
 }
 
+#' Embedded Octave Configuration and Installation Information
+#' 
+#' Retrieves configuration and installation information about 
+#' the embedded instance of Octave currently used by \pkg{RcppOctave}. 
+#' 
+#' @param var name of the configuration variable to retrieve.
+#' 
+#' @family Octave.info
+#' @export 
+#' @examples
+#' 
+#' o_config_info()
+#' o_config_info('USE_64_BIT_IDX_T')
+#' 
+o_config_info <- function(var = c('CC', 'CC_VERSION', 'FC')){
+    sapply(var, .CallOctave, .NAME = 'octave_config_info')
+}
+
 #' Accessing Octave Help and Documentation Pages
 #' 
 #' \code{o_help} retrieves the Octave help page associated with a given symbol.
@@ -254,9 +272,13 @@ o_help <- function(NAME, character.only = FALSE, show = interactive(), format = 
 #' @export
 #' @examples
 #' 
+#' try({ # may throw an error if Octave documentation is not installed
+#' 
 #' o_doc(text)
 #' # or equivalently
 #' o_doc('text')
+#' 
+#' })
 #' 
 o_doc <- function(FUNCTION_NAME){
 	# substitute FUNCTION_NAME

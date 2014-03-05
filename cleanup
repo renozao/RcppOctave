@@ -3,15 +3,10 @@
 # cleanup script borrowed and adapted from the RcppGSL package 
 
 rm -f  config.log config.status confdefs.h \
-       configure.rds \
-       src/*.o src/*.so src/Makevars src/*.dll src/Makevars.win \
+       src/*.o src/*.so src/Makevars \
+       config.status.win src/*.dll src/Makevars.win \
        src/modules/*.o src/modules/*.oct src/modules/Makefile \
+       R/config-vars.R \
        inst/doc/*.blg inst/doc/*.bbl \
        */*~ *~ 
 rm -rf autom4te.cache inst/doc/*/auto
-
-#(cd inst/examples/RcppGSLExample;  \
-#    rm -f  config.log config.status  \
-#           src/*.o src/*.so src/Makevars \
-#           */*~ *~ ; \
-#    rm -rf autom4te.cache)

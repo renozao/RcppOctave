@@ -40,8 +40,8 @@
   \code{rand} that shadow Octave built-in functions. These
   functions are defined in the Octave module
   \code{Rrng.oct} that is stored in the package
-  \emph{modules/} sub-directory. Call
-  \code{OctaveConfig('modules')} to see this directory's
+  \emph{modules/} sub-directory. See
+  \code{Octave.info('modules')} to see this directory's
   full path.
 }
 
@@ -54,6 +54,10 @@
   \Sexpr{Sys.time()}]}
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 # Draw random uniform values (in vector form)
 set.seed(123)
 o_runif(1)

@@ -35,7 +35,8 @@
 #include <octave/pt-all.h>
 #include <octave/symtab.h>
 #include <octave/parse.h>
-#if OCTAVE_API_VERSION_NUMBER < 45
+//#if OCTAVE_API_VERSION_NUMBER < 45
+#if !SWIG_OCTAVE_PREREQ(3,4,0)
 #include <octave/unwind-prot.h>
 #endif
 #include <octave/toplev.h>
@@ -91,7 +92,7 @@ SEXP octave_verbose(SEXP value){
 	return( Rcpp::wrap(res) );
 }
 
-bool octave_session(bool start=true, bool with_warnings = true){
+bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
 	if( start && !OCTAVE_INITIALIZED ){
@@ -107,23 +108,31 @@ bool octave_session(bool start=true, bool with_warnings = true){
 		cmd_args(3) = std::string("--no-history");
 
 		// redirect both stderr and stdout
-		Redirect redirect(3);
+		Redirect redirect(7);
 
 		// try starting Octave
 		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 
-		redirect.flush(NULL, "Failed to start Octave interpreter", NULL
-							, !started_ok, with_warnings);
+		redirect.flush("Failed to start Octave interpreter", !started_ok, with_warnings);
 
 		OCTAVE_INITIALIZED = true;
+#if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
+#endif
 
 	}
 	else if( !start && OCTAVE_INITIALIZED ){
-		if( RCPP_OCTAVE_VERBOSE )
-			REprintf("Terminating Octave interpreter\n");
+		if( RCPP_OCTAVE_VERBOSE || verbose )
+			REprintf("Terminating Octave interpreter... ");
 		// terminate interpreter
+#if SWIG_OCTAVE_PREREQ(3,8,0)
+		octave_exit = 0;
+		clean_up_and_exit(0, true);
+#else
 		do_octave_atexit();
+#endif
+		if( RCPP_OCTAVE_VERBOSE || verbose )
+			REprintf("OK\n");
 		OCTAVE_INITIALIZED = false;
 	}
 	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
@@ -139,8 +148,10 @@ SEXP octave_start(SEXP verbose, SEXP with_warnings){
 	return Rcpp::wrap(octave_session(true, _warnings));
 }
 
-SEXP octave_end(){
-	return Rcpp::wrap(octave_session(false));
+SEXP octave_end(SEXP verbose = R_NilValue){
+
+	bool b_verbose = !Rf_isNull(verbose) ? Rcpp::as<bool>(verbose) : false;
+	return Rcpp::wrap(octave_session(false, true, b_verbose));
 }
 
 void R_init_RcppOctave(DllInfo *info)
@@ -164,7 +175,8 @@ void R_unload_RcppOctave(DllInfo *info)
  */
 extern void recover_from_exception(void)
 {
-#if OCTAVE_API_VERSION_NUMBER >= 45
+//#if OCTAVE_API_VERSION_NUMBER >= 45
+#if SWIG_OCTAVE_PREREQ(3,4,0)
 #else
   // This isn't supported in the latest Octave versions. We simply leave this
   // disabled for now, which means that you'll have to use 'unwind_protect'
@@ -193,7 +205,7 @@ SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SE
 	// unlist result?
 	bool do_unlist = Rf_isNull(unlist) ? true : as<bool>(unlist);
 	// buffer stdout/stderr?
-	int buffer_std = Rf_isNull(buffer) ? 3 : as<int>(buffer);
+	int buffer_std = Rf_isNull(buffer) ? -1 : as<int>(buffer);
 
 	octave_value out;
 	if( TYPEOF(output) == STRSXP ){
@@ -324,7 +336,8 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #if defined (USE_EXCEPTIONS_FOR_INTERRUPTS)
 		panic_impossible()
 #else
-	#if OCTAVE_API_VERSION_NUMBER >= 45
+	//#if OCTAVE_API_VERSION_NUMBER >= 45
+	#if SWIG_OCTAVE_PREREQ(3,4,0)
 	#else
 		//XXX FIXME XXX
 		unwind_protect::run_all ();
@@ -340,7 +353,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 	octave_initialized = true;
 
 	// setup catching of stderr to use R stderr own functions
-	Redirect redirect;
+	Redirect redirect(buffer, true);// delay until calling redirect
 	//
 
 	try {
@@ -373,7 +386,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 
 		VERBOSE_LOG("octave_feval - Calling feval now ... ");
 		// catch stderr if requested
-		redirect.redirect( buffer );
+		redirect.redirect();
 		octave_value_list out = feval(fname, args, nres);
 		if ( !error_state ){
 
@@ -437,7 +450,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 	// throw an R error
 	std::ostringstream err;
 	err << R_PACKAGE_NAME" - error in Octave function `" << fname.c_str() << "`";
-	redirect.flush(NULL, err.str().c_str(), NULL, true);
+	redirect.flush(err.str().c_str(), true);
 
 	return octave_value_list();
 }

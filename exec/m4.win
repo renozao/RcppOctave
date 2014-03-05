@@ -1,0 +1,51 @@
+# Autoconf macro definitions for Windows configure scripts
+## Copyright (C) 2013 Renaud Gaujoux
+
+# START
+echo -n "Loading autoconf-like macros for Windows... "
+
+AC_INIT () {
+	echo "Package $1 - version $2"
+	# some cleanup
+	rm -f config.status.win
+}
+
+# define substitution function
+AC_SUBST () {
+	if [ ! -z "$2" ]; then eval "$1=\"$2\""; fi
+	echo "$1" >> config.status.win
+	export $1
+}
+
+AC_OUTPUT () {
+	"${RSCRIPT}" -e "
+	out <- '$1'
+	tmpl <- paste0(out, '.in')
+	conf <- 'config.status.win'
+	l <- readLines(tmpl)
+	varList <- readLines(conf)
+	cat('Substituting configure variables (', length(varList), ') in ', out, '\n', sep = '')
+	dummy <- lapply(varList, function(var){
+		# substitute backslash with forward slashes
+		val <- gsub('\\\\', '/', Sys.getenv(var), fixed = TRUE)
+		#cat(sprintf('%s=%s\n', var, val))
+		l <<- gsub(paste0('@', var, '@'), val, l, fixed = TRUE)
+	})
+	cat(l, file = out, sep = '\n')
+"
+}
+
+AC_MSG_CHECKING () {
+	echo -n "Checking $1... "
+}
+
+AC_MSG_RESULT () {
+	echo "$1"
+}
+
+AS_VERSION_COMPARE () {
+	eval "$1=`\"${RSCRIPT}\" -e \"cat(utils::compareVersion('$2', '$3'))\"`"
+}    
+
+# DONE
+echo "OK"

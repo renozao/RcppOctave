@@ -445,11 +445,12 @@ template <> octave_value Rcpp::as( SEXP x ){
 
 		if ( na == 0) {
 
-			VERBOSE_LOG("(List) -> octave_value_list\n");
-			return octave_value(as<octave_value_list>(x));
+			VERBOSE_LOG("(un-named List) -> Cell\n");
+			const octave_value& ol = as<octave_value_list>(x);
+			return Cell(ol);
 
 		}else{ // store as an Octave map
-			VERBOSE_LOG("(NamedList[%i]) -> Octave map:\n", Rf_length(x));
+			VERBOSE_LOG("(named List[%i]) -> Octave map:\n", Rf_length(x));
 			CharacterVector names(rnames);
 			Rcpp::List xl(x);
 			int n = xl.length();

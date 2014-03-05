@@ -1,14 +1,12 @@
 ## Use the R_HOME indirection to support installations of multiple R version
 
 # set by configure
-OCTINCLUDEDIR=@OCTINCLUDEDIR@
-OCTLIBDIR=@OCTLIBDIR@
-OCT_SYSLIBDIR=@OCT_SYSLIBDIR@
-OCT_POST_3_4_0=@OCT_POST_3_4_0@
+OCT_LDFLAGS=@OCT_LDFLAGS@
+OCT_CPPFLAGS=@OCT_CPPFLAGS@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 
-PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` -L"$(OCTLIBDIR)" -L"$(OCT_SYSLIBDIR)" -loctinterp -loctave -lcruft
-PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` -DOCT_POST_3_4_0=$(OCT_POST_3_4_0) -I"$(OCTINCLUDEDIR)" -I"$(OCTINCLUDEDIR)/../" -I"$(OCTINCLUDEDIR)/octave"
+PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
+PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` $(OCT_CPPFLAGS)
 
 .PHONY: all OctaveModule
 
@@ -17,7 +15,7 @@ all: OctaveModule
 OctaveModule:
 	@cd modules && \
 	make && \
-	echo "# Copying Octave module directory '$(OCT_MODULES_PATH)'" && \
+	echo "# Copying Octave modules to directory '$(OCT_MODULES_PATH)'" && \
 	mkdir -p "$(OCT_MODULES_PATH)" && \
 	cp -f PKG_ADD *.oct "$(OCT_MODULES_PATH)";
 

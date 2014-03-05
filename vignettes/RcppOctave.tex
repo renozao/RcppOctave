@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_1a5471b39556/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_6b477de88d3d/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -147,9 +147,9 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.11.3
-[October 28, 2013]\footnote{This vignette was built using \octave
-3.6.4}}
+\date{\Rpkg{RcppOctave} -- Version 0.14
+[March  5, 2014]\footnote{This vignette was built using \octave
+3.8.0}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
@@ -354,7 +354,7 @@ Calling any \octave function is then as simple as:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"version"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "3.6.4"
+## [1] "3.8.0"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"sqrt"}\hlstd{,} \hlnum{10}\hlstd{)}
@@ -498,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.4912 0.9499 0.6864 0.1499
+## [1] 0.5170 0.6824 0.3656 0.4314
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -506,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.04044 0.47447 0.30631 0.12975
+## [1] 0.0503 0.4100 0.1331 0.6679
 ## 
 ## $b
-##        [,1]    [,2]   [,3]
-## [1,] 0.1501 0.35766 0.2943
-## [2,] 0.4487 0.07778 0.3626
+##        [,1]   [,2]   [,3]
+## [1,] 0.2915 0.1338 0.6036
+## [2,] 0.4920 0.8285 0.7057
 ## 
 ## $c
 ## [1] "some text"
@@ -580,7 +580,7 @@ The other types of computations can be obtained using argument \code{argout}:
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `fun\_varargout`:\\\#\#\ \  usage: Expecting 1 or 3 output variables.\\\#\# error:\ \  fun\_varargout at line 34, column 7}}\end{kframe}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `fun\_varargout`:\\\#\#\ \  error:\ \  fun\_varargout at line 34, column 7}}\end{kframe}
 \end{knitrout}
 
 
@@ -673,7 +673,7 @@ Using the \code{.O} object, calls to \octave functions are more compact:
 \hlstd{.O}\hlopt{$}\hlkwd{version}\hlstd{()}
 \end{alltt}
 \begin{verbatim}
-## [1] "3.6.4"
+## [1] "3.8.0"
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlkwd{eye}\hlstd{(}\hlnum{3}\hlstd{)}
@@ -838,6 +838,7 @@ Variables may be assigned or retrieved individually in separate calls to
 \hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlkwd{o_assign}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{20}\hlstd{)}
 \hlkwd{o_assign}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{b} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{aaa} \hlstd{=} \hlnum{7}\hlstd{,} \hlkwc{aab} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{)))}
+
 \hlcom{## GET get all variables}
 \hlkwd{str}\hlstd{(}\hlkwd{o_get}\hlstd{())}
 \end{alltt}
@@ -927,19 +928,19 @@ can also evaluate a list of statements sequentially:
 \hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##        [,1]
-## [1,] 1.9168
-## [2,] 0.2563
-## [3,] 0.0406
+##         [,1]
+## [1,] 1.51788
+## [2,] 0.25908
+## [3,] 0.01084
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-##        [,1]
-## [1,] 1.9168
-## [2,] 0.2563
-## [3,] 0.0406
+##         [,1]
+## [1,] 1.51788
+## [2,] 0.25908
+## [3,] 0.01084
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -948,13 +949,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.5933 0.3847
+## [1] 0.2627 0.3801
 ## 
 ## [[2]]
-## [1] -1.3482 -0.4398
+## [1] -1.55072 -0.06703
 ## 
 ## [[3]]
-## [1] 0.7872 0.5593 0.1420
+## [1] 0.3170 0.1008 0.9161
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -973,7 +974,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5933 0.3847
+## [1] 0.2627 0.3801
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -986,7 +987,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5933 0.3847
+## [1] 0.2627 0.3801
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1175,6 +1176,37 @@ Once the GNU Info browser is running, help for using it is available using the
 command `Ctrl + h' -- as stated in the \octave documentation for \code{doc} (see
 \code{o\_help(doc)}).
 
+\subsection{Errors and warning handling}
+
+All i/o messages written by Octave are redirected to R own i/o functions, with
+errors and warnings generating corresponding messages in R\footnote{On
+Windows, output redirection does not working properly and all output is
+"mysteriously`` directly displayed by Octave}:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# error}
+\hlstd{res} \hlkwb{<-} \hlkwd{try}\hlstd{(}\hlkwd{.CallOctave}\hlstd{(}\hlstr{"error"}\hlstd{,} \hlstr{"this is an error in Octave"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `error`:\\\#\#\ \  error: this is an error in Octave}}\begin{alltt}
+\hlkwd{geterrmessage}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] "Error in .CallOctave(\"error\", \"this is an error in Octave\") : \n  RcppOctave - error in Octave function `error`:\n  error: this is an error in Octave\n\n"
+\end{verbatim}
+\begin{alltt}
+\hlcom{# warning}
+\hlstd{res} \hlkwb{<-} \hlkwd{.CallOctave}\hlstd{(}\hlstr{"warning"}\hlstd{,} \hlstr{"this is a warning in Octave"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: warning: this is a warning in Octave}}\end{kframe}
+\end{knitrout}
+
+
+
 \subsection{Low-level \textit{C/C++} interface}
 
 \pkgname{RcppOctave} builds upon the \Rpkg{Rcpp}, and defines specialisation
@@ -1210,8 +1242,10 @@ following code, which defines a wrapper functions to format the output of
     \hlstd{res}\hlopt{$}\hlstd{d} \hlkwb{<-} \hlkwd{diag}\hlstd{(res}\hlopt{$}\hlstd{d)}
     \hlstd{res[}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{3}\hlstd{)]}
 \hlstd{\}}
+
 \hlcom{# define random data}
 \hlstd{X} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(}\hlnum{25}\hlstd{),} \hlnum{5}\hlstd{)}
+
 \hlcom{# run SVD in R}
 \hlstd{svd.R} \hlkwb{<-} \hlkwd{svd}\hlstd{(X)}
 \hlcom{# run SVD in Octave}
@@ -1220,9 +1254,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.7787 0.6654 0.4976 0.1559 0.0698
-##  $ u: num [1:5, 1:5] -0.449 -0.489 -0.326 -0.495 -0.455 ...
-##  $ v: num [1:5, 1:5] -0.338 -0.366 -0.587 -0.512 -0.381 ...
+##  $ d: num [1:5] 3.1565 0.7806 0.3641 0.2775 0.0596
+##  $ u: num [1:5, 1:5] -0.351 -0.474 -0.415 -0.397 -0.568 ...
+##  $ v: num [1:5, 1:5] -0.391 -0.502 -0.447 -0.415 -0.471 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1236,8 +1270,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 4.04e-16" 
-## [2] "Component 3: Mean relative difference: 2.647e-16"
+## [1] "Component 2: Mean relative difference: 3.758e-16"
+## [2] "Component 3: Mean relative difference: 2.931e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1265,6 +1299,7 @@ algorithms (e.g. simulations, MCMC-based estimations):
         \hlstd{y} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{rnorm}\hlstd{(}\hlnum{100}\hlstd{),} \hlnum{10}\hlstd{)}
         \hlstd{(x} \hlopt{*} \hlstd{y)} \hlopt{%*%} \hlstd{(x} \hlopt{/} \hlstd{y)}
 \hlstd{\}}
+
 \hlstd{Of} \hlkwb{<-} \hlstd{\{}
 \hlcom{# define Octave function}
 \hlkwd{o_source}\hlstd{(}\hlkwc{text}\hlstd{=}\hlstr{"
@@ -1277,6 +1312,7 @@ end
 \hlcom{# return the function}
 \hlstd{.O}\hlopt{$}\hlstd{test}
 \hlstd{\}}
+
 \hlcom{# run both computations with a common seed  }
 \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.R} \hlkwb{<-} \hlkwd{Rf}\hlstd{()}
 \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{); res.O} \hlkwb{<-} \hlkwd{Of}\hlstd{()}
@@ -1312,12 +1348,27 @@ end
  called with a single output variable.
  For obtaining more outputs, the user must specify argument \code{argout}
  accordingly.
+ \item Redirection of Octave output sent to stdout and stderr on Windows does
+ not work.
 \end{itemize}
 
 \section{News and changes}
 
 {\scriptsize
 \begin{verbatim}
+********************
+Changes in 0.14
+********************
+CHANGES
+    o added a configure option --with-octave to specify the path to a non-standard
+    Octave installation.
+    
+FIXES
+    o Some changes have been made so that the package is compatible with Octave 3.8
+    (reported by Bernard)
+    o Installation was failing when Octave was compiled with hdf5-mpi support.
+    
+    
 ********************
 Changes in 0.11
 ********************
@@ -1364,7 +1415,7 @@ Platform: x86_64-pc-linux-gnu (64-bit)
 
 locale:
  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [3] LC_TIME=C                  LC_COLLATE=en_US.UTF-8    
  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
@@ -1374,12 +1425,12 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.11.3 pkgmaker_0.18.2   registry_0.2      Rcpp_0.10.5      
-[5] knitr_1.5        
+[1] RcppOctave_0.14 pkgmaker_0.20   registry_0.2    Rcpp_0.11.0    
+[5] knitr_1.5      
 
 loaded via a namespace (and not attached):
-[1] codetools_0.2-8 digest_0.6.3    evaluate_0.5.1  formatR_0.9    
-[5] highr_0.2.1     stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
+[1] codetools_0.2-8 digest_0.6.4    evaluate_0.5.1  formatR_0.10   
+[5] highr_0.3       stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

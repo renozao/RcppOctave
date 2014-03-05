@@ -135,12 +135,14 @@ test.assign <- function(){
 
 test.redirection <- function(){
     
+    if( .Platform$OS.type == 'windows' ) DEACTIVATED("Redirection does not currently work on Windows")
+    
     # Output
     out <- 'This is some Octave text output'
     checkIdentical(capture.output(dummy <- .CallOctave('printf', out)), out, "Octave output is correctly captured")
     checkIdentical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = 1)), out, "Octave output is correctly captured (buffer.std = 1)")
     # no buffering
-    checkTrue(!identical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = -1)), out), "Octave output is NOT captured if stdout is not buffered")
+    checkTrue(identical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = -1)), out), "Octave output is still captured if stdout is not buffered")
     
     # Errors
     oerr <- 'This is an Octave error indeed!!!'
@@ -150,12 +152,12 @@ test.redirection <- function(){
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R (buffer.std = 2)")
     # no buffering
     checkException(.CallOctave('error', oerr, buffer.std = -2), "R error is raised by Octave error even when stderr is not buffered")
-    checkTrue(!grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is NOT passed to R if stderr is not buffered")
+    checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is still passed to R if stderr is not buffered")
     
     # Warnings
     checkWarning(.CallOctave('warning', 'aaaa'), "warning: aaa", "Default call buffer warnings")
     checkWarning(.CallOctave('warning', 'aaaa', buffer.std = 2), "warning: aaa", "Default call buffer warnings (buffer.std = 2)")
     checkWarning(.CallOctave('warning', 'aaaa', buffer.std=-2)
-                                               , FALSE, "No warning buffering if not buffering stderr")
+                                               , "warning: aaa", "Warning are still detected if not buffering stderr")
     
 }

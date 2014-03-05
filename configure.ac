@@ -8,8 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-# The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.11)
+AC_INIT([RcppOctave], 0.13.7)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -60,9 +59,9 @@ AC_MSG_CHECKING([whether OS is Mac OS (Darwin)])
 if test "$OStype" == "Darwin" ; then
   darwin="yes"
   
-  ## adapt R_LDFLAGS aimed at mkoctfile: substitute -F/-framework it with -L/-l flags
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)/-L\1\/Libraries/'`
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-framework \([[^ ]]*\)/-l\1/'`
+  ## adapt R_LDFLAGS aimed at mkoctfile: pass them via flag -Wl
+  ## multiple options must be separated by commas
+  R_LDFLAGS=-Wl,"\"$R_LDFLAGS\""
   
   ## we want the *build* cputype and not the host one.
   cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
@@ -103,38 +102,113 @@ AC_SUBST(R_LDFLAGS)
 ##
 ## Check for non-standard programs: 
 ## octave-config
-AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
-## mkoctfile
-AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+
+## Look up for octave binary path from a configure option
+## or an environment variable
+AC_ARG_WITH([octave],
+            AC_HELP_STRING([--with-octave=PATH],
+                           [the location of octave root directory, binary file or bin/ sub-directory]),
+            [octave_path=$withval])
+
+AC_MSG_CHECKING([Octave binary path specification])
+if test [ -n "$octave_path" ] ; then # passed as an option
+  AC_MSG_RESULT([$octave_path [[configure option]]])
+elif test [ -n "${OCTAVE_PATH}" ] ; then
+  octave_path="${OCTAVE_PATH}"
+  AC_MSG_RESULT([$octave_path [[environment]]])
+else
+  AC_MSG_RESULT([none])
+fi
+
+if test [ -n "$octave_path" ] ; then
+	if test [ -f "$octave_path" ] ; then # path is a file: use parent directory
+	  OCTAVE_BINDIR=`AS_DIRNAME(["$octave_path"])`
+	elif test [ -d "$octave_path" ] ; then # path is a directory
+      if test [ -f "$octave_path/octave-config" ] ; then # path contains octave-config
+   	    OCTAVE_BINDIR="$octave_path"
+   	  elif test [ -f "$octave_path/bin/octave-config" ] ; then # path contains bin/ sub-directory
+   	  	OCTAVE_BINDIR="$octave_path/bin"
+   	  fi
+	fi
+    # error if the path specification did not provide the correct information
+    if test [ -z "${OCTAVE_BINDIR}" ] ; then
+	  AC_MSG_ERROR([invalid Octave path specification. Must be either:
+	    * path to Octave root directory;
+	    * path to Octave bin directory;
+	    * path to Octave binary file.
+	  ])
+    fi
+	AC_MSG_RESULT([using Octave binary path ... ${OCTAVE_BINDIR}])
+	
+	# looking up octave-config and mkoctfile
+	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
+	AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile], [], ["${OCTAVE_BINDIR}"])
+else
+  AC_MSG_RESULT([using Octave binary path from \$PATH])
+  # looking up octave-config and mkoctfile
+  AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
+  AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
+fi
 
 ## If octave-config was found, let's use it
-if test "${OCTAVE_CONFIG}" != ""; then	
-    # Use octave-config for header and linker arguments
-    AC_MSG_CHECKING([Octave include directory])
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    AC_MSG_RESULT([${OCTINCLUDEDIR}])
+if test "${OCTAVE_MKOCTFILE}" != ""; then	
+
+	AC_DEFUN([AC_OCTAVE_MKCONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_mkoct_var_$2=`${OCTAVE_MKOCTFILE} --print $2`
+		AC_SUBST([$1], [$ac_mkoct_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	AC_DEFUN([AC_OCTAVE_CONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_octave_var_$2=`${OCTAVE_CONFIG} --print $2`
+		AC_SUBST([$1], [$ac_octave_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	# specify if one uses a custom path to Octave
+    if test [ -n "$octave_path" ] ; then
+      OCTAVE_CUSTOMED=TRUE
+    else 
+      OCTAVE_CUSTOMED=FALSE
+    fi
+    AC_SUBST(OCTAVE_CUSTOMED)
     
-    AC_MSG_CHECKING([Octave library directory])
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    AC_MSG_RESULT([${OCTLIBDIR}])
+	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
+	AC_OCTAVE_CONFIG([OCTAVE_LIBDIR], [OCTLIBDIR], [Octave libraries directory])
     
-    AC_MSG_CHECKING([Octave system library directory])
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    AC_MSG_RESULT([${OCT_SYSLIBDIR}])
-        
+	# Use mkoctfile for compiler and linker arguments
+	AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [CPPFLAGS], [cpp flags])
+    AC_OCTAVE_MKCONFIG([OCT_INCFLAGS], [INCFLAGS], [include flags])
+    OCT_CPPFLAGS+=" ${OCT_INCFLAGS}"
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
+    AC_OCTAVE_MKCONFIG([OCTAVE_LFLAGS], [LFLAGS], [-L flags])
+    AC_OCTAVE_MKCONFIG([OCTAVE_LIBS], [OCTAVE_LIBS], [libraries])
+    # add to LDFLAGS
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
+    
+    # check Octave compilers
+    AC_OCTAVE_MKCONFIG([OCTAVE_CC], [CC], [C compiler])
+    AC_OCTAVE_MKCONFIG([OCTAVE_F77], [F77], [Fortran compiler])
+    
+    # Octave config info
+    AC_OCTAVE_CONFIG([OCTAVE_PLATFORM], [CANONICAL_HOST_TYPE], [platform])
+    AC_OCTAVE_CONFIG([OCTAVE_API_VERSION], [API_VERSION], [API version])
+    
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
-    AC_MSG_CHECKING([Octave version])
-    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
-    AC_MSG_RESULT([${OCTVERSION}])
+    AC_OCTAVE_CONFIG([OCTAVE_VERSION], [VERSION], [version])
     
     CMPV="3.4.3"
     AC_MSG_CHECKING([whether to infer output names for Octave function (>= ${CMPV})])
-    AS_VERSION_COMPARE(${OCTVERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
+    AS_VERSION_COMPARE(${OCTAVE_VERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
     AS_IF([test "${OCT_POST_3_4_0}" != "-1"], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
-    
-else
-    AC_MSG_ERROR([octave-config not found, is Octave installed?
+    # add to CPPFLAGS
+    OCT_CPPFLAGS+=" -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
+
+elif test "$darwin" == "no" ; then
+    AC_MSG_ERROR([mkoctfile not found, is Octave installed?
     
     -> On Debian/Ubuntu please check that the required packages are installed:
     
@@ -150,13 +224,24 @@ else
         # install as usual in R
         install.packages('RcppOctave')
     ])
+else
+	AC_MSG_ERROR([mkoctfile not found, is Octave installed?
+    
+    -> On Mac OS please check that the required packages are installed:
+    
+      * octave package from homebrew (works out of the box):
+        $ brew install gfortran octave
+        
+        # install as usual in R
+        > install.packages('RcppOctave')
+    ])
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST(OCTINCLUDEDIR)
-AC_SUBST(OCTLIBDIR)
-AC_SUBST(OCT_SYSLIBDIR)
-AC_SUBST(OCT_POST_3_4_0)
+AC_MSG_RESULT([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
+AC_SUBST(OCT_LDFLAGS)
+AC_MSG_RESULT([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
+AC_SUBST(OCT_CPPFLAGS)
 
 # Module path
 AC_MSG_CHECKING([RcppOctave Octave module directory])
@@ -167,5 +252,7 @@ AC_SUBST(OCT_MODULES_PATH)
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
+AC_OUTPUT(R/config-vars.R)
 AC_OUTPUT(src/Makevars)
 AC_OUTPUT(src/modules/Makefile)
+

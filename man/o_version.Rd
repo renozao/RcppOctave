@@ -18,6 +18,10 @@
   \code{RcppOctave}.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 o_version()
 o_version("3.6.2")
 o_version("3.4")
