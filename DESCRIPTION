@@ -23,7 +23,7 @@ Depends:
     utils,
     stats,
     Rcpp (>= 0.10.1),
-    pkgmaker (>= 0.17)
+    pkgmaker (>= 0.20)
 Imports:
     digest,
     stringr,
