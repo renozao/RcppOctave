@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Octave.home. RcppOctave 0.14</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Octave Home Directory</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Returns the path to Octave home directory, i.e. the
+  directory that contains the <code>bin/</code> sub-directory
+  where Octave binaries can be found, e.g., typically
+  <code>/usr/</code> on Linux machines.</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>Octave.home(..., configure = FALSE, use.system = TRUE)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>character strings that are appended to Octave
+  path via <code><a href='http://www.inside-r.org/r-doc/base/file.path'>file.path</a></code>.</dd>
+      <dt>configure</dt>
+      <dd>logical that indicates if one should
+  directly return the path that was used when configuring
+  (i.e. installing) <span class = "pkg">RcppOctave</span></dd>
+      <dt>use.system</dt>
+      <dd>logical that indicates if one should
+  try using <code>octave-config</code> to retrieve Octave home
+  directory. This would be done as a last resort, if the
+  path could not be determined in any other ways (see
+  <em>Details</em>).</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>a character string, or <code>NULL</code> if the path was not
+  found.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The path to Octave home directory is determined in the
+  following order:</p>
+  
+      <p><ul>
+<li> value of global option
+  <code>'octave.home'</code>; </li>
+<li> value of the environment
+  variable <code>'OCTAVE_HOME'</code>; </li>
+<li> path used during
+  configuration/installation of <span class = "pkg">RcppOctave</span>. </li>
+<li>
+  path returned by <code>octave-config</code>, which is itself
+  looked up in the system PATH. </li>
+</ul></p>
+  
+      <p>If set, the global option or environment variable should
+  contain the <strong>absolute</strong> path to Octave root
+  directory.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre><code class="r">
+## Don&#39;t show: 
+# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+## End Don&#39;t show
+
+Octave.home()
+</code></pre>
+
+<pre><code>## [1] &quot;/usr/local&quot;
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>Octave.home</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  Other Octave.info: <code><a href='o_config_info.html'>o_config_info</a></code>,
+  <code><a href='octave_config.html'>octave_config</a></code>, <code><a href='Octave.config.html'>Octave.config</a></code>,
+  <code><a href='Octave.config.html'>Octave.info</a></code>, <code><a href='Octave.config.html'>Octave.version</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

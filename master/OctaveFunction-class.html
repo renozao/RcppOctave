@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>OctaveFunction-class. RcppOctave 0.14</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Wrapping and Defining Octave Functions from R</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Wrapping and Defining Octave Functions from R</p>
+<p><code>OctaveFunction</code> objects can be created from
+  existing Octave function using their name, or directly
+  from their Octave implementation. In this case, the
+  Octave code is parsed to extract and use the name of the
+  first function defined therein.</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>OctaveFunction(fun, check = TRUE)
+
+<span class="label label-success">S4</span> (OctaveFunction)
+`show`(object)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fun</dt>
+      <dd>the name of an existing Octave function or,
+  Octave code that defines a function.</dd>
+      <dt>check</dt>
+      <dd>logical that indicates if the existence of
+  the Octave function should be checked. If function does
+  not exist then, an error or a warning is thrown if
+  <code>check=TRUE</code> or <code>check=FALSE</code> respectively. The
+  existence check can be completly disabled with
+  <code>check=NA</code>.</dd>
+      <dt>object</dt>
+      <dd>Any R object</dd>
+    </dl>
+    
+    <div class="Slots">
+      <h2>Slots</h2>
+      
+      <p><ol>
+<li>namename of the wrapped Octave function</p>
+  
+      <p></li>
+</ol></p>
+  
+      <p></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre><code class="r">
+## Don&#39;t show: 
+# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+## End Don&#39;t show
+
+osvd &lt;- OctaveFunction(&#39;svd&#39;)
+osvd
+</code></pre>
+
+<pre><code>## &lt;OctaveFunction::`svd`&gt;
+</code></pre>
+
+<pre><code class="r">osvd(matrix(1:9,3))
+</code></pre>
+
+<pre><code>##           [,1]
+## [1,] 1.685e+01
+## [2,] 1.068e+00
+## [3,] 5.039e-17
+</code></pre>
+
+<pre><code class="r">
+orand &lt;- OctaveFunction(&#39;rand&#39;)
+orand()
+</code></pre>
+
+<pre><code>## [1] 0.9342
+</code></pre>
+
+<pre><code class="r">orand(2)
+</code></pre>
+
+<pre><code>##        [,1]   [,2]
+## [1,] 0.4570 0.2359
+## [2,] 0.6174 0.1808
+</code></pre>
+
+<pre><code class="r">orand(2, 3)
+</code></pre>
+
+<pre><code>##       [,1]   [,2]   [,3]
+## [1,] 0.565 0.1667 0.9107
+## [2,] 0.652 0.7416 0.7210
+</code></pre>
+
+<pre><code class="r">
+# From source code
+myfun &lt;- OctaveFunction(&#39;function [Y] = somefun(x)
+    Y = x * x;
+    end
+&#39;)
+myfun
+</code></pre>
+
+<pre><code>## &lt;OctaveFunction::`somefun`&gt;
+</code></pre>
+
+<pre><code class="r">myfun(10)
+</code></pre>
+
+<pre><code>## [1] 100
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>OctaveFunction</li><li>OctaveFunction-class</li><li>show,OctaveFunction-method</li>
+    </ul>
+    <ul>
+      <li>methods</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

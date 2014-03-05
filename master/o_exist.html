@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>o_exist. RcppOctave 0.14</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Checking Octave Variables</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>Checks if an Octave object of a given name exists, using
+  the Octave function <code>exist</code>.</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>o_exist(NAME, ...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>NAME</dt>
+      <dd>name to check existence.</dd>
+      <dt>...</dt>
+      <dd>extra parameters passed to the Octave function
+  <code>exist</code>.</dd>
+    </dl>
+    
+    <div class="Octave Documentation for &lt;em&gt;exist&lt;/em&gt;">
+      <h2>Octave Documentation for &lt;em&gt;exist&lt;/em&gt;</h2>
+      
+      <p></p>
+  
+      <p><pre> -- Built-in Function: exist (NAME, TYPE)
+     Return 1 if the name exists as a variable, 2 if the name is an
+     absolute file name, an ordinary file in Octave's 'path', or (after
+     appending '.m') a function file in Octave's 'path', 3 if the name
+     is a '.oct' or '.mex' file in Octave's 'path', 5 if the name is a
+     built-in function, 7 if the name is a directory, or 103 if the name
+     is a function not associated with a file (entered on the command
+     line).
+
+     Otherwise, return 0.
+
+     This function also returns 2 if a regular file called NAME exists
+     in Octave's search path.  If you want information about other types
+     of files, you should use some combination of the functions
+     'file_in_path' and 'stat' instead.
+
+     If the optional argument TYPE is supplied, check only for symbols
+     of the specified type.  Valid types are
+
+     "var"
+          Check only for variables.
+
+     "builtin"
+          Check only for built-in functions.
+
+     "file"
+          Check only for files and directories.
+
+     "dir"
+          Check only for directories.
+
+     See also: file_in_loadpath, file_in_path, find_dir_in_path, stat.
+
+</pre></p>
+  
+      <p></p>
+  
+      <p><em>[Generated from
+  Octave-3.8.0
+ on
+  2014-03-05 16:28:51
+]</em></p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>o_exist</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

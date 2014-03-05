@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Simple Gibbs sampler study following Darren Wilkinson. RcppOctave 0.14</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-DEMOS.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Simple Gibbs sampler study following Darren Wilkinson</h1><br />
+
+<div class="row"><div class="span8">
+  <pre>
+  <div class='input'></div><div class='input'>## Gibbs sampler in R and Octave</div><div class='input'>##</div><div class='input'>## Compare with RcppGibbs/ example in Rcpp package</div><div class='input'></div><div class='input'>## Simple Gibbs Sampler Example</div><div class='input'>## Adapted from Darren Wilkinson's post at</div><div class='input'>## http://darrenjw.wordpress.com/2010/04/28/mcmc-programming-in-r-python-java-and-c/</div><div class='input'>##</div><div class='input'>## Sanjog Misra and Dirk Eddelbuettel, June-July 2011</div><div class='input'></div><div class='input'>suppressMessages(library(compiler))
+</div><div class='input'>suppressMessages(library(rbenchmark))
+</div><div class='input'>suppressMessages(library(RcppOctave))
+</div><div class='input'></div><div class='input'>## This is Darren Wilkinsons R code (with the corrected variance)</div><div class='input'>## But we are returning only his columns 2 and 3 as the 1:N sequence</div><div class='input'>## is never used below</div><div class='input'>Rgibbs <- function(N,thin) {
+    mat <- matrix(0,ncol=2,nrow=N)
+    x <- 0
+    y <- 0
+    for (i in 1:N) {
+        for (j in 1:thin) {
+            x <- rgamma(1,3,y*y+4)
+            y <- rnorm(1,1/(x+1),1/sqrt(2*(x+1)))
+        }
+        mat[i,] <- c(x,y)
+    }
+    mat
+}
+</div><div class='input'></div><div class='input'>## We can also try the R compiler on this R function</div><div class='input'>RCgibbs <- cmpfun(Rgibbs)
+</div><div class='input'></div><div class='input'>Mgibbs <- OctaveFunction('
+  function mat = Mgibbs(N, thin)
+    mat = zeros(N, 2);
+    x = 0;
+    y = 0;
+    for i = 1:N
+      for j = 1:thin
+        x = randg(3) / (y*y+4);
+        y = randn(1)*1/sqrt(2*(x+1)) + 1/(x+1);
+      end
+      mat(i,:) = [ x, y ];
+    end
+  end
+')
+</div><div class='input'></div><div class='input'>## Octave docs:</div><div class='input'>##     `gamma (a, b)' for `a > -1', `b > 0'</div><div class='input'>##               r = b * randg (a)</div><div class='input'></div><div class='input'>## CORRECTION:  set.seed(42); .O$gam(2,3)</div><div class='input'>##         ==   set.seed(42); rgamma(1,2,1,3)</div><div class='input'>##         ==   set.seed(42); rgamma(1,2,1)*3</div><div class='input'>##         ==   set.seed(42); o_rgamma(1,1,2,3)</div><div class='input'># set.seed(42); .O$gam(47,88); set.seed(42); rgamma(1,47,1,88);  o_rgamma(1,1,47,88)</div><div class='input'># set.seed(42); .O$gam(47,88); set.seed(42); rgamma(1,47,1,88); set.seed(42); o_rgamma(1,1,47,88)</div><div class='input'></div><div class='input'>set.seed(42)
+</div><div class='input'>matR <- Rgibbs(1000,10)
+</div><div class='input'>set.seed(42)
+</div><div class='input'>matO <- Mgibbs(1000,10)
+</div><div class='input'>stopifnot(all.equal(matR, matO))
+</div><div class='input'></div><div class='input'>##print(summary(matR))</div><div class='input'>##print(summary(matO))</div><div class='input'></div><div class='input'>## also use rbenchmark package</div><div class='input'>N <- 1000
+</div><div class='input'>thn <- 100
+</div><div class='input'>res <- benchmark(Rgibbs(N, thn),
+                 RCgibbs(N, thn),
+                 Mgibbs(N, thn),
+                 columns=c("test", "replications", "elapsed",
+                           "relative", "user.self", "sys.self"),
+                 order="relative",
+                 replications=10)
+</div><div class='input'>print(res)
+</div>
+<div class='output'>             test replications elapsed relative user.self sys.self
+2 RCgibbs(N, thn)           10   9.831    1.000     9.827    0.000
+1  Rgibbs(N, thn)           10  12.025    1.223    12.020    0.000
+3  Mgibbs(N, thn)           10  27.834    2.831    27.824    0.008
+</div>
+  </pre>
+</div></div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
