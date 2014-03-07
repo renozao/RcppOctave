@@ -13,6 +13,7 @@ Description: Direct interface to Octave. The primary goal is to facilitate the
 License: GPL (>=2)
 URL: http://renozao.github.io/RcppOctave
 BugReports: http://github.com/renozao/RcppOctave/issues
+SCM: github:renozao, r-forge
 LazyLoad: yes
 SystemRequirements: Octave (>= 3.2.4) and its development files
 Depends:
