@@ -3,7 +3,9 @@ Changes in 0.14
 ********************
 CHANGES
     o added a configure option --with-octave to specify the path to a non-standard
-    Octave installation.
+    Octave installation. For example:
+    R CMD INSTALL --configure-args="--with-octave=/opt/octave" RcppOctave_0.14.tar.gz
+    o Handling of Octave outputs and error messages have been improved.
     
 FIXES
     o Some changes have been made so that the package is compatible with Octave 3.8

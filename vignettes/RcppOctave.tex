@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_6b477de88d3d/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_4ab23b18a8c3/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -147,8 +147,8 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.14
-[March  5, 2014]\footnote{This vignette was built using \octave
+\date{\Rpkg{RcppOctave} -- Version 0.14.1
+[March 10, 2014]\footnote{This vignette was built using \octave
 3.8.0}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -498,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5170 0.6824 0.3656 0.4314
+## [1] 0.78450 0.05599 0.75929 0.16115
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -506,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.0503 0.4100 0.1331 0.6679
+## [1] 0.3051 0.0535 0.4899 0.9825
 ## 
 ## $b
-##        [,1]   [,2]   [,3]
-## [1,] 0.2915 0.1338 0.6036
-## [2,] 0.4920 0.8285 0.7057
+##        [,1]   [,2]     [,3]
+## [1,] 0.4039 0.7347 0.822640
+## [2,] 0.3700 0.2118 0.005014
 ## 
 ## $c
 ## [1] "some text"
@@ -580,7 +580,7 @@ The other types of computations can be obtained using argument \code{argout}:
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `fun\_varargout`:\\\#\#\ \  error:\ \  fun\_varargout at line 34, column 7}}\end{kframe}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `fun\_varargout`:\\\#\#\ \  usage: Expecting 1 or 3 output variables.\\\#\#\ \ \ \  fun\_varargout at line 34, column 7}}\end{kframe}
 \end{knitrout}
 
 
@@ -928,19 +928,19 @@ can also evaluate a list of statements sequentially:
 \hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##         [,1]
-## [1,] 1.51788
-## [2,] 0.25908
-## [3,] 0.01084
+##        [,1]
+## [1,] 1.7368
+## [2,] 0.6801
+## [3,] 0.3309
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-##         [,1]
-## [1,] 1.51788
-## [2,] 0.25908
-## [3,] 0.01084
+##        [,1]
+## [1,] 1.7368
+## [2,] 0.6801
+## [3,] 0.3309
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -949,13 +949,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.2627 0.3801
+## [1] 0.7761 0.1548
 ## 
 ## [[2]]
-## [1] -1.55072 -0.06703
+## [1]  0.8761 -0.9049
 ## 
 ## [[3]]
-## [1] 0.3170 0.1008 0.9161
+## [1] 0.7096 0.1897 0.7677
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -970,11 +970,11 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `eval`:\\\#\#\ \  error: eval: invalid use of statement list}}\begin{alltt}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `eval`:\\\#\#\ \  eval: invalid use of statement list}}\begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.2627 0.3801
+## [1] 0.7761 0.1548
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -987,7 +987,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.2627 0.3801
+## [1] 0.7761 0.1548
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1190,11 +1190,11 @@ Windows, output redirection does not working properly and all output is
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `error`:\\\#\#\ \  error: this is an error in Octave}}\begin{alltt}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: RcppOctave - error in Octave function `error`:\\\#\#\ \  this is an error in Octave}}\begin{alltt}
 \hlkwd{geterrmessage}\hlstd{()}
 \end{alltt}
 \begin{verbatim}
-## [1] "Error in .CallOctave(\"error\", \"this is an error in Octave\") : \n  RcppOctave - error in Octave function `error`:\n  error: this is an error in Octave\n\n"
+## [1] "Error in .CallOctave(\"error\", \"this is an error in Octave\") : \n  RcppOctave - error in Octave function `error`:\n  this is an error in Octave\n\n"
 \end{verbatim}
 \begin{alltt}
 \hlcom{# warning}
@@ -1202,7 +1202,7 @@ Windows, output redirection does not working properly and all output is
 \end{alltt}
 
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: warning: this is a warning in Octave}}\end{kframe}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: this is a warning in Octave}}\end{kframe}
 \end{knitrout}
 
 
@@ -1254,9 +1254,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 3.1565 0.7806 0.3641 0.2775 0.0596
-##  $ u: num [1:5, 1:5] -0.351 -0.474 -0.415 -0.397 -0.568 ...
-##  $ v: num [1:5, 1:5] -0.391 -0.502 -0.447 -0.415 -0.471 ...
+##  $ d: num [1:5] 2.5398 1.0167 0.6231 0.3324 0.0574
+##  $ u: num [1:5, 1:5] -0.244 -0.31 -0.482 -0.546 -0.561 ...
+##  $ v: num [1:5, 1:5] -0.584 -0.432 -0.34 -0.461 -0.38 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1270,8 +1270,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 3.758e-16"
-## [2] "Component 3: Mean relative difference: 2.931e-16"
+## [1] "Component 2: Mean relative difference: 4.656e-16"
+## [2] "Component 3: Mean relative difference: 3.531e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1361,7 +1361,9 @@ Changes in 0.14
 ********************
 CHANGES
     o added a configure option --with-octave to specify the path to a non-standard
-    Octave installation.
+    Octave installation. For example:
+    R CMD INSTALL --configure-args="--with-octave=/opt/octave" RcppOctave_0.14.tar.gz
+    o Handling of Octave outputs and error messages have been improved.
     
 FIXES
     o Some changes have been made so that the package is compatible with Octave 3.8
@@ -1425,8 +1427,8 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.14 pkgmaker_0.20   registry_0.2    Rcpp_0.11.0    
-[5] knitr_1.5      
+[1] RcppOctave_0.14.1 pkgmaker_0.20     registry_0.2      Rcpp_0.11.0      
+[5] knitr_1.5        
 
 loaded via a namespace (and not attached):
 [1] codetools_0.2-8 digest_0.6.4    evaluate_0.5.1  formatR_0.10   
