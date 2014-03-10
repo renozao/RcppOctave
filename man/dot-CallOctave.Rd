@@ -3,7 +3,8 @@
 \title{Calling an Octave Function}
 \usage{
   .CallOctave(.NAME, ..., argout = -1,
-    unlist = !is.character(argout), buffer.std = -1L)
+    unlist = !is.character(argout), buffer.std = -1L,
+    verbose = NULL)
 }
 \arguments{
   \item{.NAME}{an Octave function name. The function must
@@ -44,6 +45,11 @@
   Note that warnings are handle slightly differently than
   other messages, as they are never output directly, except
   when \code{buffer.std = 0}.}
+
+  \item{verbose}{logical that toggles verbosity (i.e.
+  debug) messages. If \code{NULL}, then the current
+  verbosity level is used (see
+  \code{\link{octave_verbose}}).}
 }
 \value{
   the value returned by the Octave function -- converted
