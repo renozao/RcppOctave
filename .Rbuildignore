@@ -21,4 +21,4 @@ staticdocs
 ^\.Rproj\.user$
 ^README.md$
 ^pkg/
-
+^\.travis\.yml$
