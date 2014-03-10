@@ -30,6 +30,10 @@ class Octave_Rstreambuf : public Rcpp::Rstreambuf<OUTPUT> {
 
 		void send_to_R(const char* head = NULL, bool stop = false, bool warn = true);
 
+		std::string str() const{
+			return _output.str();
+		}
+
 	protected:
 		virtual std::streamsize xsputn(const char *s, std::streamsize n );
 
@@ -156,6 +160,10 @@ public:
 
 	Buffer* Rrdbuf(){
 		return static_cast<Buffer*>( rdbuf() );
+	}
+
+	std::string str() const{
+		return buf->str();
 	}
 };
 
