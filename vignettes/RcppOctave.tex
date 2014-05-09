@@ -129,7 +129,7 @@
 \usepackage[minnames=1,maxnames=2]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_4ab23b18a8c3/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_283c1a3a4e45/RcppOctave/REFERENCES}
 
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
@@ -147,9 +147,9 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.14.1
-[March 10, 2014]\footnote{This vignette was built using \octave
-3.8.0}}
+\date{\Rpkg{RcppOctave} -- Version 0.14.2
+[May  9, 2014]\footnote{This vignette was built using \octave
+3.6.4}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
@@ -354,7 +354,7 @@ Calling any \octave function is then as simple as:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"version"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "3.8.0"
+## [1] "3.6.4"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"sqrt"}\hlstd{,} \hlnum{10}\hlstd{)}
@@ -498,7 +498,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{"fun1"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.78450 0.05599 0.75929 0.16115
+## [1] 0.8026 0.4932 0.1184 0.6709
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values}
@@ -506,12 +506,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.3051 0.0535 0.4899 0.9825
+## [1] 0.9176 0.5341 0.1338 0.4786
 ## 
 ## $b
-##        [,1]   [,2]     [,3]
-## [1,] 0.4039 0.7347 0.822640
-## [2,] 0.3700 0.2118 0.005014
+##        [,1]   [,2]   [,3]
+## [1,] 0.7249 0.3322 0.3428
+## [2,] 0.7487 0.1552 0.5636
 ## 
 ## $c
 ## [1] "some text"
@@ -673,7 +673,7 @@ Using the \code{.O} object, calls to \octave functions are more compact:
 \hlstd{.O}\hlopt{$}\hlkwd{version}\hlstd{()}
 \end{alltt}
 \begin{verbatim}
-## [1] "3.8.0"
+## [1] "3.6.4"
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlkwd{eye}\hlstd{(}\hlnum{3}\hlstd{)}
@@ -928,19 +928,19 @@ can also evaluate a list of statements sequentially:
 \hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##        [,1]
-## [1,] 1.7368
-## [2,] 0.6801
-## [3,] 0.3309
+##         [,1]
+## [1,] 1.60491
+## [2,] 0.63496
+## [3,] 0.06564
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-##        [,1]
-## [1,] 1.7368
-## [2,] 0.6801
-## [3,] 0.3309
+##         [,1]
+## [1,] 1.60491
+## [2,] 0.63496
+## [3,] 0.06564
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -949,13 +949,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.7761 0.1548
+## [1] 0.9095 0.3805
 ## 
 ## [[2]]
-## [1]  0.8761 -0.9049
+## [1] 1.296 1.112
 ## 
 ## [[3]]
-## [1] 0.7096 0.1897 0.7677
+## [1] 0.35840 0.92289 0.07028
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -974,7 +974,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.7761 0.1548
+## [1] 0.9095 0.3805
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -987,7 +987,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.7761 0.1548
+## [1] 0.9095 0.3805
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1254,9 +1254,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.5398 1.0167 0.6231 0.3324 0.0574
-##  $ u: num [1:5, 1:5] -0.244 -0.31 -0.482 -0.546 -0.561 ...
-##  $ v: num [1:5, 1:5] -0.584 -0.432 -0.34 -0.461 -0.38 ...
+##  $ d: num [1:5] 3.1355 0.8341 0.4872 0.3564 0.0239
+##  $ u: num [1:5, 1:5] -0.591 -0.353 -0.346 -0.552 -0.319 ...
+##  $ v: num [1:5, 1:5] -0.351 -0.385 -0.555 -0.403 -0.508 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1270,8 +1270,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol} \hlstd{=} \hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component 2: Mean relative difference: 4.656e-16"
-## [2] "Component 3: Mean relative difference: 3.531e-16"
+## [1] "Component \"u\": Mean relative difference: 4.104e-16"
+## [2] "Component \"v\": Mean relative difference: 3.238e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1412,12 +1412,12 @@ CHANGES
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-R version 3.0.2 (2013-09-25)
+R version 3.1.0 (2014-04-10)
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 locale:
  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=C                  LC_COLLATE=en_US.UTF-8    
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
@@ -1427,12 +1427,12 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] RcppOctave_0.14.1 pkgmaker_0.20     registry_0.2      Rcpp_0.11.0      
+[1] RcppOctave_0.14.2 pkgmaker_0.21.1   registry_0.2      Rcpp_0.11.1      
 [5] knitr_1.5        
 
 loaded via a namespace (and not attached):
-[1] codetools_0.2-8 digest_0.6.4    evaluate_0.5.1  formatR_0.10   
-[5] highr_0.3       stringr_0.6.2   tools_3.0.2     xtable_1.7-1   
+[1] codetools_0.2-8 digest_0.6.4    evaluate_0.5.5  formatR_0.10   
+[5] highr_0.3       stringr_0.6.2   tools_3.1.0     xtable_1.7-3   
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
