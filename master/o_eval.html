@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_eval. RcppOctave 0.14</title>
+<title>o_eval. RcppOctave 0.14.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -51,7 +51,7 @@
     </form>--> 
     <ul class="nav navbar-nav navbar-right">
       <li><p class="navbar-text">
-      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14.2</span>
       &nbsp;</p></li>
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -108,18 +108,18 @@
       <p><pre> -- Built-in Function: evalin (CONTEXT, TRY)
  -- Built-in Function: evalin (CONTEXT, TRY, CATCH)
      Like 'eval', except that the expressions are evaluated in the
-     context CONTEXT, which may be either "caller" or "base".
+     context CONTEXT, which may be either '"caller"' or '"base"'.
 
-     See also: eval, assignin.
+     See also: eval, assignin
 
 </pre></p>
   
       <p></p>
   
       <p><em>[Generated from
-  Octave-3.8.0
+  Octave-3.6.4
  on
-  2014-03-07 09:33:43
+  2014-05-21 11:08:13
 ]</em></p>
   
     </div>
@@ -175,24 +175,24 @@ o_eval(a=&quot;10^3&quot;, singular=&quot;svd(rand(4,4))&quot;, random=&quot;ran
 ## [1] 1000
 ## 
 ## $singular
-##         [,1]
-## [1,] 2.28371
-## [2,] 0.64758
-## [3,] 0.26682
-## [4,] 0.03769
+##        [,1]
+## [1,] 2.5279
+## [2,] 0.7602
+## [3,] 0.4378
+## [4,] 0.1092
 ## 
 ## $random
-##         [,1]
-##  [1,] 0.4704
-##  [2,] 0.2018
-##  [3,] 0.7573
-##  [4,] 0.1019
-##  [5,] 0.8362
-##  [6,] 0.9936
-##  [7,] 0.6074
-##  [8,] 0.3372
-##  [9,] 0.9756
-## [10,] 0.7200
+##          [,1]
+##  [1,] 0.36440
+##  [2,] 0.06064
+##  [3,] 0.10844
+##  [4,] 0.84044
+##  [5,] 0.90227
+##  [6,] 0.35084
+##  [7,] 0.45517
+##  [8,] 0.23446
+##  [9,] 0.32442
+## [10,] 0.06486
 </code></pre>
 
 <pre><code class="r"># or from a list
@@ -204,24 +204,24 @@ o_eval(l)
 ## [1] 1000
 ## 
 ## $singular
-##         [,1]
-## [1,] 2.01425
-## [2,] 0.56982
-## [3,] 0.27619
-## [4,] 0.07883
+##        [,1]
+## [1,] 2.0231
+## [2,] 0.6018
+## [3,] 0.2792
+## [4,] 0.1155
 ## 
 ## $random
 ##          [,1]
-##  [1,] 0.35165
-##  [2,] 0.61069
-##  [3,] 0.98800
-##  [4,] 0.22875
-##  [5,] 0.19967
-##  [6,] 0.01476
-##  [7,] 0.31938
-##  [8,] 0.39246
-##  [9,] 0.35725
-## [10,] 0.72344
+##  [1,] 0.40495
+##  [2,] 0.93367
+##  [3,] 0.08573
+##  [4,] 0.51738
+##  [5,] 0.81349
+##  [6,] 0.57310
+##  [7,] 0.53813
+##  [8,] 0.51668
+##  [9,] 0.05332
+## [10,] 0.80864
 </code></pre>
 
 <pre><code class="r">

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>. RcppOctave 0.14.2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Renaud Gaujoux">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">RcppOctave</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href=""><span class="glyphicon glyphicon-home"></span> Index</a></li>
+       <li><a href="PAGE-MAN.html">Documentation</a></li>
+       <li><a href="PAGE-DEMOS.html">Demos</a></li>
+       <li><a href="PAGE-FAQ.html">FAQ</a></li>
+       <li><a href="PAGE-REFERENCES.html">References</a></li>
+       <li><a href="PAGE-INSTALLATION.html">Installation</a></li>
+       <li class="active"><a href="PAGE-NEWS.html">News</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14.2</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <div class="row"><div class="span8">
+  <ol>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Changes in 0.14.2</div>
+	  <div class="panel-body">
+	    <h4>NEW FEATURES</h4>
+
+<ul>
+<li>Function .CallOctave gains a new argument <code>verbose</code> to specify a temporary 
+verbose level
+#### FIXES</li>
+<li>Fixed installation issue on Windows that were introduced with new installation
+features in 0.14.</li>
+<li>Fixed bug in output redirection when linking against old octave 3.2: method str() 
+was not defined</li>
+</ul>
+
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Changes in 0.14</div>
+	  <div class="panel-body">
+	    <h4>CHANGES</h4>
+
+<ul>
+<li>added a configure option &ndash;with-octave to specify the path to a non-standard
+Octave installation. For example:
+R CMD INSTALL &ndash;configure-args=&ldquo;&ndash;with-octave=/opt/octave&rdquo; RcppOctave_0.14.tar.gz</li>
+<li>Handling of Octave outputs and error messages have been improved.</li>
+</ul>
+
+<h4>FIXES</h4>
+
+<ul>
+<li>Some changes have been made so that the package is compatible with Octave 3.8
+(reported by Bernard)</li>
+<li>Installation was failing when Octave was compiled with hdf5-mpi support.</li>
+</ul>
+
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Changes in 0.11</div>
+	  <div class="panel-body">
+	    <h4>NEW FEATURES</h4>
+
+<ul>
+<li>The package have successfully been installed on Windows machines, 
+although only basic functionalities have been tested (see README file).</li>
+<li>Support for Mac have also started, although even more slightly, using
+the Octave version available from homebrew.</li>
+</ul>
+
+<h4>CHANGES</h4>
+
+<ul>
+<li>Moved all developments/bug reports/static docs to GitHub repository:
+<a href="https://github.com/renozao/RcppOctave/">https://github.com/renozao/RcppOctave/</a> </li>
+<li>Octave functions&#39; stdout and stderr messages are now buffered by default, so 
+that it does not bypass R own i/o functions.
+All messages/warnings sent to stdout/stderr from Octave are displayed on 
+exiting the function call.</li>
+<li>function .CallOctave gains a new argument buffer.std to enable/disable 
+stdout and/or stderr buffering (see ?.CallOctave).</li>
+<li>Octave startup warnings (e.g. shadowing of core functions by Octave modules) 
+are not shown anymore.</li>
+<li>Minor adaptations to pass new CRAN checks</li>
+<li>The package now depends on R &gt;= 3.0.0 to properly handle the knitr vignettes.</li>
+<li>Errors are now more properly handled, thanks to hints found in this 
+old post by Romain François:
+<a href="http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html">http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html</a></li>
+</ul>
+
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Changes in 0.9.3</div>
+	  <div class="panel-body">
+	    <h4>CHANGES</h4>
+
+<ul>
+<li>Conditional use of function packageName: use the one from pkgmaker 
+in R &lt;= 2.15.3, or the one exported by utils in R &gt;= 3.0. </li>
+</ul>
+
+	  </div>
+	</div>
+  </ol>
+</div></div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

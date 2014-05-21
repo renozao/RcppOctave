@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_addpath. RcppOctave 0.14</title>
+<title>o_addpath. RcppOctave 0.14.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -51,7 +51,7 @@
     </form>--> 
     <ul class="nav navbar-nav navbar-right">
       <li><p class="navbar-text">
-      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14.2</span>
       &nbsp;</p></li>
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -118,7 +118,7 @@ o_inpath(...)</pre>
   
       <p><pre> -- Built-in Function: addpath (DIR1, ...)
  -- Built-in Function: addpath (DIR1, ..., OPTION)
-     Add named directories to the function search path.  If OPTION is
+     Add DIR1, ... to the current function search path.  If OPTION is
      "-begin" or 0 (the default), prepend the directory name to the
      current path.  If OPTION is "-end" or 1, append the directory name
      to the current path.  Directories added to the path must exist.
@@ -127,18 +127,18 @@ o_inpath(...)</pre>
      directory names separated by 'pathsep' are also accepted.  For
      example:
 
-          addpath ("dir1:/dir2:~/dir3")
+          addpath ("dir1:/dir2:~/dir3");
 
-     See also: path, rmpath, genpath, pathdef, savepath, pathsep.
+     See also: path, rmpath, genpath, pathdef, savepath, pathsep
 
 </pre></p>
   
       <p></p>
   
       <p><em>[Generated from
-  Octave-3.8.0
+  Octave-3.6.4
  on
-  2014-03-07 09:33:38
+  2014-05-21 11:08:10
 ]</em></p>
   
     </div>
@@ -160,7 +160,10 @@ try(.CallOctave(&#39;fun1&#39;))
 o_addpath(system.file(&#39;scripts&#39;, package=&#39;RcppOctave&#39;))
 </code></pre>
 
-<pre><code>## Warning: warning: autoload: &#39;example.m&#39; is not an absolute file name
+<pre><code>## Warning: autoload: &#39;example.m&#39; is not an absolute file name
+## autoload: &#39;example.m&#39; is not an absolute file name
+## autoload: &#39;example.m&#39; is not an absolute file name
+## autoload: &#39;example.m&#39; is not an absolute file name
 </code></pre>
 
 <pre><code class="r">
@@ -176,15 +179,15 @@ o_addpath(tempdir())
 o_inpath(tempdir())
 </code></pre>
 
-<pre><code>## /tmp/RtmpMaJifF 
+<pre><code>## /tmp/Rtmpf8pqLM 
 ##            TRUE
 </code></pre>
 
 <pre><code class="r">o_inpath(tempfile())
 </code></pre>
 
-<pre><code>## /tmp/RtmpMaJifF/file1b2d40f79951 
-##                            FALSE
+<pre><code>## /tmp/Rtmpf8pqLM/file344c5055eb4 
+##                           FALSE
 </code></pre>
 
 <pre><code class="r">

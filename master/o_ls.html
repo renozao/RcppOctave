@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>o_ls. RcppOctave 0.14</title>
+<title>o_ls. RcppOctave 0.14.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -51,7 +51,7 @@
     </form>--> 
     <ul class="nav navbar-nav navbar-right">
       <li><p class="navbar-text">
-      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14</span>
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;0.14.2</span>
       &nbsp;</p></li>
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -122,6 +122,10 @@ o_assign(list(a=1, b=2, c=5))
 o_ls()
 </code></pre>
 
+<pre><code>## Warning: function name &#39;fun1&#39; does not agree with function file name
+## &#39;/tmp/Rtmpf8pqLM/file344cc6a2bd2/RcppOctave/scripts/ex_functions.m&#39;
+</code></pre>
+
 <pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
 </code></pre>
 
@@ -147,6 +151,10 @@ o_who() # should be the same output
 o_clear(all=TRUE) # first clear Octave session
 o_source(system.file(&#39;scripts/ex_source.m&#39;, package=&#39;RcppOctave&#39;))
 o_ls()
+</code></pre>
+
+<pre><code>## Warning: function name &#39;fun1&#39; does not agree with function file name
+## &#39;/tmp/Rtmpf8pqLM/file344cc6a2bd2/RcppOctave/scripts/ex_functions.m&#39;
 </code></pre>
 
 <pre><code>## [1] &quot;a&quot;   &quot;b&quot;   &quot;c&quot;   &quot;abc&quot;
