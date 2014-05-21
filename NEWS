@@ -1,4 +1,16 @@
 ********************
+Changes in 0.14.2
+********************
+NEW FEATURES
+    o Function .CallOctave gains a new argument `verbose` to specify a temporary 
+    verbose level
+FIXES
+    o Fixed installation issue on Windows that were introduced with new installation
+    features in 0.14.
+    O Fixed bug in output redirection when linking against old octave 3.2: method str() 
+    was not defined
+
+********************
 Changes in 0.14
 ********************
 CHANGES
