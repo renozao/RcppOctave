@@ -327,6 +327,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 						, int buffer) {
 
 	VERBOSE_LOG("octave_feval - Calling Octave function `%s` with %i argument(s)\n", fname.c_str(), args.length());
+	VERBOSE_LOG("octave_feval - Buffering level: %i\n", buffer);
 
 	// update time stamps to reload modified functions if necessary
 	Vlast_prompt_time.stamp();
@@ -445,7 +446,6 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 
 	octave_restore_signal_mask();
 	octave_initialized = false;
-
 
 	// throw an R error
 	std::ostringstream err;

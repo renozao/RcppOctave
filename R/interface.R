@@ -44,6 +44,10 @@ NULL
 #' Note that warnings are handle slightly differently than other messages, 
 #' as they are never output directly, except when \code{buffer.std = 0}.
 #' 
+#' @param verbose logical that toggles verbosity (i.e. debug) messages.
+#' If \code{NULL}, then the current verbosity level is used 
+#' (see \code{\link{octave_verbose}}).
+#' 
 #' @return the value returned by the Octave function -- converted into standard 
 #' R objects.
 #' 
@@ -62,8 +66,12 @@ NULL
 #' # call Octave function 'svd' asking for 3 named output values: [U, S, V] = svd(x)
 #' .CallOctave('svd', x, argout=c('U', 'S', 'V'))
 #' 
-.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L){
+.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL){
 	
+    if( !is.null(verbose) ){
+        ov <- octave_verbose(verbose)
+        on.exit( octave_verbose(ov), add = TRUE)
+    }
     if( isTRUE(buffer.std) ) buffer.std <- 7L
     res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, PACKAGE='RcppOctave')
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()

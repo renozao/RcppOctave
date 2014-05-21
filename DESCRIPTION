@@ -1,7 +1,7 @@
 Package: RcppOctave
 Type: Package
 Title: Seamless Interface to Octave -- and Matlab
-Version: 0.14
+Version: 0.14.2
 Date: 2013-11-07
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@tx.technion.ac.il>
@@ -13,7 +13,7 @@ Description: Direct interface to Octave. The primary goal is to facilitate the
 License: GPL (>=2)
 URL: http://renozao.github.io/RcppOctave
 BugReports: http://github.com/renozao/RcppOctave/issues
-SCM: github:renozao, r-forge
+SCM: github:renozao, r-forge, CRAN
 LazyLoad: yes
 SystemRequirements: Octave (>= 3.2.4) and its development files
 Depends:

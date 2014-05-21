@@ -15,56 +15,92 @@ class Octave_Rstreambuf : public Rcpp::Rstreambuf<OUTPUT> {
 		std::stringstream _output;
 		std::stringstream _errors;
 		std::stringstream _warnings;
+		std::stringstream _usages;
 	public:
 		Octave_Rstreambuf(int sink_level = 0) :
 			Rcpp::Rstreambuf<OUTPUT>()
 			, _sink(sink_level)
-		{}
-
-		void flush(const char* head = NULL, bool stop = false, bool warn = true){
-
-			if( OUTPUT ){
-				if( head != NULL ) Rcpp::Rcout << head << ":" << std::endl << "  ";
-				std::string buf_msg = _output.str();
-				if( buf_msg.length() > 0 ){
-				    Rcpp::Rcout << _output.str();
-				    _output.clear();
-                 }
-			}else{
-				// Warnings
-				std::string buf_msg = _warnings.str();
-				if( warn && buf_msg.length() > 0 ){
-					std::ostringstream omsg;
-					if( head != NULL ) omsg << head << ":" << std::endl << "  ";
-					omsg << buf_msg;
-					_warnings.clear();
-					Rf_warning("%s", omsg.str().c_str());
-				}
-
-				// Errors
-				buf_msg = _errors.str();
-				if( stop || buf_msg.length() > 0 ){
-					std::ostringstream omsg;
-					if( head != NULL ) omsg << head << ":" << std::endl << "  ";
-					omsg << buf_msg;
-					_errors.clear();
-					// throw an exception not Rf_error
-					// See: http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html
-					throw std::string(omsg.str());
-				}
-			}
-
+		{
+			// clear all buffers
+			_output.str(std::string());
+			_errors.str(std::string());
+			_warnings.str(std::string());
+			_usages.str(std::string());
 		}
+
+		void send_to_R(const char* head = NULL, bool stop = false, bool warn = true);
+
+		std::string str() const{
+			return _output.str();
+		}
+
 	protected:
 		virtual std::streamsize xsputn(const char *s, std::streamsize n );
+
+		// dump usage strings as errors or normal output
+		void dump_usage(bool as_error = false){
+			if( _usages.str().length() ){
+				if( as_error ) _errors << _usages.str() << "  ";
+				else _output << _usages.str();
+				// clear usage buffer
+				_usages.str(std::string());
+			}
+		}
 };
+
+template <> inline void Octave_Rstreambuf<true>::send_to_R(const char* head, bool stop, bool warn){
+
+	// Output: write to R stdout
+	std::string buf_msg = _output.str();
+	if( head != NULL ) Rcpp::Rcout << head << ":" << std::endl << "  ";
+	if( buf_msg.length() > 0 ){
+		Rcpp::Rcout << _output.str();
+		// clear buffer
+		_output.str(std::string());
+	}
+}
+
+template <> inline void Octave_Rstreambuf<false>::send_to_R(const char* head, bool stop, bool warn){
+
+	// flush usage: in errors if in stop mode
+	dump_usage(stop);
+
+	// Messages: write to R stderr
+	if( _output.str().length() > 0 ){
+		REprintf(_output.str().c_str());
+		_output.str(std::string());
+	}
+
+	// Warnings: throw R warnings
+	std::string buf_msg = _warnings.str();
+	if( warn && buf_msg.length() > 0 ){
+		std::ostringstream omsg;
+		if( head != NULL ) omsg << head << ":" << std::endl << "  ";
+		omsg << buf_msg;
+		_warnings.str(std::string());
+		Rf_warning("%s", omsg.str().c_str());
+	}
+
+	// Errors
+	buf_msg = _errors.str();
+	if( stop || buf_msg.length() > 0 ){
+		std::ostringstream omsg;
+		if( head != NULL ) omsg << head << ":" << std::endl << "  ";
+		omsg << buf_msg;
+		_errors.str(std::string());
+		// throw an exception not Rf_error
+		// See: http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2010-May/000651.html
+		throw std::string(omsg.str());
+	}
+
+}
 
 template <> inline std::streamsize Octave_Rstreambuf<true>::xsputn(const char *s, std::streamsize n ){
 
-	// sink std Octave output
+	// sink std output
 	if( _sink & 1 ){
 		_output << s;
-		return(0);
+		return(n);
 	}
 	// send to R
 	return Rcpp::Rstreambuf<true>::xsputn(s, n);
@@ -73,17 +109,35 @@ template <> inline std::streamsize Octave_Rstreambuf<true>::xsputn(const char *s
 template <> inline std::streamsize Octave_Rstreambuf<false>::xsputn(const char *s, std::streamsize n ){
 
 	//detect warning/error
-	if( strstr(s, "error:") == s ){
-		_errors << s;
-		if( _sink & 2 ) return(0); // sink errors
-	}else if( strstr(s, "warning:") == s ){
+	if( strstr(s, "error: ") == s || error_state ){
+		// flush possible previous usage messages
+		dump_usage(true);
+
+		_errors << (s + 7);
+		if( _sink & 2 ) return(n); // sink errors
+
+	}else if( strstr(s, "usage: ") == s ){ // usage string
+		_usages << s;
+
+		if( _sink & 2 ) return(n); // sink errors
+
+	}else if( strstr(s, "warning: ") == s ){
+		// flush possible previous usage messages
+		dump_usage();
 		// sink warnings? (store to throw them later)
-		if( _sink & 4 ) _warnings << s;
-		else Rf_warning("%s", s);
+		if( _sink & 4 ) _warnings << (s+9);
+		else Rf_warning("%s", s+9);
+
 		// never output plain warning
-		if( _sink != 0 ) return(0);
+		if( _sink != 0 ) return(n);
+
+	}else if( _sink & 2 ){ // sink messages
+		// flush possible previous usage messages
+		dump_usage();
+		_output << s;
+		return(n);
 	}
-	// call parent method
+	// Send to R
 	return Rcpp::Rstreambuf<false>::xsputn(s, n);
 }
 
@@ -106,6 +160,10 @@ public:
 
 	Buffer* Rrdbuf(){
 		return static_cast<Buffer*>( rdbuf() );
+	}
+
+	std::string str() const{
+		return buf->str();
 	}
 };
 
@@ -156,9 +214,9 @@ public:
 
 	void flush(const char* head = NULL, bool stop = false, bool warn = true){
 		// stdout
-		_cout.Rrdbuf()->flush();
+		_cout.Rrdbuf()->send_to_R();
 		// stderr
-		_cerr.Rrdbuf()->flush(head, stop, warn);
+		_cerr.Rrdbuf()->send_to_R(head, stop, warn);
 
 	}
 

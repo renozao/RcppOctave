@@ -88,6 +88,10 @@ AC_MSG_RESULT "${OCTAVE_BINDIR}"
 ## If octave-config was found, let's use it
 if test "${OCTAVE_BINDIR}" != ""; then
 	
+	# specify if one uses a custom path to Octave (dummy on windows)
+    OCTAVE_CUSTOMED=FALSE
+    AC_SUBST OCTAVE_CUSTOMED
+	
 	OCTAVE_CONFIG="${OCTAVE_BINDIR}/octave-config"
 	AC_SUBST OCTAVE_CONFIG
     

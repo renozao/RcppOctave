@@ -143,7 +143,7 @@ NULL
     
     
     # custom installation
-    if( Octave.config[['customed']] ){
+    if( isTRUE(Octave.config[['customed']]) ){
         .load_dep()
         .load()
         return(TRUE)

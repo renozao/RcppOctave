@@ -155,9 +155,10 @@ test.redirection <- function(){
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is still passed to R if stderr is not buffered")
     
     # Warnings
-    checkWarning(.CallOctave('warning', 'aaaa'), "warning: aaa", "Default call buffer warnings")
-    checkWarning(.CallOctave('warning', 'aaaa', buffer.std = 2), "warning: aaa", "Default call buffer warnings (buffer.std = 2)")
+    checkWarning(.CallOctave('warning', 'aaaa'), "aaaa", "Default call buffer warnings")
+    checkWarning(.CallOctave('warning', 'aaaa', buffer.std = 2), "aaaa", "Default call buffer warnings (buffer.std = 2)")
     checkWarning(.CallOctave('warning', 'aaaa', buffer.std=-2)
-                                               , "warning: aaa", "Warning are still detected if not buffering stderr")
+                                               , "aaaa", "Warning are still detected if not buffering stderr")
+    checkIdentical(capture.output(dummy <- .CallOctave('warning', 'aaaa')), character(), "Octave warning printed directly (not in stdout) if buffering is disabled (buffer.std=0)")
     
 }

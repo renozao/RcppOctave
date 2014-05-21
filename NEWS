@@ -1,9 +1,23 @@
 ********************
+Changes in 0.14.2
+********************
+NEW FEATURES
+    o Function .CallOctave gains a new argument `verbose` to specify a temporary 
+    verbose level
+FIXES
+    o Fixed installation issue on Windows that were introduced with new installation
+    features in 0.14.
+    o Fixed bug in output redirection when linking against old octave 3.2: method str() 
+    was not defined
+
+********************
 Changes in 0.14
 ********************
 CHANGES
     o added a configure option --with-octave to specify the path to a non-standard
-    Octave installation.
+    Octave installation. For example:
+    R CMD INSTALL --configure-args="--with-octave=/opt/octave" RcppOctave_0.14.tar.gz
+    o Handling of Octave outputs and error messages have been improved.
     
 FIXES
     o Some changes have been made so that the package is compatible with Octave 3.8
