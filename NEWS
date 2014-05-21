@@ -7,7 +7,7 @@ NEW FEATURES
 FIXES
     o Fixed installation issue on Windows that were introduced with new installation
     features in 0.14.
-    O Fixed bug in output redirection when linking against old octave 3.2: method str() 
+    o Fixed bug in output redirection when linking against old octave 3.2: method str() 
     was not defined
 
 ********************
