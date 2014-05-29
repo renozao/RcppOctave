@@ -90,10 +90,10 @@
 
 <pre><code class="r">library(devtools)
 # latest stable version
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;)
 
 # development version
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, &quot;develop&quot;)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;, &#39;develop&#39;)
 </code></pre>
 
 <h3>Troubleshooting</h3>
@@ -110,12 +110,12 @@ This should be fine for standard unix-based R installations (Linux, Mac), but is
 
 <pre><code class="r">library(devtools)
 # latest stable version
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, quick = TRUE)
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, build_vignettes = FALSE)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;, quick = TRUE)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;, build_vignettes = FALSE)
 
 # development version
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, &quot;develop&quot;, quick = TRUE)
-install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, &quot;develop&quot;, build_vignettes = FALSE)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;, &#39;develop&#39;, quick = TRUE)
+install_github(&#39;RcppOctave&#39;, &#39;renozao&#39;, &#39;develop&#39;, build_vignettes = FALSE)
 </code></pre>
 
 <hr/>
@@ -126,14 +126,14 @@ install_github(&quot;renozao&quot;, &quot;RcppOctave&quot;, &quot;develop&quot;,
 
 <p>The latest automated build of the package can be installed from R-forge repository as follows:</p>
 
-<pre><code class="r">install.packages(&quot;RcppOctave&quot;, repos = &quot;http://R-Forge.R-project.org&quot;)
+<pre><code class="r">install.packages(&quot;RcppOctave&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)
 </code></pre>
 
 <h3>Troubleshooting</h3>
 
 <p>This installation method depends on the package&#39;s build status on R-forge, which can be checked on the <a href="http://r-forge.r-project.org/projects/rcppoctave">project page</a> &gt; &#39;R packages&#39; or from R:</p>
 
-<pre><code class="r">&quot;RcppOctave&quot; %in% rownames(available.packages(contrib.url(&quot;http://R-Forge.R-project.org&quot;)))
+<pre><code class="r">&#39;RcppOctave&#39; %in% rownames(available.packages(contrib.url(&quot;http://R-Forge.R-project.org&quot;)))
 </code></pre>
 
 <hr/>
