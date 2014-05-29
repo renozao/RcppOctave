@@ -28,7 +28,7 @@ namespace Rcpp {
 // define version-specific macros
 #include "swig_octave_version.h"
 #ifndef OCT_POST_3_4_0
-	#if !SWIF_OCTAVE_PREREQ(3,4,0)
+	#if !SWIG_OCTAVE_PREREQ(3,4,0)
 		#define OCT_POST_3_4_0 -1
 	#else
 		#define OCT_POST_3_4_0 1
