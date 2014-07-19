@@ -1,4 +1,11 @@
 ********************
+Changes in 0.14.3
+********************
+FIXES
+    o Fixed typo in rcpp_octave.h which was causing an installation error on FreeBSD:
+    SWIF_OCTAVE_PREREQ should be SWIG_OCTAVE_PREREQ.
+    
+********************
 Changes in 0.14.2
 ********************
 NEW FEATURES
