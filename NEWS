@@ -1,4 +1,11 @@
 ********************
+Changes in 0.14.4
+********************
+FIXES
+    o Mac support: look also for .dylib files when default .so files don't exist
+    (issue #2) 
+
+********************
 Changes in 0.14.3
 ********************
 FIXES

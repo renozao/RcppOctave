@@ -160,3 +160,9 @@ system_call <- function(...){
     }else base::system(..., intern = TRUE)
 	
 }
+
+is.Mac <- function(check.gui=FALSE){
+	is.mac <- (length(grep("darwin", R.version$platform)) > 0)
+	# return TRUE is running on Mac (adn optionally through GUI)
+	is.mac && (!check.gui || .Platform$GUI == 'AQUA')
+}

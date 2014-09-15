@@ -134,7 +134,10 @@ NULL
     }
     
     .load_dep <- function( libdir = Octave.config[['libdir']] ){
-        dlibs <- file.path(libdir, paste0(Octave.config[['libs']], .Platform$dynlib.ext))
+        if( is.Mac() && !file.exists(dlibs <- file.path(libdir, paste0(Octave.config[['libs']], .Platform$dynlib.ext))) ){
+            # on Mac look for .dylib if default .so does not exist
+            dlibs <- file.path(libdir, paste0(Octave.config[['libs']], ".dylib"))
+        }
         sapply(dlibs, dyn.load)
     }
     
