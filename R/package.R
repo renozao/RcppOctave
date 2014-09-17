@@ -196,7 +196,7 @@ NULL
     	if( !.OctaveLibs(pkgname, libname) ) return()
         
     	# start Octave session
-    	octave_start()
+    	octave_start(NULL)
         
     	# load Octave modules
     	octave_modules()
