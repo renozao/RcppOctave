@@ -86,9 +86,13 @@ inline octave_value octave_feval(const string& fname, const octave_value_list& a
  * Toggle verbosity for RcppOctave calls.
  */
 SEXP octave_verbose(SEXP value){
-	bool bval = Rcpp::as<bool>(value);
+
 	bool res = RCPP_OCTAVE_VERBOSE;
-	RCPP_OCTAVE_VERBOSE = bval;
+	// set verbosity if not passing NULL
+	if( !Rf_isNull(value) ){
+		bool bval = Rcpp::as<bool>(value);
+		RCPP_OCTAVE_VERBOSE = bval;
+	}
 	return( Rcpp::wrap(res) );
 }
 

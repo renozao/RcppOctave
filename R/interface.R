@@ -121,7 +121,9 @@ octave_end <- function(verbose = getOption('verbose')){
 #' @rdname octave-ll
 #' @export
 octave_verbose <- function(value){
-	invisible(.Call("octave_verbose", value, PACKAGE='RcppOctave'))
+    value <- if( !missing(value) ) value
+	res <- .Call("octave_verbose", value, PACKAGE='RcppOctave')
+    if( !is.null(value) ) invisible(res) else res
 }
 
 #' Octave Utils: octave-config
