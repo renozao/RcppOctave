@@ -139,7 +139,7 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 			REprintf("Terminating Octave interpreter... ");
 
 		if( !OCTAVE_INITIALIZED ){// early exit if already off
-			VERBOSE_LOG("[SKIP: already off]\n");
+			if( verbose ) REprintf("[SKIP: already off]\n");
 			return true;
 		}
 
