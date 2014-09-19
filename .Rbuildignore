@@ -9,6 +9,8 @@ vignettes/cache
 vignettes/vignette.mk
 vignettes/Rplots.pdf
 vignettes/.*\.tex
+vignettes/.*\.err
+vignettes/.*\.log
 vignettes/RJ.*
 vignettes/.*\.inc
 vignettes/\.install_extras$
