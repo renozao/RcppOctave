@@ -1,5 +1,8 @@
 ## Use the R_HOME indirection to support installations of multiple R version
 
+# To avoid warnings with Octave C99 syntax
+CXX_STD = CXX11
+
 # set by configure.win
 OCT_LDFLAGS=@OCT_LDFLAGS@
 OCT_CPPFLAGS=@OCT_CPPFLAGS@
@@ -7,26 +10,25 @@ OCT_MODULES_PATH=@OCT_MODULES_PATH@
 
 ## Use the R_HOME indirection to support installations of multiple R version
 PKG_LIBS := $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()") $(OCT_LDFLAGS) 
-PKG_CPPFLAGS := $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") -fmax-errors=10 $(OCT_CPPFLAGS)
+PKG_CPPFLAGS := $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::CxxFlags()") $(OCT_CPPFLAGS) -fmax-errors=10 
 
-.PHONY: all OctaveModule
+.PHONY: OctaveModule
 
-all: OctaveModule
+$(SHLIB): OctaveModule
 
 OctaveModule:
 	@cd modules && \
-	make && \
+	$(MAKE) CC="$(CC)" CXX="$(CXX)" AR="$(AR)" RANLIB="$(RANLIB)" && \
 	echo "# Copying Octave modules to directory '$(OCT_MODULES_PATH)'" && \
 	mkdir -p "$(OCT_MODULES_PATH)" && \
 	cp -f PKG_ADD *.oct "$(OCT_MODULES_PATH)";
 	
 clean:
-	rm *.o; \
-	cd modules; \
-	make clean;
+	env
+	rm *.o;
+	cd modules && $(MAKE) clean;
 
 clean-all: clean
-	rm *.dll; \
-	cd modules; \
-	make clean-all;
+	rm $(SHLIB);
+	cd modules && $(MAKE) clean-all;
 
