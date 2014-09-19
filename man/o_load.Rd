@@ -5,24 +5,21 @@
   o_load(from, ..., options)
 }
 \arguments{
-  \item{from}{a list or an environment from where the
-  objects should be loaded}
+  \item{from}{a list or an environment from where the objects should be loaded}
 
   \item{...}{names of the variables to load}
 
-  \item{options}{argument passed to the Octave function
-  \code{load}. See section \emph{Octave Documentation}.}
+  \item{options}{argument passed to the Octave function \code{load}. See section
+\emph{Octave Documentation}.}
 }
 \description{
   Loads variables from a file, a list or an environment.
 }
 \section{Octave Documentation for \emph{load}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(load,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(load, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag

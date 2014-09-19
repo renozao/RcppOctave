@@ -5,13 +5,11 @@
   o_version(version)
 }
 \arguments{
-  \item{version}{optional reference version to compare
-  with.}
+  \item{version}{optional reference version to compare with.}
 }
 \value{
-  Octave version as a single character string or the result
-  of \code{\link[utils]{compareVersion}} if argument
-  \code{version} is provided.
+  Octave version as a single character string or the result of
+\code{\link[utils]{compareVersion}} if argument \code{version} is provided.
 }
 \description{
   Returns the version of Octave currently used by

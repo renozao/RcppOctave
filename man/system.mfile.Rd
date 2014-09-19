@@ -5,12 +5,10 @@
   system.mfile(..., package = "base")
 }
 \arguments{
-  \item{...}{arguments passed to
-  \code{\link{system.file}}.}
+  \item{...}{arguments passed to \code{\link{system.file}}.}
 
-  \item{package}{a character string with the name of a
-  single package.  An error occurs if more than one package
-  name is given.}
+  \item{package}{a character string with the name of a single package.
+    An error occurs if more than one package name is given.}
 }
 \description{
   \code{system.mfile} returns paths to .m files installed

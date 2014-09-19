@@ -5,16 +5,13 @@
   o_eval(..., CATCH, unlist = TRUE)
 }
 \arguments{
-  \item{...}{The Octave expression(s) to evaluate, as a
-  character string.}
+  \item{...}{The Octave expression(s) to evaluate, as a character string.}
 
-  \item{CATCH}{The Octave expression(s) to evaluate if the
-  evaluation(s) of \code{...} fails. See section
-  \emph{Octave Documentation} for more details.}
+  \item{CATCH}{The Octave expression(s) to evaluate if the evaluation(s) of
+\code{...} fails. See section \emph{Octave Documentation} for more details.}
 
-  \item{unlist}{a logical that specifies it single
-  variables should be returned as a single value (default),
-  or as a list.}
+  \item{unlist}{a logical that specifies it single variables should be
+returned as a single value (default), or as a list.}
 }
 \value{
   the result of the evaluation
@@ -25,12 +22,10 @@
   are available for subsequent \code{o_eval} calls.
 }
 \section{Octave Documentation for \emph{evalin}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(evalin,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(evalin, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag

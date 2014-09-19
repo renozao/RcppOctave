@@ -11,33 +11,26 @@
   o_get(..., unlist = TRUE, rm.ans = TRUE, pattern)
 }
 \arguments{
-  \item{...}{variables to assign in Octave global context
-  for \code{o_assign} , or object names to retrieve from
-  Octave for \code{o_get}.}
+  \item{...}{variables to assign in Octave global context for \code{o_assign}
+, or object names to retrieve from Octave for \code{o_get}.}
 
-  \item{unlist}{a logical that specifies it single
-  variables should be returned as a single value (default),
-  or as a list.}
+  \item{unlist}{a logical that specifies it single variables should be
+returned as a single value (default), or as a list.}
 
-  \item{rm.ans}{a logical that indicates if the automatic
-  Octave variable \code{ans} should be included in the
-  result. Default is not to include it unless otherwise
-  explicitly specified with this argument, or if it is part
-  of the requested variables in \code{...}. When present,
-  argument \code{rm.ans} is always honoured.}
+  \item{rm.ans}{a logical that indicates if the automatic Octave variable \code{ans}
+should be included in the result. Default is not to include it unless otherwise
+explicitly specified with this argument, or if it is part of the requested
+variables in \code{...}. When present, argument \code{rm.ans} is always honoured.}
 
-  \item{pattern}{regular expression used to filter the
-  requested variable names. Only names matching the pattern
-  are returned.}
+  \item{pattern}{regular expression used to filter the requested variable names.
+Only names matching the pattern are returned.}
 }
 \value{
-  \code{o_assign} returns invisibly the names of the
-  assigned variables.
+  \code{o_assign} returns invisibly the names of the assigned variables.
 
-  \code{o_get} returns a list of the retrieved
-  variable/object. If \code{unlist=TRUE} and a single --
-  not re-named -- variable/object is requested then only
-  its value is returned.
+\code{o_get} returns a list of the retrieved variable/object. If
+\code{unlist=TRUE} and a single -- not re-named -- variable/object is requested then
+only its value is returned.
 }
 \description{
   \code{o_assign} assigns a variable in Octave.
@@ -64,12 +57,10 @@
   properties.
 }
 \section{Octave Documentation for \emph{assignin}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(assignin,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(assignin, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag

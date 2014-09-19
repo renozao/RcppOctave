@@ -8,14 +8,14 @@
   o_inpath(...)
 }
 \arguments{
-  \item{DIR1}{path specification to add to Octave search
-  path. See section \emph{Octave Documentation}.}
+  \item{DIR1}{path specification to add to Octave search path.
+See section \emph{Octave Documentation}.}
 
   \item{...}{other path specifications}
 
-  \item{OPTION}{option that specifies how the path should
-  be added. Possible values are: \code{'-begin', 0, '-end',
-  1}. See section \emph{Octave Documentation}.}
+  \item{OPTION}{option that specifies how the path should be added.
+Possible values are: \code{'-begin', 0, '-end', 1}.
+See section \emph{Octave Documentation}.}
 }
 \value{
   returns invisibly the old value of search path.
@@ -34,12 +34,10 @@
   modification.
 }
 \section{Octave Documentation for \emph{addpath}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(addpath,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(addpath, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag

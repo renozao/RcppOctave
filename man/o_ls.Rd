@@ -5,20 +5,17 @@
   o_ls(long = FALSE, rm.ans = TRUE)
 }
 \arguments{
-  \item{rm.ans}{a logical that indicates if the automatic
-  Octave variable \code{ans} should be included in the
-  result. Default (\code{TRUE}) is not to include it.}
+  \item{rm.ans}{a logical that indicates if the automatic Octave variable \code{ans}
+should be included in the result. Default (\code{TRUE}) is not to include it.}
 
-  \item{long}{logical that indicates the desired type of
-  output: if \code{FALSE} (default) then only the names of
-  the variables are returned (like dispatched
-  \code{o_who}), otherwise a list with more detailed
-  information about each variable is returned (like
-  \code{\link{o_whos}}.}
+  \item{long}{logical that indicates the desired type of output: if \code{FALSE}
+(default) then only the names of the variables are returned (like dispatched
+\code{o_who}), otherwise a list with more detailed information about
+each variable is returned (like \code{\link{o_whos}}.}
 }
 \value{
-  a character vector or a list depending on the value of
-  argument \code{long}.
+  a character vector or a list depending on the value of argument
+\code{long}.
 }
 \description{
   The function \code{o_ls} is an enhanced listing function,

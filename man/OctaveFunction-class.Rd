@@ -10,15 +10,14 @@
   \S4method{show}{OctaveFunction}(object)
 }
 \arguments{
-  \item{fun}{the name of an existing Octave function or,
-  Octave code that defines a function.}
+  \item{fun}{the name of an existing Octave function or, Octave code that
+defines a function.}
 
-  \item{check}{logical that indicates if the existence of
-  the Octave function should be checked. If function does
-  not exist then, an error or a warning is thrown if
-  \code{check=TRUE} or \code{check=FALSE} respectively. The
-  existence check can be completly disabled with
-  \code{check=NA}.}
+  \item{check}{logical that indicates if the existence of the Octave function
+should be checked.
+If function does not exist then, an error or a warning is thrown if \code{check=TRUE}
+or \code{check=FALSE} respectively.
+The existence check can be completly disabled with \code{check=NA}.}
 
   \item{object}{Any R object}
 }
@@ -32,11 +31,12 @@
   first function defined therein.
 }
 \section{Slots}{
-  \describe{
+\describe{
 
-  \item{name}{name of the wrapped Octave function}
+\item{name}{name of the wrapped Octave function}
 
-  }
+}
+
 }
 \examples{
 \dontshow{# roxygen generated flag

@@ -8,15 +8,13 @@
   o_rm(..., all = FALSE, options)
 }
 \arguments{
-  \item{...}{names or pattern of the variables to delete,
-  as character strings.}
+  \item{...}{names or pattern of the variables to delete, as character strings.}
 
-  \item{all}{a logical indicating whether all user-defined
-  objects should be deleted. See section \emph{Octave
-  Documentation} for details.}
+  \item{all}{a logical indicating whether all user-defined objects should be
+deleted. See section \emph{Octave Documentation} for details.}
 
-  \item{options}{options passed to Octave function
-  \code{clear}. See section \emph{Octave Documentation}.}
+  \item{options}{options passed to Octave function \code{clear}.
+See section \emph{Octave Documentation}.}
 }
 \value{
   None
@@ -27,12 +25,10 @@
   The function \code{o_rm} is an alias to \code{o_clear}.
 }
 \section{Octave Documentation for \emph{clear}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(clear,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(clear, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag

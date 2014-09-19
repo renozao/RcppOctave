@@ -23,12 +23,10 @@
   \code{\link{o_runif}} for more details.
 }
 \section{Octave Documentation for \emph{randg}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(randg,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(randg, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag
@@ -52,7 +50,6 @@ o_rgamma(1, 10, scale=0.5)
 \seealso{
   rgamma
 
-  Other orandom: \code{\link{o_rexp}},
-  \code{\link{o_rnorm}}, \code{\link{o_runif}}
+Other orandom: \code{\link{o_rexp}}, \code{\link{o_rnorm}}, \code{\link{o_runif}}
 }
 

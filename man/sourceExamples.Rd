@@ -5,9 +5,8 @@
   sourceExamples(file)
 }
 \arguments{
-  \item{file}{filename of the example script to source. If
-  missing, the function lists all the m-files from the
-  \dQuote{scripts/} sub-directory.}
+  \item{file}{filename of the example script to source. If missing, the function
+lists all the m-files from the \dQuote{scripts/} sub-directory.}
 }
 \description{
   Source an example M-file in the sub-directory
