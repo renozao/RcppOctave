@@ -39,7 +39,7 @@ pkgmaker::latex_preamble()
 @
 
 % REFERENCES
-\usepackage[minnames=1,maxnames=2]{biblatex}
+\usepackage[minnames=1,maxnames=2,backend=bibtex]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 <<bibliofile, echo=FALSE, results='asis'>>=
 pkgmaker::latex_bibliography(pkg)	
@@ -214,12 +214,15 @@ settings:
 
 \subsection{Mac OS}
 Support for Mac OS is not yet official, but is currently being investigating.
-Preliminary discussion(s) on how to install and run under Mac can be found here:
+Discussion(s) on how to install and run under Mac can be found here:
 
 \url{http://lists.r-forge.r-project.org/pipermail/rcppoctave-user/2013-October/000024.html}
+and 
+\url{https://github.com/renozao/RcppOctave/issues/1}
 
-The installation procedure under investigation is based on the Octave version
-provided by \emph{homebrew}\footnote{\url{http://brew.sh/}}:
+The main installation procedure is based on the Octave version provided by
+\emph{homebrew}\footnote{\url{http://brew.sh/}}, which works with the binary
+build provided by CRAN\footnote{\url{http://cran.r-project.org/bin/macosx/}}:
 
 \begin{enumerate}
   \item install XCode and its Command Line Tools
