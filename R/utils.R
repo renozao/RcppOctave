@@ -117,10 +117,10 @@ Sys.path <- local({
             .init_state <<- .get()
         }
         , append = function(x){
-            .set(paste(.get(), x, sep = .Platform$path.sep))
+            .set(paste(c(.get(), x), collapse = .Platform$path.sep))
         }
         , prepend = function(){
-            .set(paste(x, .get(), sep = .Platform$path.sep))
+            .set(paste(c(x, .get()), collapse = .Platform$path.sep))
         }
         , rm = function(){
             
@@ -166,3 +166,14 @@ is.Mac <- function(check.gui=FALSE){
 	# return TRUE is running on Mac (adn optionally through GUI)
 	is.mac && (!check.gui || .Platform$GUI == 'AQUA')
 }
+
+file.first.path <- function(dir, ...){
+    f <- file.path(...)
+    sapply(f, function(x){
+        x <- file.path(dir, x)
+        x0 <- x[file.exists(x)]
+        if( length(x0) ) head(x0, 1) else as.character(NA)
+    })
+    
+}
+

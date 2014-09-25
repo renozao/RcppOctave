@@ -99,14 +99,15 @@ SEXP octave_verbose(SEXP value){
 bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	// use global verbose state if set
-	with_warnings = RCPP_OCTAVE_VERBOSE || with_warnings;
-	verbose = RCPP_OCTAVE_VERBOSE || verbose;
+	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
+	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
+	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
 
 	if( start ){
-		VERBOSE_LOG("Starting Octave interpreter ... ");
+		if( verbose ) REprintf("Starting Octave interpreter ... ");
 
 		if( OCTAVE_INITIALIZED ){// early exit if alredy on
-			VERBOSE_LOG("[SKIP: already on]\n");
+			if( verbose ) REprintf("[SKIP: already on]\n");
 			return true;
 		}
 
@@ -126,7 +127,7 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		// try starting Octave
 		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
-		VERBOSE_LOG(started_ok ? "[OK]\n" : "[ERROR]\n");
+		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
 		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
 
 		OCTAVE_INITIALIZED = true;
