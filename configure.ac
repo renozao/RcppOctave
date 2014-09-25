@@ -157,6 +157,8 @@ if test [ -n "$octave_path" ] ; then
 	# looking up octave-config and mkoctfile
 	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
 	AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile], [], ["${OCTAVE_BINDIR}"])
+	# prepend to PATH
+	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
   AC_MSG_RESULT([using Octave binary path from \$PATH])
   # looking up octave-config and mkoctfile

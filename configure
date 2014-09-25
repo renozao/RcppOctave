@@ -3373,6 +3373,8 @@ $as_echo "no" >&6; }
 fi
 
 
+	# prepend to PATH
+	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: using Octave binary path from \$PATH" >&5
 $as_echo "using Octave binary path from \$PATH" >&6; }
