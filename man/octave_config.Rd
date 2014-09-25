@@ -3,7 +3,9 @@
 \title{Octave Utils: octave-config}
 \usage{
   octave_config(varname, verbose = FALSE, warn = TRUE,
-    mustWork = TRUE, bindir = Octave.home("bin"))
+    mustWork = TRUE,
+    exec = c("octave-config", "mkoctfile"),
+    bindir = Octave.home("bin"))
 }
 \arguments{
   \item{varname}{Name (as a character string) of the Octave configuration
@@ -20,6 +22,8 @@ config variable name.}
 
   \item{mustWork}{logical that indicates if an error should be thrown if failing
 to load Octave configuration.}
+
+  \item{exec}{name of the executable to query}
 
   \item{bindir}{path to Octave bin/ sub-directory where to look for \code{octave-config}.
 If \code{NULL} or \code{NA}, then the system PATH is looked up.}

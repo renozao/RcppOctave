@@ -148,6 +148,7 @@ octave_verbose <- function(value){
 #' config variable name.
 #' @param mustWork logical that indicates if an error should be thrown if failing 
 #' to load Octave configuration.
+#' @param exec name of the executable to query
 #' @param bindir path to Octave bin/ sub-directory where to look for \code{octave-config}.
 #' If \code{NULL} or \code{NA}, then the system PATH is looked up.
 #'  
@@ -157,10 +158,10 @@ octave_verbose <- function(value){
 #' octave_config('VERSION') 
 #' octave_config('BINDIR')
 #' 
-octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, bindir = Octave.home('bin')){
+octave_config <- function(varname, verbose=FALSE, warn=TRUE, mustWork = TRUE, exec = c('octave-config', 'mkoctfile'), bindir = Octave.home('bin')){
 
     # use custom BINDIR if requested
-    octave_config_cmd <- 'octave-config'
+    octave_config_cmd <- match.arg(exec)
     if( !is.null(bindir) && !is_NA(bindir) ){
         if( verbose ) message("# Using Octave BINDIR '", bindir, "'")
         octave_config_cmd <- file.path(normalizePath(bindir), octave_config_cmd) 
