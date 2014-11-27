@@ -246,7 +246,7 @@ else
     -> On Mac OS please check that the required packages are installed:
     
       * octave package from homebrew (works out of the box):
-        $ brew install gfortran octave
+        $ brew install gcc octave
         
         # install as usual in R
         > install.packages('RcppOctave')
