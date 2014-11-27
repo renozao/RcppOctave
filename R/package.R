@@ -157,6 +157,7 @@ NULL
         if( length(notfound <- which(is.na(dlibs))) && is.Mac() ){
             # on Mac look for .dylib if default .so does not exist
             dlibs[notfound] <- file.first.path(libdir, paste0(octlibs[notfound], ".dylib"))
+            notfound <- which(is.na(dlibs))
         }
 		if( length(notfound) ){
 			warning("RcppOctave - Could not find library ", paste0(octlibs[notfound], collapse = ','))
