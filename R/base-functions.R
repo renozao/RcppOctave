@@ -114,6 +114,7 @@ o_rmpath <- function(DIR1, ...){
 #' @return Octave version as a single character string or the result of 
 #' \code{\link[utils]{compareVersion}} if argument \code{version} is provided.
 #' 
+#' @importFrom utils compareVersion
 #' @export
 #' @examples
 #' 
