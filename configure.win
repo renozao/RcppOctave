@@ -24,7 +24,7 @@ RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
 # load m4 Windows macros
 . exec/m4.win
 
-AC_INIT RcppOctave 0.13.7
+AC_INIT RcppOctave 0.16
 AC_MSG_CHECKING "Rscript version"
 AC_MSG_RESULT `"${RSCRIPT}" --version`
 
@@ -108,10 +108,13 @@ if test "${OCTAVE_BINDIR}" != ""; then
 		AC_SUBST $1
 	}
 	
+	AC_OCTAVE_MKCONFIG OCT_INCLUDEDIR OCTINCLUDEDIR "include dir"
 	AC_OCTAVE_CONFIG () { 
 		AC_MSG_CHECKING "Octave $3"
 		eval "$1=\"`${OCTAVE_CONFIG} --print $2`\""
 		eval "AC_MSG_RESULT \$$1"
+		eval "$1=`\"${RSCRIPT}\" -e \"cat(gsub(dirname('${OCT_INCLUDEDIR}'), '${OCTAVE_BINDIR}', '$1', fixed = TRUE))\"`"
+		eval "echo \"Using Octave $3: \$$1\""
 		AC_SUBST $1
 	}
 	##

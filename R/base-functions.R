@@ -114,6 +114,7 @@ o_rmpath <- function(DIR1, ...){
 #' @return Octave version as a single character string or the result of 
 #' \code{\link[utils]{compareVersion}} if argument \code{version} is provided.
 #' 
+#' @importFrom utils compareVersion
 #' @export
 #' @examples
 #' 
@@ -134,6 +135,14 @@ o_version <- function(version){
 #' 
 #' @param var name of the configuration variable to retrieve.
 #' 
+#' @note 
+#' In Octave 4.0.0., variables \code{CC_VERSION} and \code{CXX_VERSION} 
+#' were renamed \code{GCC_VERSION} and \code{GXX_VERSION} respectively.
+#' \code{o_config_info} supports both values, querying the right ones
+#' depending on the linked Octave version.  
+#'  
+#' See \url{http://www.gnu.org/software/octave/NEWS-4.0.html}
+#' 
 #' @family Octave.info
 #' @export 
 #' @examples
@@ -142,8 +151,18 @@ o_version <- function(version){
 #' o_config_info('USE_64_BIT_IDX_T')
 #' 
 o_config_info <- function(var = c('CC', 'CC_VERSION', 'FC')){
+    
+    # fix for Octave version >= 4.0.0: CC_VERSION is now GCC_VERSION
+    if( o_version("4.0.0") >= 0 ){
+        var[ var == "CC_VERSION" ] <- "GCC_VERSION"
+        var[ var == "CXX_VERSION" ] <- "GXX_VERSION"
+    }
     sapply(var, .CallOctave, .NAME = 'octave_config_info')
 }
+
+o_builtin <- function(name, ...){
+    .CallOctave('builtin', name, ...)
+} 
 
 #' Accessing Octave Help and Documentation Pages
 #' 

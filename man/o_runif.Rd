@@ -21,37 +21,34 @@
   without changing the original Octave/Matlab code.
 }
 \section{Difference with plain \code{runif}}{
-  Since calling \code{o_runif} or
-  \code{\link[stats]{runif}} is equivalent, this function
-  may not be really useful for the end user, and is defined
-  for testing purposes essentially. One possible advantage
-  over plain \code{\link[stats]{runif}} however, is that it
-  can generate random matrices, instead of only vectors
-  (see examples).
+
+Since calling \code{o_runif} or \code{\link[stats]{runif}} is equivalent, this
+function may not be really useful for the end user, and is defined for
+testing purposes essentially.
+One possible advantage over plain \code{\link[stats]{runif}} however, is that it
+can generate random matrices, instead of only vectors (see examples).
 }
 
 \section{Seeding}{
-  Because the RNG of R is called used, seeding computations
-  is achieved by a standard call to \code{\link{set.seed}}.
+
+Because the RNG of R is called used, seeding computations is achieved by a
+standard call to \code{\link{set.seed}}.
 }
 
 \section{Octave details}{
-  \code{RcppOctave} defines a set of functions like
-  \code{rand} that shadow Octave built-in functions. These
-  functions are defined in the Octave module
-  \code{Rrng.oct} that is stored in the package
-  \emph{modules/} sub-directory. See
-  \code{Octave.info('modules')} to see this directory's
-  full path.
+
+\code{RcppOctave} defines a set of functions like \code{rand} that shadow
+Octave built-in functions.
+These functions are defined in the Octave module \code{Rrng.oct} that is
+stored in the package \emph{modules/} sub-directory.
+See \code{Octave.info('modules')} to see this directory's full path.
 }
 
 \section{Octave Documentation for \emph{rand}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(rand,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(rand, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag
@@ -75,7 +72,6 @@ o_runif(2, 5)
 \seealso{
   runif
 
-  Other orandom: \code{\link{o_rexp}},
-  \code{\link{o_rgamma}}, \code{\link{o_rnorm}}
+Other orandom: \code{\link{o_rexp}}, \code{\link{o_rgamma}}, \code{\link{o_rnorm}}
 }
 

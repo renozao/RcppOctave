@@ -5,10 +5,10 @@
 \alias{Octave.version}
 \title{Octave Configuration and Installation Information}
 \format{List of 4
- $ platform      : chr "x86_64-unknown-linux-gnu"
- $ version       : chr "3.8.0"
+ $ platform      : chr "x86_64-pc-linux-gnu"
+ $ version       : chr "3.8.1"
  $ api           : chr "api-v49+"
- $ version.string: chr "Octave version 3.8.0 (api-v49+)"
+ $ version.string: chr "Octave version 3.8.1 (api-v49+)"
  - attr(*, "class")= chr "simple.list"}
 \usage{
   Octave.version
@@ -57,8 +57,7 @@ Octave.info()
 Octave.info('modules')
 }
 \seealso{
-  Other Octave.info: \code{\link{o_config_info}},
-  \code{\link{octave_config}}, \code{\link{Octave.home}}
+  Other Octave.info: \code{\link{o_config_info}}, \code{\link{octave_config}}, \code{\link{Octave.home}}
 }
 \keyword{datasets}
 

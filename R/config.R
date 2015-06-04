@@ -39,7 +39,7 @@ Octave.version <- structure(list(
 Octave.config <- structure(c(Octave.version, list(
                 home = dirname(.OCTAVE_BINDIR),
                 bindir = .OCTAVE_BINDIR,
-                libdir = .OCTAVE_LIBDIR,
+                libdir = unique(c(.OCTAVE_LIBDIR, Filter(nchar, gsub(" ", "", strsplit(.OCTAVE_LFLAGS, "-L", fixed = TRUE)[[1L]])))),
                 modules = .OCT_MODULES_PATH,
                 cc = .OCTAVE_CC,
                 cppflags = .OCT_CPPFLAGS,
@@ -99,7 +99,7 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
         # check environment variable OCTAVE_HOME
         if( !nzchar(path <- Sys.getenv('OCTAVE_HOME')) ){
             # check existence of path resolved at configure time
-            if( !file_test('-d', path <- .config.path) && system ){
+            if( !file_test('-d', path <- .config.path) && use.system ){
                 # last resort: retrieve path from octave-config
                 path <- dirname(octave_config('BINDIR', mustWork = FALSE, warn = FALSE, bindir = NA))
             }

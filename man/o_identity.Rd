@@ -8,8 +8,8 @@
   \item{...}{any R object supported by RcppOctave.}
 }
 \value{
-  its argument -- list -- after its conversion from R to
-  Octave and from Octave to R.
+  its argument -- list -- after its conversion from R to Octave and
+from Octave to R.
 }
 \description{
   This function calls the Octave function provided by the

@@ -124,18 +124,46 @@ NULL
 #	}
 #})
 
+.debug <- function(...){
+    if( any(!is.na(Sys.getenv(c('R_RCPPOCTAVE_VERBOSE', 'R_RCPPOCTAVE_DEBUG'), unset = NA))) ){ 
+        message(...)
+        TRUE
+    }else FALSE
+}
+
 # Load/Unload Octave Libraries
 .OctaveLibs <- function(pkgname, libname){
     		
-    .load <- function(){
+    .load <- function(libfile = NULL){
+        
+        lib_str <- 'RcppOctave library'
+        if( !is.null(libfile) ) lib_str <- libfile
+        
+        if( .debug("  - Loading ", lib_str, " ... ", appendLF = FALSE) ){
+            on.exit( .debug('ERROR') )
+        }
         # load compiled library normally or in devmode
-    	if( !isDevNamespace() ) library.dynam(pkgname, pkgname, libname)
-    	else dyn.load(packagePath('src', paste0(pkgname, .Platform$dynlib.ext)))
+        res <- if( !is.null(libfile) ) dyn.load(libfile)
+            else if( !isDevNamespace() ) library.dynam(pkgname, pkgname, libname)
+        	else dyn.load(packagePath('src', paste0(pkgname, .Platform$dynlib.ext)))
+
+        if( .debug('OK [', res[['path']], ']') ) on.exit()
+        TRUE
     }
     
     .load_dep <- function( libdir = Octave.config[['libdir']] ){
-        dlibs <- file.path(libdir, paste0(Octave.config[['libs']], .Platform$dynlib.ext))
-        sapply(dlibs, dyn.load)
+        octlibs <- Octave.config[['libs']]
+        dlibs <- file.first.path(libdir, paste0(octlibs, .Platform$dynlib.ext))
+        if( length(notfound <- which(is.na(dlibs))) && is.Mac() ){
+            # on Mac look for .dylib if default .so does not exist
+            dlibs[notfound] <- file.first.path(libdir, paste0(octlibs[notfound], ".dylib"))
+            notfound <- which(is.na(dlibs))
+        }
+		if( length(notfound) ){
+			warning("RcppOctave - Could not find library ", paste0(octlibs[notfound], collapse = ','))
+			dlibs <- dlibs[-notfound]
+		}
+        sapply(dlibs, .load)
     }
     
     dlls <- base::getLoadedDLLs()
@@ -144,12 +172,14 @@ NULL
     
     # custom installation
     if( isTRUE(Octave.config[['customed']]) ){
+        .debug("* Try explicit loading:")
         .load_dep()
         .load()
         return(TRUE)
     }
     
     # try directly loading the library
+    .debug("* Try direct loading:")
     if( !is(try(.load(), silent = TRUE), 'try-error') ) return(TRUE)
     
     # check Octave configuration is reachable
@@ -158,14 +188,19 @@ NULL
     }
     
     # setup path restoration for .onUnload
+    .debug("* Expanding PATH with Octave lib directories:")
     on.exit( Sys.path$commit(), add = TRUE)
     Sys.path$append(octave_bindir)
     Sys.path$append(octave_config('OCTLIBDIR', mustWork = FALSE))
+    Sys.path$append(octave_config('LIBDIR', exec = 'mkoctfile', mustWork = FALSE))
+    .debug("  - ", Sys.path$get())
     
     # try reload
+    .debug("* Re-try direct loading")
     if( !is(try(.load(), silent = TRUE), 'try-error') ) return(TRUE)
     
     # final try, pre-loading custom dependencies if necessary
+    .debug("* Try excplicit loading:")
     .load_dep()
     .load()
     
@@ -193,7 +228,7 @@ NULL
     	if( !.OctaveLibs(pkgname, libname) ) return()
         
     	# start Octave session
-    	octave_start()
+    	octave_start(NULL)
         
     	# load Octave modules
     	octave_modules()
@@ -244,9 +279,9 @@ NULL
                 , "\nNOTE: Octave binaries were probably not found. See ?octave_config.")
     }else{
         # display info about config
-        packageStartupMessage("RcppOctave [", pversion, "] - "
+        packageStartupMessage("RcppOctave ", pversion, " [Octave "
                 , o_version()
-                , "\nOctave path: ", Octave.home('bin'))
+                , "]\nOctave path: ", Octave.home('bin'))
     }
 }
 

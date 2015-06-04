@@ -8,12 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-AC_INIT([RcppOctave], 0.13.7)
-
-# Checks for common programs using default macros
-AC_PROG_CC
-AC_PROG_CXX
-AC_LANG(C++)
+AC_INIT([RcppOctave], 0.16)
 
 # You will very likely need to ensure that the same C compiler and compiler 
 # flags are used in the configure tests as when compiling R or your package. 
@@ -24,6 +19,33 @@ if test -z "${R_HOME}"; then
   echo "RcppOctave - configure: could not determine R_HOME"
   exit 1
 fi
+
+# get compiler and compilation flags from R
+if test -n "${R_HOME}"; then
+  AC_MSG_CHECKING([R CC])
+  CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
+  AC_MSG_RESULT(${CC})
+  
+  AC_MSG_CHECKING([R CFLAGS])
+  CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
+  AC_MSG_RESULT(${CFLAGS})
+  
+  AC_MSG_CHECKING([R CPPFLAGS])
+  CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
+  AC_MSG_RESULT(${CPPFLAGS})
+  
+  AC_MSG_CHECKING([R CXXFLAGS])
+  CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
+  AC_MSG_RESULT(${CXXFLAGS})
+fi
+
+# Now checks for compiler using default macros
+AC_PATH_TOOL([R_CC_COMPILER], [${CC}])
+AC_PROG_CC
+AC_PROG_CXX
+AC_PATH_TOOL([R_CXX_COMPILER], [${CXX}])
+AC_LANG(C++)
+
 
 # check R is a shared library
 R_LDFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config --ldflags 2>/dev/null`
@@ -78,17 +100,20 @@ AC_MSG_RESULT(${darwin})
 AC_MSG_RESULT([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
 AC_MSG_RESULT([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
 
-# get compilation flags
-if test -n "${R_HOME}"; then
-  CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
-  CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
-  CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
-  CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXXFLAGS`
-fi
-
 # pass R flags down to makefile in modules/
 AC_SUBST(R_CPPFLAGS)
 AC_SUBST(R_LDFLAGS)
+
+
+## Check if the user's Rprofile should be used in calls to Rscript
+AC_ARG_WITH([rprofile],
+	AS_HELP_STRING([--without-rprofile], ["Do not read the user's .Rprofile in calls to Rscript"]))
+	
+RSCRIPT_BIN=''
+AS_IF([test "x$with_rprofile" = "xno"], 
+	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\" --no-init-file"], 
+	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\""])
+AC_SUBST(RSCRIPT_BIN)
 
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
 #RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
@@ -143,6 +168,8 @@ if test [ -n "$octave_path" ] ; then
 	# looking up octave-config and mkoctfile
 	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
 	AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile], [], ["${OCTAVE_BINDIR}"])
+	# prepend to PATH
+	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
   AC_MSG_RESULT([using Octave binary path from \$PATH])
   # looking up octave-config and mkoctfile
@@ -230,7 +257,7 @@ else
     -> On Mac OS please check that the required packages are installed:
     
       * octave package from homebrew (works out of the box):
-        $ brew install gfortran octave
+        $ brew install gcc octave
         
         # install as usual in R
         > install.packages('RcppOctave')

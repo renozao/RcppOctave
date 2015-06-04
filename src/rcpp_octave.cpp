@@ -86,17 +86,31 @@ inline octave_value octave_feval(const string& fname, const octave_value_list& a
  * Toggle verbosity for RcppOctave calls.
  */
 SEXP octave_verbose(SEXP value){
-	bool bval = Rcpp::as<bool>(value);
+
 	bool res = RCPP_OCTAVE_VERBOSE;
-	RCPP_OCTAVE_VERBOSE = bval;
+	// set verbosity if not passing NULL
+	if( !Rf_isNull(value) ){
+		bool bval = Rcpp::as<bool>(value);
+		RCPP_OCTAVE_VERBOSE = bval;
+	}
 	return( Rcpp::wrap(res) );
 }
 
 bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
-	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
-	if( start && !OCTAVE_INITIALIZED ){
-		VERBOSE_LOG("Starting Octave interpreter\n");
+	// use global verbose state if set
+	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
+	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
+	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
+
+	if( start ){
+		if( verbose ) REprintf("Starting Octave interpreter ... ");
+
+		if( OCTAVE_INITIALIZED ){// early exit if alredy on
+			if( verbose ) REprintf("[SKIP: already on]\n");
+			return true;
+		}
+
 		// instantiate the Octave interpreter
 		int narg = 4;
 		string_vector cmd_args(narg);
@@ -112,18 +126,24 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// try starting Octave
 		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
-
-		redirect.flush("Failed to start Octave interpreter", !started_ok, with_warnings);
+		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
+		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
+		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
 
 		OCTAVE_INITIALIZED = true;
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
 #endif
 
-	}
-	else if( !start && OCTAVE_INITIALIZED ){
-		if( RCPP_OCTAVE_VERBOSE || verbose )
+	}else{
+		if( verbose )
 			REprintf("Terminating Octave interpreter... ");
+
+		if( !OCTAVE_INITIALIZED ){// early exit if already off
+			if( verbose ) REprintf("[SKIP: already off]\n");
+			return true;
+		}
+
 		// terminate interpreter
 #if SWIG_OCTAVE_PREREQ(3,8,0)
 		octave_exit = 0;
@@ -131,11 +151,10 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 #else
 		do_octave_atexit();
 #endif
-		if( RCPP_OCTAVE_VERBOSE || verbose )
-			REprintf("OK\n");
+		if( verbose )
+			REprintf("[OK]\n");
 		OCTAVE_INITIALIZED = false;
 	}
-	VERBOSE_LOG("Octave interpreter: %s\n", OCTAVE_INITIALIZED ? "on" : "off");
 
 	return true;
 }
@@ -157,6 +176,9 @@ SEXP octave_end(SEXP verbose = R_NilValue){
 void R_init_RcppOctave(DllInfo *info)
 {
 	/* Register routines, allocate resources. */
+	// set verbosity from environment variable
+	RCPP_OCTAVE_VERBOSE = getenv("R_RCPPOCTAVE_VERBOSE") != NULL;
+	// start octave session
 	octave_session(true, false);
 }
 

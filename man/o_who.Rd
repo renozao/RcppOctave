@@ -5,20 +5,18 @@
   o_who(..., options, rm.ans = FALSE, unique = TRUE)
 }
 \arguments{
-  \item{...}{filtering patterns or extra arguments passed
-  to \code{o_who} and \code{o_whos}. Only names matching
-  any of the patterns are returned.}
+  \item{...}{filtering patterns or extra arguments passed to \code{o_who}
+and \code{o_whos}. Only names matching any of the patterns are returned.}
 
-  \item{rm.ans}{a logical that indicates if the automatic
-  Octave variable \code{ans} should be included in the
-  result (\code{FALSE}) or removed (\code{TRUE}).}
+  \item{rm.ans}{a logical that indicates if the automatic Octave variable \code{ans}
+should be included in the result (\code{FALSE}) or removed (\code{TRUE}).}
 
-  \item{options}{options passed to Octave function
-  \code{who}. See section \emph{Octave Documentation}.}
+  \item{options}{options passed to Octave function \code{who}.
+See section \emph{Octave Documentation}.}
 
-  \item{unique}{a logical that indicates whether unique
-  names should be returned. This argument is relevant in
-  the case multiple patterns are specified in \code{...}.}
+  \item{unique}{a logical that indicates whether unique names should be returned.
+This argument is relevant in the case multiple patterns are specified in
+\code{...}.}
 }
 \value{
   None
@@ -28,12 +26,10 @@
   context.
 }
 \section{Octave Documentation for \emph{who}}{
-  \Sexpr[results=rd,stage=render]{RcppOctave::o_help(who,
-  format='rd')}
 
-  \emph{[Generated from
-  Octave-\Sexpr{RcppOctave::o_version()} on
-  \Sexpr{Sys.time()}]}
+\Sexpr[results=rd,stage=render]{RcppOctave::o_help(who, format='rd')}
+
+\emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
 \examples{
 \dontshow{# roxygen generated flag
