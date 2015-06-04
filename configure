@@ -659,6 +659,7 @@ OCTAVE_BINDIR
 OCTAVE_CUSTOMED
 OCTAVE_MKOCTFILE
 OCTAVE_CONFIG
+RSCRIPT_BIN
 R_LDFLAGS
 R_CPPFLAGS
 R_CXX_COMPILER
@@ -714,6 +715,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_rprofile
 with_octave
 '
       ac_precious_vars='build_alias
@@ -1335,6 +1337,8 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --without-rprofile      "Do not read the user's .Rprofile in calls to
+                          Rscript"
   --with-octave=PATH      the location of octave root directory, binary file
                           or bin/ sub-directory
 
@@ -3211,6 +3215,23 @@ $as_echo "Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6; }
 
 # pass R flags down to makefile in modules/
 
+
+
+
+## Check if the user's Rprofile should be used in calls to Rscript
+
+# Check whether --with-rprofile was given.
+if test "${with_rprofile+set}" = set; then :
+  withval=$with_rprofile;
+fi
+
+
+RSCRIPT_BIN=''
+if test "x$with_rprofile" = "xno"; then :
+  RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\" --no-init-file"
+else
+  RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\""
+fi
 
 
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`

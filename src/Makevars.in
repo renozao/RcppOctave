@@ -9,14 +9,16 @@ OCT_CPPFLAGS=@OCT_CPPFLAGS@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 OCT_BINDIR=@OCTAVE_BINDIR@
 OCTAVE_CUSTOMED=@OCTAVE_CUSTOMED@
+RSCRIPT_BIN=@RSCRIPT_BIN@
+#RSCRIPT_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/Rscript"
 
 ifeq ($(OCTAVE_CUSTOMED), "TRUE")
 export PATH := $(OCT_BINDIR)$(PATH_SEPARATOR)$(PATH)
 endif
 
 ## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
-PKG_CPPFLAGS = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "Rcpp:::CxxFlags()"` $(OCT_CPPFLAGS)
+PKG_LIBS = `$(RSCRIPT_BIN) -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
+PKG_CPPFLAGS = `$(RSCRIPT_BIN) -e "Rcpp:::CxxFlags()"` $(OCT_CPPFLAGS)
 
 .PHONY: OctaveModule
 

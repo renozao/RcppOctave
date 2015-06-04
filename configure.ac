@@ -104,6 +104,17 @@ AC_MSG_RESULT([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
 AC_SUBST(R_CPPFLAGS)
 AC_SUBST(R_LDFLAGS)
 
+
+## Check if the user's Rprofile should be used in calls to Rscript
+AC_ARG_WITH([rprofile],
+	AS_HELP_STRING([--without-rprofile], ["Do not read the user's .Rprofile in calls to Rscript"]))
+	
+RSCRIPT_BIN=''
+AS_IF([test "x$with_rprofile" = "xno"], 
+	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\" --no-init-file"], 
+	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\""])
+AC_SUBST(RSCRIPT_BIN)
+
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
 #RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
 #AC_MSG_RESULT([Using Rcpp LIBS: ${RCPP_LIBS}])
