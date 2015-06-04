@@ -8,7 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-AC_INIT([RcppOctave], 0.14.5)
+AC_INIT([RcppOctave], 0.16)
 
 # You will very likely need to ensure that the same C compiler and compiler 
 # flags are used in the configure tests as when compiling R or your package. 
