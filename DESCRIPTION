@@ -1,7 +1,7 @@
 Package: RcppOctave
 Type: Package
-Title: Seamless Interface to Octave -- and Matlab
-Version: 0.14.5
+Title: Seamless Interface to Octave -- And Matlab
+Version: 0.16
 Date: 2013-11-07
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@tx.technion.ac.il>
@@ -33,14 +33,14 @@ Suggests:
     bibtex
 LinkingTo: Rcpp
 Collate:
-    'utils.R'
-    'package.R'
-    'interface.R'
     'Octave-class.R'
     'OctaveFunction-class.R'
     'base-functions.R'
-    'eval.R'
-    'random.R'
     'config-vars.R'
     'config.R'
+    'eval.R'
+    'utils.R'
+    'interface.R'
+    'package.R'
+    'random.R'
 VignetteBuilder: knitr

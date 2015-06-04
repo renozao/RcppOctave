@@ -60,8 +60,8 @@
 
 \usepackage[colorlinks]{hyperref}
 \author{Renaud Gaujoux}
-\title{\texttt{RcppOctave}: Unit testing results\footnote{Vignette computed  on Fri Sep 19 12:05:55 2014}}
-\date{\texttt{RcppOctave} version 0.14.5 as of September 19, 2014}
+\title{\texttt{RcppOctave}: Unit testing results\footnote{Vignette computed  on Thu Jun  4 12:57:19 2015}}
+\date{\texttt{RcppOctave} version 0.16 as of June  4, 2015}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
@@ -69,7 +69,7 @@
 \section{Details}
 \begin{verbatim}
 
-RUNIT TEST PROTOCOL -- Fri Sep 19 12:05:55 2014 
+RUNIT TEST PROTOCOL -- Thu Jun  4 12:57:19 2015 
 *********************************************** 
 Number of test functions: 15 
 Number of errors: 0 
@@ -87,26 +87,26 @@ Test Suite: package:RcppOctave
 Test function regexp: ^test. 
 Test file regexp: ^runit.*.[rR]$ 
 Involved directory: 
-/tmp/Rpkglib_7a8d485f90b1/RcppOctave/unitTests 
+/tmp/Rpkglib_281b7906adcc/RcppOctave/unitTests 
 --------------------------- 
-Test file: /tmp/Rpkglib_7a8d485f90b1/RcppOctave/unitTests/runit.conversions.R 
+Test file: /tmp/Rpkglib_281b7906adcc/RcppOctave/unitTests/runit.conversions.R 
 test.bool: (7 checks) ... OK (0 seconds)
 test.char: (7 checks) ... OK (0 seconds)
 test.double: (9 checks) ... OK (0 seconds)
 test.int: (9 checks) ... OK (0 seconds)
 test.list: (37 checks) ... OK (0.01 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_7a8d485f90b1/RcppOctave/unitTests/runit.eval.R 
-test.assign: (4 checks) ... OK (0.03 seconds)
+Test file: /tmp/Rpkglib_281b7906adcc/RcppOctave/unitTests/runit.eval.R 
+test.assign: (4 checks) ... OK (0.01 seconds)
 test.o_eval: (11 checks) ... OK (0.02 seconds)
 test.o_get: (25 checks) ... OK (0.04 seconds)
-test.o_source: (2 checks) ... OK (0.01 seconds)
+test.o_source: (2 checks) ... OK (0 seconds)
 test.redirection: (13 checks) ... OK (0 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_7a8d485f90b1/RcppOctave/unitTests/runit.OctaveFunction.R 
-test.definition: (36 checks) ... OK (0.05 seconds)
+Test file: /tmp/Rpkglib_281b7906adcc/RcppOctave/unitTests/runit.OctaveFunction.R 
+test.definition: (36 checks) ... OK (0.02 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_7a8d485f90b1/RcppOctave/unitTests/runit.stats.R 
+Test file: /tmp/Rpkglib_281b7906adcc/RcppOctave/unitTests/runit.stats.R 
 test.o_rexp: (24 checks) ... OK (0.01 seconds)
 test.o_rgamma: (48 checks) ... OK (0 seconds)
 test.o_rnorm: (24 checks) ... OK (0 seconds)
@@ -115,20 +115,21 @@ test.o_runif: (24 checks) ... OK (0 seconds)
 Total execution time
 ***************************
    user  system elapsed 
-  0.834   0.016   0.862 
+  0.595   0.001   0.610 
 
 \end{verbatim}
 
 \section*{Session Information}
 \begin{itemize}\raggedright
-  \item R version 3.1.1 (2014-07-10), \verb|x86_64-pc-linux-gnu|
+  \item R version 3.2.0 (2015-04-16), \verb|x86_64-pc-linux-gnu|
   \item Locale: \verb|LC_CTYPE=en_US.UTF-8|, \verb|LC_NUMERIC=C|, \verb|LC_TIME=C|, \verb|LC_COLLATE=en_US.UTF-8|, \verb|LC_MONETARY=en_ZA.UTF-8|, \verb|LC_MESSAGES=en_US.UTF-8|, \verb|LC_PAPER=en_ZA.UTF-8|, \verb|LC_NAME=C|, \verb|LC_ADDRESS=C|, \verb|LC_TELEPHONE=C|, \verb|LC_MEASUREMENT=en_ZA.UTF-8|, \verb|LC_IDENTIFICATION=C|
   \item Base packages: base, datasets, graphics, grDevices, methods,
     stats, utils
-  \item Other packages: pkgmaker~0.25.7, Rcpp~0.11.2,
-    RcppOctave~0.14.5, registry~0.2, RUnit~0.4.26, stringr~0.6.2
-  \item Loaded via a namespace (and not attached): codetools~0.2-9,
-    digest~0.6.4, tools~3.1.1, xtable~1.7-3
+  \item Other packages: pkgmaker~0.25.9, Rcpp~0.11.6, RcppOctave~0.16,
+    registry~0.2, RUnit~0.4.28, stringr~1.0.0
+  \item Loaded via a namespace (and not attached): codetools~0.2-11,
+    digest~0.6.8, magrittr~1.5, stringi~0.4-1, tools~3.2.0,
+    xtable~1.7-4
 \end{itemize}
 
 \end{document}

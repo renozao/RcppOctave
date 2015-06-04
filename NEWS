@@ -1,4 +1,12 @@
 ********************
+Changes in 0.16
+********************
+FIXES
+    o Fixed compatibility bug with Octave 4.0.0. See ?o_config_info (issue #5).
+    o Added configure option --without-rprofile to disable loading in internal 
+    R calls during installation (issue #6)   
+
+********************
 Changes in 0.14.5
 ********************
 FIXES
