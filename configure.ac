@@ -8,7 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-AC_INIT([RcppOctave], 0.16)
+AC_INIT([RcppOctave], 0.16.1)
 
 # You will very likely need to ensure that the same C compiler and compiler 
 # flags are used in the configure tests as when compiling R or your package. 
@@ -19,6 +19,34 @@ if test -z "${R_HOME}"; then
   echo "RcppOctave - configure: could not determine R_HOME"
   exit 1
 fi
+
+## Path to Rscript binary
+AC_PATH_PROG([RSCRIPT_BIN], [Rscript], [], [${R_HOME}/bin${R_ARCH_BIN}])
+## Check if the user's Rprofile should be used in calls to Rscript
+AC_ARG_WITH([rprofile], AS_HELP_STRING([--without-rprofile], [Do not read the user's .Rprofile in calls to Rscript]))
+	
+RSCRIPT_ARG=''
+AC_MSG_CHECKING([whether loading Rprofile writes to stdout])
+AS_IF([test "`\"${RSCRIPT_BIN}\" -e 'q()'`" = ""], [rscript_write_stdout="no"], [rscript_write_stdout="yes"])
+AC_MSG_RESULT([${rscript_write_stdout}])
+
+AS_IF([( test "x${with_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout}" = "xyes" && test "x${with_rprofile}" = "x" )], 
+	[RSCRIPT_ARG='--no-init-file'], # explicitly without Rprofile or detected as required and no explicit specification
+	[ AS_IF([test "x${rscript_write_stdout}" = "xyes"], # error if required but still forced by the user 
+			[AC_MSG_ERROR([Your Rprofile writes to stdout.
+                This will corrupt corrupt output from installation Rscript calls 
+                and lead to compilation errors.
+            -> Please drop configure option --with-rprofile.])])
+	]
+)                                                        
+AS_IF( [test "${RSCRIPT_ARG}" != ""], [
+	RSCRIPT_BIN="\"${RSCRIPT_BIN}\" ${RSCRIPT_ARG}"
+	AC_MSG_NOTICE([Using Rscript command: ${RSCRIPT_BIN}])
+	],
+	[RSCRIPT_BIN="\"${RSCRIPT_BIN}\""]
+)
+AC_SUBST(RSCRIPT_BIN)
+#
 
 # get compiler and compilation flags from R
 if test -n "${R_HOME}"; then
@@ -97,28 +125,17 @@ else
 fi
 AC_MSG_RESULT(${darwin})
 
-AC_MSG_RESULT([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
-AC_MSG_RESULT([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
+AC_MSG_NOTICE([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
+AC_MSG_NOTICE([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
 
 # pass R flags down to makefile in modules/
 AC_SUBST(R_CPPFLAGS)
 AC_SUBST(R_LDFLAGS)
 
-
-## Check if the user's Rprofile should be used in calls to Rscript
-AC_ARG_WITH([rprofile],
-	AS_HELP_STRING([--without-rprofile], ["Do not read the user's .Rprofile in calls to Rscript"]))
-	
-RSCRIPT_BIN=''
-AS_IF([test "x$with_rprofile" = "xno"], 
-	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\" --no-init-file"], 
-	[RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\""])
-AC_SUBST(RSCRIPT_BIN)
-
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
 #RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
-#AC_MSG_RESULT([Using Rcpp LIBS: ${RCPP_LIBS}])
-#AC_MSG_RESULT([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
+#AC_MSG_NOTICE([Using Rcpp LIBS: ${RCPP_LIBS}])
+#AC_MSG_NOTICE([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
 #AC_SUBST(RCPP_LIBS)
 #AC_SUBST(RCPP_CXXFLAGS)
 
@@ -163,7 +180,7 @@ if test [ -n "$octave_path" ] ; then
 	    * path to Octave binary file.
 	  ])
     fi
-	AC_MSG_RESULT([using Octave binary path ... ${OCTAVE_BINDIR}])
+	AC_MSG_NOTICE([using Octave binary path ... ${OCTAVE_BINDIR}])
 	
 	# looking up octave-config and mkoctfile
 	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
@@ -171,7 +188,7 @@ if test [ -n "$octave_path" ] ; then
 	# prepend to PATH
 	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
-  AC_MSG_RESULT([using Octave binary path from \$PATH])
+  AC_MSG_NOTICE([using Octave binary path from \$PATH])
   # looking up octave-config and mkoctfile
   AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
   AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
@@ -265,9 +282,9 @@ else
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_MSG_RESULT([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
+AC_MSG_NOTICE([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
 AC_SUBST(OCT_LDFLAGS)
-AC_MSG_RESULT([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
+AC_MSG_NOTICE([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
 AC_SUBST(OCT_CPPFLAGS)
 
 # Module path
