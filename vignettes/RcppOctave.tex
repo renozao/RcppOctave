@@ -127,7 +127,7 @@
 \usepackage[minnames=1,maxnames=2,backend=bibtex]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_281b7906adcc/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_170436d8bcc3/RcppOctave/REFERENCES}
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
 %%
@@ -143,9 +143,9 @@
 \usepackage[noabbrev, capitalise, nameinlink]{cleveref}
 
 \author{Renaud Gaujoux}
-\title{\pkgname{RcppOctave}: Seamless Interface to Octave -- and Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.16
-[June  4, 2015]\footnote{This vignette was built using \octave
+\title{\pkgname{RcppOctave}: Seamless Interface to Octave -- And Matlab}
+\date{\Rpkg{RcppOctave} -- Version 0.16.1
+[June  5, 2015]\footnote{This vignette was built using \octave
 3.8.1}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -495,7 +495,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{'fun1'}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.2993035018 0.0007675409 0.2705366798 0.4234020347
+## [1] 0.1987735 0.4770475 0.4388762 0.9827698
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values }
@@ -503,12 +503,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.5762003 0.5768093 0.0617600 0.9912986
+## [1] 0.80830623 0.05730155 0.29734387 0.59857238
 ## 
 ## $b
-##            [,1]      [,2]      [,3]
-## [1,] 0.04883472 0.5336333 0.8338933
-## [2,] 0.73256321 0.7748761 0.7519246
+##           [,1]      [,2]      [,3]
+## [1,] 0.8435441 0.4460483 0.6421596
+## [2,] 0.4349020 0.2899460 0.9645151
 ## 
 ## $c
 ## [1] "some text"
@@ -919,18 +919,18 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ##           [,1]
-## [1,] 1.8851010
-## [2,] 0.4240681
-## [3,] 0.0681409
+## [1,] 1.6264419
+## [2,] 0.6153160
+## [3,] 0.2520642
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
 ##           [,1]
-## [1,] 1.8851010
-## [2,] 0.4240681
-## [3,] 0.0681409
+## [1,] 1.6264419
+## [2,] 0.6153160
+## [3,] 0.2520642
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -939,13 +939,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.70466822 0.03875278
+## [1] 0.3246837 0.2284441
 ## 
 ## [[2]]
-## [1]  0.3319237 -1.3078108
+## [1] -0.5561903  0.5860857
 ## 
 ## [[3]]
-## [1] 0.7462565 0.3679739 0.1722518
+## [1] 0.46853563 0.08462453 0.50091288
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -964,7 +964,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.70466822 0.03875278
+## [1] 0.3246837 0.2284441
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -977,7 +977,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.70466822 0.03875278
+## [1] 0.3246837 0.2284441
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1237,9 +1237,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.6242 0.868 0.6972 0.1767 0.0499
-##  $ u: num [1:5, 1:5] -0.354 -0.52 -0.438 -0.374 -0.522 ...
-##  $ v: num [1:5, 1:5] -0.27 -0.533 -0.169 -0.566 -0.542 ...
+##  $ d: num [1:5] 2.621 0.806 0.488 0.321 0.158
+##  $ u: num [1:5, 1:5] -0.363 -0.439 -0.579 -0.412 -0.413 ...
+##  $ v: num [1:5, 1:5] -0.538 -0.376 -0.595 -0.279 -0.37 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1253,8 +1253,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol}\hlstd{=}\hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component \"u\": Mean relative difference: 2.721664e-16"
-## [2] "Component \"v\": Mean relative difference: 3.811115e-16"
+## [1] "Component \"u\": Mean relative difference: 4.034129e-16"
+## [2] "Component \"v\": Mean relative difference: 2.943264e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1446,8 +1446,8 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] knitr_1.10.5    RcppOctave_0.16 pkgmaker_0.25.9 registry_0.2   
-[5] Rcpp_0.11.6    
+[1] knitr_1.10.5      RcppOctave_0.16.1 pkgmaker_0.25.9   registry_0.2     
+[5] Rcpp_0.11.6      
 
 loaded via a namespace (and not attached):
  [1] magrittr_1.5     formatR_1.2      tools_3.2.0      stringi_0.4-1   
