@@ -659,7 +659,6 @@ OCTAVE_BINDIR
 OCTAVE_CUSTOMED
 OCTAVE_MKOCTFILE
 OCTAVE_CONFIG
-RSCRIPT_BIN
 R_LDFLAGS
 R_CPPFLAGS
 R_CXX_COMPILER
@@ -674,6 +673,7 @@ LDFLAGS
 CFLAGS
 CC
 R_CC_COMPILER
+RSCRIPT_BIN
 target_alias
 host_alias
 build_alias
@@ -1337,8 +1337,7 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --without-rprofile      "Do not read the user's .Rprofile in calls to
-                          Rscript"
+  --without-rprofile      Do not read the user's .Rprofile in calls to Rscript
   --with-octave=PATH      the location of octave root directory, binary file
                           or bin/ sub-directory
 
@@ -1870,6 +1869,93 @@ if test -z "${R_HOME}"; then
   echo "RcppOctave - configure: could not determine R_HOME"
   exit 1
 fi
+
+## Path to Rscript binary
+# Extract the first word of "Rscript", so it can be a program name with args.
+set dummy Rscript; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_RSCRIPT_BIN+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $RSCRIPT_BIN in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_RSCRIPT_BIN="$RSCRIPT_BIN" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in ${R_HOME}/bin${R_ARCH_BIN}
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_RSCRIPT_BIN="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+RSCRIPT_BIN=$ac_cv_path_RSCRIPT_BIN
+if test -n "$RSCRIPT_BIN"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RSCRIPT_BIN" >&5
+$as_echo "$RSCRIPT_BIN" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+## Check if the user's Rprofile should be used in calls to Rscript
+
+# Check whether --with-rprofile was given.
+if test "${with_rprofile+set}" = set; then :
+  withval=$with_rprofile;
+fi
+
+
+RSCRIPT_ARG=''
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether loading Rprofile writes to stdout" >&5
+$as_echo_n "checking whether loading Rprofile writes to stdout... " >&6; }
+if test "`\"${RSCRIPT_BIN}\" -e 'q()'`" = ""; then :
+  rscript_write_stdout="no"
+else
+  rscript_write_stdout="yes"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${rscript_write_stdout}" >&5
+$as_echo "${rscript_write_stdout}" >&6; }
+
+if ( test "x${with_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout}" = "xyes" && test "x${with_rprofile}" = "x" ); then :
+  RSCRIPT_ARG='--no-init-file'
+else
+  # explicitly without Rprofile or detected as required and no explicit specification
+	 if test "x${rscript_write_stdout}" = "xyes"; then :
+  # error if required but still forced by the user
+			as_fn_error $? "Your Rprofile writes to stdout.
+                This will corrupt corrupt output from installation Rscript calls
+                and lead to compilation errors.
+            -> Please drop configure option --with-rprofile." "$LINENO" 5
+fi
+
+
+fi
+if test "${RSCRIPT_ARG}" != ""; then :
+
+	RSCRIPT_BIN="\"${RSCRIPT_BIN}\" ${RSCRIPT_ARG}"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Using Rscript command: ${RSCRIPT_BIN}" >&5
+$as_echo "$as_me: Using Rscript command: ${RSCRIPT_BIN}" >&6;}
+
+else
+  RSCRIPT_BIN="\"${RSCRIPT_BIN}\""
+
+fi
+
+#
 
 # get compiler and compilation flags from R
 if test -n "${R_HOME}"; then
@@ -3215,23 +3301,6 @@ $as_echo "$as_me: Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6;}
 
 # pass R flags down to makefile in modules/
 
-
-
-
-## Check if the user's Rprofile should be used in calls to Rscript
-
-# Check whether --with-rprofile was given.
-if test "${with_rprofile+set}" = set; then :
-  withval=$with_rprofile;
-fi
-
-
-RSCRIPT_BIN=''
-if test "x$with_rprofile" = "xno"; then :
-  RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\" --no-init-file"
-else
-  RSCRIPT_BIN="\"${R_HOME}/bin${R_ARCH_BIN}/Rscript\""
-fi
 
 
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
