@@ -24,7 +24,7 @@ RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe
 # load m4 Windows macros
 . exec/m4.win
 
-AC_INIT RcppOctave 0.16
+AC_INIT RcppOctave 0.16.1
 AC_MSG_CHECKING "Rscript version"
 AC_MSG_RESULT `"${RSCRIPT}" --version`
 
