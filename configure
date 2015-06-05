@@ -3208,10 +3208,10 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${darwin}" >&5
 $as_echo "${darwin}" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}" >&5
-$as_echo "Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&5
-$as_echo "Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}" >&5
+$as_echo "$as_me: Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&5
+$as_echo "$as_me: Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6;}
 
 # pass R flags down to makefile in modules/
 
@@ -3236,8 +3236,8 @@ fi
 
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
 #RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
-#AC_MSG_RESULT([Using Rcpp LIBS: ${RCPP_LIBS}])
-#AC_MSG_RESULT([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
+#AC_MSG_NOTICE([Using Rcpp LIBS: ${RCPP_LIBS}])
+#AC_MSG_NOTICE([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
 #AC_SUBST(RCPP_LIBS)
 #AC_SUBST(RCPP_CXXFLAGS)
 
@@ -3310,8 +3310,8 @@ $as_echo X"$octave_path" |
 	    * path to Octave binary file.
 	  " "$LINENO" 5
     fi
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using Octave binary path ... ${OCTAVE_BINDIR}" >&5
-$as_echo "using Octave binary path ... ${OCTAVE_BINDIR}" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: using Octave binary path ... ${OCTAVE_BINDIR}" >&5
+$as_echo "$as_me: using Octave binary path ... ${OCTAVE_BINDIR}" >&6;}
 
 	# looking up octave-config and mkoctfile
 	# Extract the first word of "octave-config", so it can be a program name with args.
@@ -3397,8 +3397,8 @@ fi
 	# prepend to PATH
 	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: using Octave binary path from \$PATH" >&5
-$as_echo "using Octave binary path from \$PATH" >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: using Octave binary path from \$PATH" >&5
+$as_echo "$as_me: using Octave binary path from \$PATH" >&6;}
   # looking up octave-config and mkoctfile
   # Extract the first word of "octave-config", so it can be a program name with args.
 set dummy octave-config; ac_word=$2
@@ -3667,11 +3667,11 @@ else
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&5
-$as_echo "Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&5
+$as_echo "$as_me: Using Octave LDFLAGS: ${OCT_LDFLAGS}" >&6;}
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&5
-$as_echo "Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&5
+$as_echo "$as_me: Using Octave CPPFLAGS: ${OCT_CPPFLAGS}" >&6;}
 
 
 # Module path

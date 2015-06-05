@@ -97,8 +97,8 @@ else
 fi
 AC_MSG_RESULT(${darwin})
 
-AC_MSG_RESULT([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
-AC_MSG_RESULT([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
+AC_MSG_NOTICE([Using mkoctfile with R_LDFLAGS: ${R_LDFLAGS}])
+AC_MSG_NOTICE([Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}])
 
 # pass R flags down to makefile in modules/
 AC_SUBST(R_CPPFLAGS)
@@ -117,8 +117,8 @@ AC_SUBST(RSCRIPT_BIN)
 
 #RCPP_LIBS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::LdFlags()"`
 #RCPP_CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e "Rcpp:::CxxFlags()"`
-#AC_MSG_RESULT([Using Rcpp LIBS: ${RCPP_LIBS}])
-#AC_MSG_RESULT([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
+#AC_MSG_NOTICE([Using Rcpp LIBS: ${RCPP_LIBS}])
+#AC_MSG_NOTICE([Using Rcpp CXXFLAGS: ${R_CXXFLAGS}])
 #AC_SUBST(RCPP_LIBS)
 #AC_SUBST(RCPP_CXXFLAGS)
 
@@ -163,7 +163,7 @@ if test [ -n "$octave_path" ] ; then
 	    * path to Octave binary file.
 	  ])
     fi
-	AC_MSG_RESULT([using Octave binary path ... ${OCTAVE_BINDIR}])
+	AC_MSG_NOTICE([using Octave binary path ... ${OCTAVE_BINDIR}])
 	
 	# looking up octave-config and mkoctfile
 	AC_PATH_PROG([OCTAVE_CONFIG], [octave-config], [], ["${OCTAVE_BINDIR}"])
@@ -171,7 +171,7 @@ if test [ -n "$octave_path" ] ; then
 	# prepend to PATH
 	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
 else
-  AC_MSG_RESULT([using Octave binary path from \$PATH])
+  AC_MSG_NOTICE([using Octave binary path from \$PATH])
   # looking up octave-config and mkoctfile
   AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
   AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
@@ -265,9 +265,9 @@ else
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_MSG_RESULT([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
+AC_MSG_NOTICE([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
 AC_SUBST(OCT_LDFLAGS)
-AC_MSG_RESULT([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
+AC_MSG_NOTICE([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
 AC_SUBST(OCT_CPPFLAGS)
 
 # Module path
