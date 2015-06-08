@@ -167,6 +167,7 @@ is.Mac <- function(check.gui=FALSE){
 	is.mac && (!check.gui || .Platform$GUI == 'AQUA')
 }
 
+#' @importFrom utils head
 file.first.path <- function(dir, ...){
     f <- file.path(...)
     sapply(f, function(x){
