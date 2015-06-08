@@ -26,31 +26,7 @@ namespace Rcpp {
 #include <octave/oct-obj.h>
 
 // define version-specific macros
-#include "swig_octave_version.h"
-#ifndef OCT_POST_3_4_0
-	#if !SWIG_OCTAVE_PREREQ(3,4,0)
-		#define OCT_POST_3_4_0 -1
-	#else
-		#define OCT_POST_3_4_0 1
-	#endif
-#endif
-
-#if OCT_POST_3_4_0 < 0
-#define PRE_3_4_0(x) x
-#define POST_3_4_0(x)
-#else
-#define PRE_3_4_0(x)
-#define POST_3_4_0(x) x
-#endif
-
-
-// define which class to use for Octave maps
-#if SWIG_OCTAVE_PREREQ(3,8,0)
-  #define OCTAVE_MAP octave_map
-#else
-  #define OCTAVE_MAP Octave_map
-#endif
-//
+#include "compatibility.h"
 
 #define VERBOSE_LOG if( RCPP_OCTAVE_VERBOSE ) Rprintf
 

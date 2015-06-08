@@ -3,6 +3,7 @@ autoload('rand', which('Rrng.oct'));
 autoload('randn', which('Rrng.oct'));
 autoload('rande', which('Rrng.oct'));
 autoload('randg', which('Rrng.oct'));
+autoload('randp', which('Rrng.oct'));
 autoload('setseed', which('Rrng.oct'));
 autoload('getseed', which('Rrng.oct'));
 

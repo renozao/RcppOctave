@@ -172,7 +172,7 @@ NULL
     
     # custom installation
     if( isTRUE(Octave.config[['customed']]) ){
-        .debug("* Try explicit loading:")
+        .debug("* Explicit loading from custom location:")
         .load_dep()
         .load()
         return(TRUE)

@@ -166,6 +166,48 @@ o_rgamma <- function(n, p=n, shape=1, scale=1){
 	.CallOctave('randg', shape, n, p, scale)
 }
 
+#' Drawing from R Poisson Distribution in Octave
+#' 
+#' This function wraps a call to the standard Octave function \code{randp}, 
+#' which is redefined by \code{RcppOctave} to call the R base function 
+#' \code{\link[stats]{rpois}}.
+#' This enables to exactly reproduce stochastic computations in R and Octave, 
+#' without changing the original Octave/Matlab code.
+#' See \code{\link{o_runif}} for more details.
+#' 
+#' This function calls the Octave function \code{randp} as provided by 
+#' \code{RcppOctave}, which returns the draws as double.
+#' The result is converted into integer to match the behaviour of
+#' \code{\link{rpois}}
+#' 
+#' @inheritParams o_runif 
+#' @param lambda Mean of the Poisson distribution
+#' 
+#' @templateVar name randp
+#' @template OctaveDoc
+#' 
+#' @export
+#' @family orandom
+#' @seealso rpois 
+#' @examples
+#' 
+#' # Draw random poisson values (in vector form)
+#' set.seed(123)
+#' o_rpois(1, lambda = 4)
+#' o_rpois(1, 10, 4)
+#' 
+#' # Draw random poisson values (in matrix form)
+#' set.seed(123)
+#' o_rpois(2, lambda = 4)
+#' o_rpois(2, 5, lambda = 4)
+#' 
+o_rpois <- function(n, p=n, lambda){
+	res <- .CallOctave('randp', lambda, n, p)
+    # need to convert to integer
+    storage.mode(res) <- 'integer'
+    res
+}
+
 ##' Seed R RNG in Octave
 ##' 
 ##' This function seeds the Octave port of R random number generators.

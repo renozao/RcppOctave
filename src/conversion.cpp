@@ -62,10 +62,21 @@ inline SEXP wrap(const Array<int>& x){
 }
 
 /**
- * Converts an Octave Array of integer into a double R matrix or vector.
+ * Converts an Octave Array of double into a double R matrix or vector.
  */
 inline SEXP wrap(const Array<double>& x){
-	VERBOSE_LOG("(doubleMatrix) -> NumericMatrix");
+	VERBOSE_LOG("(Array<double>) -> NumericMatrix");
+	return wrapArray<REALSXP>(x);
+}
+/**
+ * Converts an Octave Matrix object into a double R matrix or vector.
+ *
+ * This method was added in version 0.16.2 to fix ompatibility issues with
+ * Octave 4.0.0, in which `Matrix` inherits from `NDArray` and not directly
+ * from `Array`.
+ */
+inline SEXP wrap(const Matrix& x){
+	VERBOSE_LOG("(Matrix) -> NumericMatrix");
 	return wrapArray<REALSXP>(x);
 }
 
@@ -75,17 +86,24 @@ inline SEXP wrap(const Array<double>& x){
  * Currently only 3D arrays are supported.
  */
 inline SEXP wrap(const NDArray& x){
-	VERBOSE_LOG("(NDArray) -> Array");
-	if( x.ndims() > 3 ){
+
+	int nd = x.ndims();
+	VERBOSE_LOG("(%iD-NDArray)", nd);
+	if( nd > 3 ){
 		std::ostringstream err;
 		err << "<NDArray> - Could not convert NDArray[" << x.ndims() << "]: only up to 3 dimensions are supported";
 		WRAP_ERROR(err.str().c_str());
+
+	}else if( nd == 2 ){// safe-guard in case of a 2D-NDArray (i.e. a Matrix object)
+		VERBOSE_LOG(" = ");
+		return wrap(x.as_matrix()) ;
 	}
 
 	// copy values from the outer to inner dimensions
 	int n = x.dim1();
 	int p = x.dim2();
 	int q = x.dim3();
+	VERBOSE_LOG("[%i x %i x %i]", n, p, q);
 	Rcpp::NumericVector res( Rcpp::Dimension(n, p, q) );
 	Rcpp::NumericVector::iterator z = res.begin();
 	for(int k=0; k<q; k++){

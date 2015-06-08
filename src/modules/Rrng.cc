@@ -239,3 +239,24 @@ RCPP_OCTAVE_HELP_NOTE)
   RAND_RESULT(Rf_rgamma(shape, scale))\
 }
 
+DEFUN_DLD (randp, args, ,
+"USAGE: E = randp(lambda, [n, p])\n\n"
+"Generates Poisson random variates as R function 'rpois' -- using the current RNG from R."
+"\n\nPossible calls:\n"
+"randp(lambda)				returns a single draw from P(lambda)\n"
+"randp(lambda, n) 			returns n*n matrix with uncorrelated P(lambda) deviates drawn in columns\n"
+"randp(lambda, n, p) 		returns n*p matrix with uncorrelated P(lambda) deviates drawn in columns\n"
+"\nNotes:\n"
+"As opposed to the R function rpois, the octave function returns the draws as double."
+"The RcppOctave wrapper function converts the result into integers."
+RCPP_OCTAVE_HELP_NOTE)
+{
+
+  RAND_ARGS("randp", 2, 3, 1, 2)
+
+  // retrieve lambda parameter
+  double lambda = args(0).double_value();
+
+  RAND_RESULT(Rf_rpois(lambda))\
+}
+

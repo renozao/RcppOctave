@@ -73,3 +73,8 @@ test.o_rgamma <- function(){
 	check.rfun(rgamma, o_rgamma, shape=10, scale=1, .msg='shape=10 / scale=1')
 	check.rfun(rgamma, o_rgamma, shape=1, scale=10, .msg='shape=1 / scale=10')
 }
+
+#' Unit test for o_rpois
+test.o_rpois <- function(){
+	check.rfun(rpois, o_rpois, lambda=4, .msg='lambda=4')
+}
