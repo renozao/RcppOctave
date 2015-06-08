@@ -23,20 +23,21 @@ fi
 ## Path to Rscript binary
 AC_PATH_PROG([RSCRIPT_BIN], [Rscript], [], [${R_HOME}/bin${R_ARCH_BIN}])
 ## Check if the user's Rprofile should be used in calls to Rscript
-AC_ARG_WITH([rprofile], AS_HELP_STRING([--without-rprofile], [Do not read the user's .Rprofile in calls to Rscript]))
+AC_ARG_ENABLE([rprofile], AS_HELP_STRING([--disable-rprofile], [Do not read the user's .Rprofile in internal calls to Rscript]))
 	
 RSCRIPT_ARG=''
 AC_MSG_CHECKING([whether loading Rprofile writes to stdout])
 AS_IF([test "`\"${RSCRIPT_BIN}\" -e 'q()'`" = ""], [rscript_write_stdout="no"], [rscript_write_stdout="yes"])
 AC_MSG_RESULT([${rscript_write_stdout}])
 
-AS_IF([( test "x${with_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout}" = "xyes" && test "x${with_rprofile}" = "x" )], 
+AS_IF([( test "x${enable_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout}" = "xyes" && test "x${enable_rprofile}" = "x" )], 
 	[RSCRIPT_ARG='--no-init-file'], # explicitly without Rprofile or detected as required and no explicit specification
 	[ AS_IF([test "x${rscript_write_stdout}" = "xyes"], # error if required but still forced by the user 
-			[AC_MSG_ERROR([Your Rprofile writes to stdout.
+			[AC_MSG_ERROR([Aborting installation.
+                Your current Rprofile contains code that writes to stdout.
                 This will corrupt corrupt output from installation Rscript calls 
                 and lead to compilation errors.
-            -> Please drop configure option --with-rprofile.])])
+            -> Please drop configure option --enable-rprofile.])])
 	]
 )                                                        
 AS_IF( [test "${RSCRIPT_ARG}" != ""], [
@@ -146,18 +147,20 @@ AC_SUBST(R_LDFLAGS)
 ## octave-config
 
 ## Look up for octave binary path from a configure option
-## or an environment variable
 AC_ARG_WITH([octave],
             AC_HELP_STRING([--with-octave=PATH],
-                           [the location of octave root directory, binary file or bin/ sub-directory]),
+                        [the location of octave root directory, binary file or bin/ sub-directory. 
+                    This option overrides environment variable OCTAVE_PATH if defined.]),
             [octave_path=$withval])
+## or an environment variable
+AC_ARG_VAR([OCTAVE_PATH], [Path to octave root directory, binary file or bin/ sub-directory])
 
 AC_MSG_CHECKING([Octave binary path specification])
 if test [ -n "$octave_path" ] ; then # passed as an option
-  AC_MSG_RESULT([$octave_path [[configure option]]])
+AC_MSG_RESULT([$octave_path [[from configure option --wit-octave]]])
 elif test [ -n "${OCTAVE_PATH}" ] ; then
   octave_path="${OCTAVE_PATH}"
-  AC_MSG_RESULT([$octave_path [[environment]]])
+AC_MSG_RESULT([$octave_path [[from environment variable OCTAVE_PATH]]])
 else
   AC_MSG_RESULT([none])
 fi
@@ -187,8 +190,10 @@ if test [ -n "$octave_path" ] ; then
 	AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile], [], ["${OCTAVE_BINDIR}"])
 	# prepend to PATH
 	export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
+	OCTAVE_PATH_ADD="export PATH := \$(OCT_BINDIR)\$(PATH_SEPARATOR)\$(PATH)"
 else
   AC_MSG_NOTICE([using Octave binary path from \$PATH])
+  OCTAVE_PATH_ADD=''
   # looking up octave-config and mkoctfile
   AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
   AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
@@ -218,6 +223,7 @@ if test "${OCTAVE_MKOCTFILE}" != ""; then
       OCTAVE_CUSTOMED=FALSE
     fi
     AC_SUBST(OCTAVE_CUSTOMED)
+    AC_SUBST(OCTAVE_PATH_ADD)
     
 	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
 	AC_OCTAVE_CONFIG([OCTAVE_LIBDIR], [OCTLIBDIR], [Octave libraries directory])

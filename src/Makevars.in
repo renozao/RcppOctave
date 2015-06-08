@@ -12,9 +12,7 @@ OCTAVE_CUSTOMED=@OCTAVE_CUSTOMED@
 RSCRIPT_BIN=@RSCRIPT_BIN@
 #RSCRIPT_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/Rscript"
 
-ifeq ($(OCTAVE_CUSTOMED), "TRUE")
-export PATH := $(OCT_BINDIR)$(PATH_SEPARATOR)$(PATH)
-endif
+@OCTAVE_PATH_ADD@
 
 ## Use the R_HOME indirection to support installations of multiple R version
 PKG_LIBS = `$(RSCRIPT_BIN) -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
