@@ -154,8 +154,11 @@ o_config_info <- function(var = c('CC', 'CC_VERSION', 'FC')){
     
     # fix for Octave version >= 4.0.0: CC_VERSION is now GCC_VERSION
     if( o_version("4.0.0") >= 0 ){
+        var0 <- var
         var[ var == "CC_VERSION" ] <- "GCC_VERSION"
         var[ var == "CXX_VERSION" ] <- "GXX_VERSION"
+        var[ var == "FC" ] <- "F77"
+        names(var) <- var0
     }
     sapply(var, .CallOctave, .NAME = 'octave_config_info')
 }
