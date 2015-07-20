@@ -5,7 +5,8 @@
 echo -n "Loading autoconf-like macros for Windows... "
 
 AC_INIT () {
-	echo "Package $1 - version $2"
+	echo "Auto-configure - `date`"
+	echo "Package $1 - version $2" 
 	# some cleanup
 	rm -f config.status.win
 }
