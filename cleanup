@@ -2,7 +2,7 @@
 
 # cleanup script borrowed and adapted from the RcppGSL package 
 
-rm -f  config.log config.status confdefs.h \
+rm -f  config.log config.status confdefs.h sh.exe.stackdump\
        src/*.o src/*.so src/Makevars \
        config.status.win src/*.dll src/Makevars.win \
        src/modules/*.o src/modules/*.oct src/modules/Makefile \
