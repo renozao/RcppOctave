@@ -127,7 +127,7 @@
 \usepackage[minnames=1,maxnames=2,backend=bibtex]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_527b64d993d1/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_4533e4550e2/RcppOctave/REFERENCES}
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
 %%
@@ -144,8 +144,8 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- And Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.16.2
-[June  8, 2015]\footnote{This vignette was built using \octave
+\date{\Rpkg{RcppOctave} -- Version 0.18
+[September  3, 2015]\footnote{This vignette was built using \octave
 3.8.1}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -495,7 +495,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{'fun1'}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.9801393 0.4138329 0.3023903 0.5537010
+## [1] 0.5511179 0.7377002 0.3528893 0.6659455
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values }
@@ -503,12 +503,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.3523596 0.5891845 0.2665027 0.7890200
+## [1] 0.7969234 0.9335352 0.2986201 0.7667780
 ## 
 ## $b
-##           [,1]      [,2]      [,3]
-## [1,] 0.1130705 0.5242258 0.8986561
-## [2,] 0.5118271 0.5998324 0.8322179
+##           [,1]        [,2]      [,3]
+## [1,] 0.6993137 0.819803328 0.6552577
+## [2,] 0.9864912 0.003746385 0.3077899
 ## 
 ## $c
 ## [1] "some text"
@@ -918,19 +918,19 @@ can also evaluate a list of statements sequentially:
 \hlkwd{o_eval}\hlstd{(}\hlstr{"a=svd(rand(3))"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##           [,1]
-## [1,] 1.8538005
-## [2,] 0.5255432
-## [3,] 0.2573246
+##              [,1]
+## [1,] 1.460018e+00
+## [2,] 6.726904e-01
+## [3,] 7.281303e-05
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-##           [,1]
-## [1,] 1.8538005
-## [2,] 0.5255432
-## [3,] 0.2573246
+##              [,1]
+## [1,] 1.460018e+00
+## [2,] 6.726904e-01
+## [3,] 7.281303e-05
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -939,13 +939,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.2245704 0.8792137
+## [1] 0.6369389 0.7419985
 ## 
 ## [[2]]
-## [1] 0.2512116 1.3064536
+## [1]  1.427095 -1.690550
 ## 
 ## [[3]]
-## [1] 0.4018886 0.3780302 0.3605478
+## [1] 0.6321667 0.6118836 0.6561972
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -964,7 +964,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.2245704 0.8792137
+## [1] 0.6369389 0.7419985
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -977,7 +977,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.2245704 0.8792137
+## [1] 0.6369389 0.7419985
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1237,9 +1237,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.5734 0.8143 0.5036 0.1638 0.0821
-##  $ u: num [1:5, 1:5] -0.355 -0.429 -0.504 -0.484 -0.448 ...
-##  $ v: num [1:5, 1:5] -0.407 -0.611 -0.553 -0.335 -0.207 ...
+##  $ d: num [1:5] 2.278 1.216 0.676 0.195 0.059
+##  $ u: num [1:5, 1:5] -0.5 -0.413 -0.408 -0.462 -0.447 ...
+##  $ v: num [1:5, 1:5] -0.231 -0.393 -0.634 -0.442 -0.442 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1253,8 +1253,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol}\hlstd{=}\hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component \"u\": Mean relative difference: 4.627036e-16"
-## [2] "Component \"v\": Mean relative difference: 2.714142e-16"
+## [1] "Component \"u\": Mean relative difference: 3.261494e-16"
+## [2] "Component \"v\": Mean relative difference: 4.455854e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1338,11 +1338,21 @@ end
 {\scriptsize
 \begin{verbatim}
 ********************
-Changes in 0.16
+Changes in 0.18
 ********************
 FIXES
+	o Fixed installation problem on Windows for R >= 3.2, due to 
+	toolchain incompatiblity. Now requires that the 4.9.2 toolchain
+	available from CRAN is located under the Rtools directory. 
+
+********************
+Changes in 0.16
+********************
+NEW FEATURES
+    o Added Octave function randp for Poisson distribution (issue #8)
+FIXES
     o Fixed compatibility bug with Octave 4.0.0. See ?o_config_info (issue #5).
-    o Added configure option --without-rprofile to disable loading in internal 
+    o Added configure option --diable-rprofile to disable loading in internal 
     R calls during installation (issue #6)   
 
 ********************
@@ -1430,9 +1440,9 @@ CHANGES
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-R version 3.2.0 (2015-04-16)
+R version 3.2.2 (2015-08-14)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 14.04.2 LTS
+Running under: Ubuntu 14.04.3 LTS
 
 locale:
  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -1446,13 +1456,13 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] knitr_1.10.5      RcppOctave_0.16.2 pkgmaker_0.25.9   registry_0.2     
-[5] Rcpp_0.11.6      
+[1] knitr_1.10.5     RcppOctave_0.18  pkgmaker_0.25.10 registry_0.3    
+[5] Rcpp_0.12.0     
 
 loaded via a namespace (and not attached):
- [1] magrittr_1.5     formatR_1.2      tools_3.2.0      stringi_0.4-1   
- [5] codetools_0.2-11 highr_0.5        stringr_1.0.0    digest_0.6.8    
- [9] xtable_1.7-4     evaluate_0.7    
+ [1] magrittr_1.5     formatR_1.2      tools_3.2.2      stringi_0.5-5   
+ [5] codetools_0.2-14 highr_0.5        stringr_1.0.0    digest_0.6.8    
+ [9] xtable_1.7-4     evaluate_0.7.2  
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
