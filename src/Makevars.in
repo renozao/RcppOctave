@@ -10,12 +10,14 @@ OCT_CPPFLAGS=@OCT_CPPFLAGS@
 OCT_MODULES_PATH=@OCT_MODULES_PATH@
 OCT_MODULES_DEST="$(OCT_MODULES_PATH)$(R_ARCH)"
 OCTAVE_CUSTOMED=@OCTAVE_CUSTOMED@
-RSCRIPT_BIN=@RSCRIPT_BIN@
-#RSCRIPT_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/Rscript"
+RSCRIPT_ARG=@RSCRIPT_ARG@
+RSCRIPT_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/Rscript$(RSCRIPT_ARG)"
 
-## Windows-specific variables (flags,target)
-PKG_CPPFLAGS_XTRA=@PKG_CPPFLAGS_XTRA@
+# Octave module target
 OCT_TARGET=@OCT_TARGET@
+
+# System-specific statments (e.g., overrides)
+@SYSTEM_SPEC@
 
 ## Use the R_HOME indirection to support installations of multiple R version
 PKG_LIBS = `$(RSCRIPT_BIN) -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
@@ -27,7 +29,7 @@ all: OctaveModule $(SHLIB)
 $(SHLIB): OctaveModule
  
 OctaveModule:
-	@echo "# Making Octave module [r_arch: $(R_ARCH)]"
+	@echo "# Making Octave module [r_arch: $(OCT_TARGET)]"
 	@cd modules && \
 	$(MAKE) CC="$(CC)" CXX="$(CXX)" AR="$(AR)" RANLIB="$(RANLIB)" $(OCT_TARGET) && \
 	echo "# Copying Octave modules to directory '$(OCT_MODULES_DEST)'" && \

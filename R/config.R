@@ -109,6 +109,17 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
     if( length(path) && nzchar(path) ) file.path(path, ...) 
 }
 
+
+modules.path <- function(){
+    
+    modpath <- packagePath('modules')
+    # fix module path due changes in devtools compilation step
+    if( isDevNamespace() ) modpath <- file.path(tempdir(), packageName(), 'modules')
+    # append architecture sub-directory if necessary
+    if( nzchar(.Platform$r_arch) ) modpath <- file.path(modpath, .Platform$r_arch)
+    modpath
+}
+
 #' Octave Session Details
 #' 
 #' \code{Octave.info} is a function that retrieves information about 
@@ -126,9 +137,8 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
 Octave.info <- function(name){
     
     # special handling of module path
-    modpath <- packagePath('modules')
-    if( isDevNamespace() ){ # fix module path due changes in devtools compilation step
-        modpath <- file.path(tempdir(), packageName(), 'modules')
+    modpath <- modules.path()
+    if( isDevNamespace() ){
         # create module directory
         if( !file.exists(modpath) ){
             message("Faking devtools compilation directory '", modpath, "'")					

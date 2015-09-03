@@ -655,8 +655,8 @@ OCTAVE_LFLAGS
 OCT_INCFLAGS
 OCT_CPPFLAGS
 MKOCT_CMD
+SYSTEM_SPEC
 OCT_TARGET
-PKG_CPPFLAGS_XTRA
 PATH_EXPORT
 OCTAVE_BIN
 OCTAVE_LIBDIR
@@ -679,7 +679,8 @@ LDFLAGS
 CFLAGS
 CC
 R_CC_COMPILER
-RSCRIPT_BIN
+RSCRIPT_ARG
+RSCRIPT
 R_BIN
 target_alias
 host_alias
@@ -1941,12 +1942,12 @@ fi
 set dummy Rscript; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_RSCRIPT_BIN+:} false; then :
+if ${ac_cv_path_RSCRIPT+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  case $RSCRIPT_BIN in
+  case $RSCRIPT in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_RSCRIPT_BIN="$RSCRIPT_BIN" # Let the user override the test with a path.
+  ac_cv_path_RSCRIPT="$RSCRIPT" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -1956,7 +1957,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_RSCRIPT_BIN="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_RSCRIPT="$as_dir/$ac_word$ac_exec_ext"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -1967,27 +1968,17 @@ IFS=$as_save_IFS
   ;;
 esac
 fi
-RSCRIPT_BIN=$ac_cv_path_RSCRIPT_BIN
-if test -n "$RSCRIPT_BIN"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RSCRIPT_BIN" >&5
-$as_echo "$RSCRIPT_BIN" >&6; }
+RSCRIPT=$ac_cv_path_RSCRIPT
+if test -n "$RSCRIPT"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RSCRIPT" >&5
+$as_echo "$RSCRIPT" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Rscript version" >&5
-$as_echo_n "checking Rscript version... " >&6; }
-echo -n `"${RSCRIPT_BIN}" --version`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R platform" >&5
-$as_echo_n "checking R platform... " >&6; }
-R_OS=`"${RSCRIPT_BIN}" -e 'cat(R.version$platform)'`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_OS}" >&5
-$as_echo "${R_OS}" >&6; }
-
-# init variable for possible changes to PATH
-PATH_EXPORT="# not used on ${R_OS}"
+#
 
 ## Check if the user's Rprofile should be used in calls to Rscript
 # Check whether --enable-rprofile was given.
@@ -1999,7 +1990,7 @@ fi
 RSCRIPT_ARG=''
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether loading Rprofile writes to stdout" >&5
 $as_echo_n "checking whether loading Rprofile writes to stdout... " >&6; }
-if test "`\"${RSCRIPT_BIN}\" -e 'q()'`" = ""; then :
+if test "`\"${RSCRIPT}\" -e 'q()'`" = ""; then :
   rscript_write_stdout="no"
 else
   rscript_write_stdout="yes"
@@ -2022,22 +2013,26 @@ fi
 
 
 fi
-if test "${RSCRIPT_ARG}" != ""; then :
+if test -n "${RSCRIPT_ARG}"; then :
 
-	RSCRIPT="${RSCRIPT_BIN}" ${RSCRIPT_ARG}
-	RSCRIPT_BIN="\"${RSCRIPT_BIN}\" ${RSCRIPT_ARG}"
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Using Rscript command: ${RSCRIPT_BIN}" >&5
-$as_echo "$as_me: Using Rscript command: ${RSCRIPT_BIN}" >&6;}
-
-else
-
-	RSCRIPT="${RSCRIPT_BIN}"
-	RSCRIPT_BIN="\"${RSCRIPT_BIN}\""
+	RSCRIPT="${RSCRIPT} ${RSCRIPT_ARG}"
+	RSCRIPT_ARG=" ${RSCRIPT_ARG}"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Using Rscript command: ${RSCRIPT}" >&5
+$as_echo "$as_me: Using Rscript command: ${RSCRIPT}" >&6;}
 
 
 fi
 
 #
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R version" >&5
+$as_echo_n "checking R version... " >&6; }
+echo `${RSCRIPT} -e 'cat(R.version$version.string)'`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R platform" >&5
+$as_echo_n "checking R platform... " >&6; }
+R_OS=`${RSCRIPT} -e 'cat(R.version$platform)'`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_OS}" >&5
+$as_echo "${R_OS}" >&6; }
 
 # get compiler and compilation flags from R
 if test -n "${R_HOME}"; then
@@ -3391,6 +3386,7 @@ $as_echo "$as_me: Using mkoctfile with R_CPPFLAGS: ${R_CPPFLAGS}" >&6;}
 ## octave-config
 
 ## Look up for octave binary path from a configure option
+OCTAVE_CUSTOMED=FALSE
 
 # Check whether --with-octave was given.
 if test "${with_octave+set}" = set; then :
@@ -3417,8 +3413,10 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
 $as_echo "none" >&6; }
 fi
+
 # build lookup path for octave-config
-if test  -n "$OCTAVE_PATH"  ; then
+if test -n "${OCTAVE_PATH}"; then :
+
 	if test  -f "$OCTAVE_PATH"  ; then # path is a file: use parent directory
 	  OCTAVE_PATH=`$as_dirname -- "$OCTAVE_PATH" ||
 $as_expr X"$OCTAVE_PATH" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
@@ -3446,13 +3444,15 @@ $as_echo X"$OCTAVE_PATH" |
 	fi
 	OCTAVE_LOOKUP_PATH="${OCTAVE_PATH}${PATH_SEPARATOR}${OCTAVE_PATH}/bin"
 	OCTAVE_CUSTOMED=TRUE
+
 else
-	OCTAVE_CUSTOMED=FALSE
+
 	OCTAVE_LOOKUP_PATH="$PATH"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: using Octave binary path from \$PATH" >&5
 $as_echo "$as_me: using Octave binary path from \$PATH" >&6;}
-fi
 
+
+fi
 # pass custom flag to scripts
 
 
@@ -3565,6 +3565,7 @@ $as_echo_n "checking Octave Octave libraries directory... " >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $OCTAVE_LIBDIR" >&5
 $as_echo "$OCTAVE_LIBDIR" >&6; }
 
+
 	## octave
 	# Extract the first word of "octave", so it can be a program name with args.
 set dummy octave; ac_word=$2
@@ -3608,26 +3609,26 @@ fi
 
 
 
-	# prepend Octave bin directory to PATH if necessary (custom path)
-	if test  -n "$OCTAVE_PATH"  ; then
-      export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
-      PATH_EXPORT="export PATH := \$(OCTAVE_BINDIR)\$(PATH_SEPARATOR)\$(PATH)"
-    fi
+	## pass on PATH modifications
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking PATH changes" >&5
+$as_echo_n "checking PATH changes... " >&6; }
+	if test "${PATH_EXPORT}" = ""; then :
 
-	## System-specific variables (flags,target)
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking RcppOctave system-specific cpp flags" >&5
-$as_echo_n "checking RcppOctave system-specific cpp flags... " >&6; }
-	PKG_CPPFLAGS_XTRA=
-
-	if test "${PKG_CPPFLAGS_XTRA}" = ""; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
+		PATH_EXPORT="# none needed"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
 $as_echo "none" >&6; }
+
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${PKG_CPPFLAGS_XTRA}" >&5
-$as_echo "${PKG_CPPFLAGS_XTRA}" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${PATH_EXPORT}" >&5
+$as_echo "${PATH_EXPORT}" >&6; }
+		PATH_EXPORT="${PATH_EXPORT}${PATH_SEPARATOR}\$(PATH)"
+		PATH_EXPORT="export PATH=${PATH_EXPORT}"
+
 fi
 
+
+	## Octave module target
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Octave module make target" >&5
 $as_echo_n "checking Octave module make target... " >&6; }
 	OCT_TARGET=all
@@ -3635,6 +3636,12 @@ $as_echo_n "checking Octave module make target... " >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCT_TARGET}" >&5
 $as_echo "${OCT_TARGET}" >&6; }
 	##
+
+	## System-specific statements (flags,target)
+	if test "${SYSTEM_SPEC}" = ""; then :
+  SYSTEM_SPEC="# none needed"
+fi
+
 
 	# mkoctfile command used to compile the modules
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking mkoctfile command" >&5

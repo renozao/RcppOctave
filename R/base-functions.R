@@ -233,12 +233,22 @@ o_help <- function(NAME, character.only = FALSE, show = interactive(), format = 
 	if( length(NAME) != 1 )
 		stop("Argument `NAME` must be a single symbol or character string")
 		
-	# get the help page from Octave
-	hlp <- .Call('oct_help', NAME, PACKAGE='RcppOctave')
-	#print(hlp)
-	
-	if( isTRUE(format) ) format <- 'rd'
+    if( isTRUE(format) ) format <- 'rd'
 	format <- match.arg(format)
+	
+	# get the help page from Octave
+    hlp <- ''
+    if( .isPlatformCompatible() ) hlp <- .Call('oct_help', NAME, PACKAGE='RcppOctave')
+    else{
+        # call on platform i386
+        libpath <- dirname(path.package('RcppOctave'))
+        cmd <- sprintf("Rscript --arch i386 -e \"suppressWarnings(suppressMessages(library(RcppOctave, lib = '%s'))); cat(o_help('%s', TRUE, FALSE, '%s'))\""
+                        , libpath
+                        , NAME, format)
+        return(shell(cmd, intern = TRUE))
+    }
+    
+	#print(hlp)
 	if( format != 'plain' ){
 		# generate \Sexpr commands for each 
 #		sexpr <- paste("RcppOctave::o_help(", NAME, ", show=FALSE)", sep='')

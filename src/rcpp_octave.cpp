@@ -18,6 +18,20 @@
    GPL are also be read online at http://www.gnu.org/licenses/.
 */
 
+#ifdef _WIN64
+
+#include <Rdefines.h>
+
+extern "C" {
+
+	/** Dummy interface function */
+	SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist, SEXP buffer){
+		return R_NilValue;
+	}
+}
+
+#else
+
 #include "rcpp_octave.h"
 #include "Redirect.hpp"
 
@@ -508,3 +522,5 @@ SEXP oct_help(SEXP name){
 		return 0;
 	}
 #endif
+
+#endif // END not _WIN64

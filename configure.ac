@@ -25,22 +25,15 @@ AS_IF([test "${R_ARCH}" = ""], AC_MSG_RESULT([none]), AC_MSG_RESULT([${R_ARCH}])
 
 ## Path to R binaries
 AC_PATH_PROG([R_BIN], [R], [], [${R_HOME}/bin${R_ARCH_BIN}])
-AC_PATH_PROG([RSCRIPT_BIN], [Rscript], [], [${R_HOME}/bin${R_ARCH_BIN}])
-AC_MSG_CHECKING([Rscript version])
-echo -n `"${RSCRIPT_BIN}" --version`
-AC_MSG_CHECKING([R platform])
-R_OS=`"${RSCRIPT_BIN}" -e 'cat(R.version$platform)'`
-AC_MSG_RESULT([${R_OS}])
-
-# init variable for possible changes to PATH
-PATH_EXPORT="# not used on ${R_OS}"
+AC_PATH_PROG([RSCRIPT], [Rscript], [], [${R_HOME}/bin${R_ARCH_BIN}])
+#
 
 ## Check if the user's Rprofile should be used in calls to Rscript
 AC_ARG_ENABLE([rprofile], AS_HELP_STRING([--disable-rprofile], [Do not read the user's .Rprofile in internal calls to Rscript]))
 	
 RSCRIPT_ARG=''
 AC_MSG_CHECKING([whether loading Rprofile writes to stdout])
-AS_IF([test "`\"${RSCRIPT_BIN}\" -e 'q()'`" = ""], [rscript_write_stdout="no"], [rscript_write_stdout="yes"])
+AS_IF([test "`\"${RSCRIPT}\" -e 'q()'`" = ""], [rscript_write_stdout="no"], [rscript_write_stdout="yes"])
 AC_MSG_RESULT([${rscript_write_stdout}])
 
 AS_IF([( test "x${enable_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout}" = "xyes" && test "x${enable_rprofile}" = "x" )], 
@@ -53,18 +46,20 @@ AS_IF([( test "x${enable_rprofile}" = "xno" ) || ( test "x${rscript_write_stdout
             -> Please drop configure option --enable-rprofile.])])
 	]
 )                                                        
-AS_IF( [test "${RSCRIPT_ARG}" != ""], [
-	RSCRIPT="${RSCRIPT_BIN}" ${RSCRIPT_ARG}
-	RSCRIPT_BIN="\"${RSCRIPT_BIN}\" ${RSCRIPT_ARG}"
-	AC_MSG_NOTICE([Using Rscript command: ${RSCRIPT_BIN}])
-	],
-	[
-	RSCRIPT="${RSCRIPT_BIN}"
-	RSCRIPT_BIN="\"${RSCRIPT_BIN}\""
+AS_IF( [test -n "${RSCRIPT_ARG}"], [
+	RSCRIPT="${RSCRIPT} ${RSCRIPT_ARG}"
+	RSCRIPT_ARG=" ${RSCRIPT_ARG}"
+	AC_MSG_NOTICE([Using Rscript command: ${RSCRIPT}])
 	]
 )
-AC_SUBST(RSCRIPT_BIN)
+AC_SUBST(RSCRIPT_ARG)
 #
+
+AC_MSG_CHECKING([R version])
+echo `${RSCRIPT} -e 'cat(R.version$version.string)'`
+AC_MSG_CHECKING([R platform])
+R_OS=`${RSCRIPT} -e 'cat(R.version$platform)'`
+AC_MSG_RESULT([${R_OS}])
 
 # get compiler and compilation flags from R
 if test -n "${R_HOME}"; then
@@ -156,6 +151,7 @@ AC_SUBST(R_LDFLAGS)
 ## octave-config
 
 ## Look up for octave binary path from a configure option
+OCTAVE_CUSTOMED=FALSE
 AC_ARG_WITH([octave],
             AC_HELP_STRING([--with-octave=PATH],
                         [the location of octave root directory, binary file or bin/ sub-directory. 
@@ -176,19 +172,19 @@ elif test [ -n "${OCTAVE_PATH}" ] ; then
 else
   AC_MSG_RESULT([none])
 fi
+
 # build lookup path for octave-config
-if test [ -n "$OCTAVE_PATH" ] ; then
+AS_IF([test -n "${OCTAVE_PATH}"], [
 	if test [ -f "$OCTAVE_PATH" ] ; then # path is a file: use parent directory
 	  OCTAVE_PATH=`AS_DIRNAME(["$OCTAVE_PATH"])`
 	fi
 	OCTAVE_LOOKUP_PATH="${OCTAVE_PATH}${PATH_SEPARATOR}${OCTAVE_PATH}/bin"
 	OCTAVE_CUSTOMED=TRUE
-else
-	OCTAVE_CUSTOMED=FALSE
+	],[	
 	OCTAVE_LOOKUP_PATH="$PATH"
 	AC_MSG_NOTICE([using Octave binary path from \$PATH])
-fi
-
+	]
+)
 # pass custom flag to scripts
 AC_SUBST(OCTAVE_CUSTOMED)
 
@@ -217,27 +213,32 @@ if test "${OCTAVE_CONFIG}" != ""; then
 
 	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
 	AC_OCTAVE_CONFIG([OCTAVE_LIBDIR], [OCTLIBDIR], [Octave libraries directory])
+
 	## octave
 	AC_PATH_PROG([OCTAVE_BIN], [octave], [OCTAVE_BINDIR])
 	
-	# prepend Octave bin directory to PATH if necessary (custom path)
-	if test [ -n "$OCTAVE_PATH" ] ; then
-      export PATH="${OCTAVE_BINDIR}"${PATH_SEPARATOR}${PATH}
-      PATH_EXPORT="export PATH := \$(OCTAVE_BINDIR)\$(PATH_SEPARATOR)\$(PATH)"
-    fi
-	
-	## System-specific variables (flags,target)
+	## pass on PATH modifications
+	AC_MSG_CHECKING([PATH changes])
+	AS_IF([test "${PATH_EXPORT}" = ""], [
+		PATH_EXPORT="# none needed"
+		AC_MSG_RESULT([none])
+		],[
+		AC_MSG_RESULT([${PATH_EXPORT}])
+		PATH_EXPORT="${PATH_EXPORT}${PATH_SEPARATOR}\$(PATH)"
+		PATH_EXPORT="export PATH=${PATH_EXPORT}"
+	])
 	AC_SUBST(PATH_EXPORT)
-	AC_MSG_CHECKING([RcppOctave system-specific cpp flags])
-	PKG_CPPFLAGS_XTRA=
-	AC_SUBST(PKG_CPPFLAGS_XTRA)
-	AS_IF([test "${PKG_CPPFLAGS_XTRA}" = ""], AC_MSG_RESULT([none]), AC_MSG_RESULT(${PKG_CPPFLAGS_XTRA}))
 	
+	## Octave module target
 	AC_MSG_CHECKING([Octave module make target])
 	OCT_TARGET=all
 	AC_SUBST(OCT_TARGET)
 	AC_MSG_RESULT(${OCT_TARGET})
 	##
+	
+	## System-specific statements (flags,target)
+	AS_IF([test "${SYSTEM_SPEC}" = ""], [SYSTEM_SPEC="# none needed"])
+	AC_SUBST(SYSTEM_SPEC)
 		
 	# mkoctfile command used to compile the modules
 	AC_MSG_CHECKING([mkoctfile command])

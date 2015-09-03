@@ -36,7 +36,7 @@ ac_prog_varpath <- function(...){
 ac_path_prog <- function(prog, notfound = '', path = "", msg = "", mode = c('first', 'all', 'deep'), strip.flags = FALSE, intern = FALSE){
     
     strip.flags <- !missing(strip.flags) || !strip.flags
-    if( strip.flags ) prog <- strsplit(prog, ' -', fixed = TRUE)[[1L]]
+    if( strip.flags ) prog <- strsplit(prog, ' -', fixed = TRUE)[[1L]][1L]
         
     if( !nzchar(msg) ) msg <- prog
     if( !nzchar(path) ) path <- Sys.path()
@@ -80,6 +80,8 @@ ac_path_prog <- function(prog, notfound = '', path = "", msg = "", mode = c('fir
     
 }
 
+strm <- function(x) message(paste0(capture.output(str(x)), collapse = "\n"))
+
 Sys.which2 <- function(names, path = ""){
     
     if( !nzchar(path) ) path <- Sys.path()
@@ -98,7 +100,7 @@ Sys.which2 <- function(names, path = ""){
 }
 
 #' Finds Rtools
-ac_path_rtools <- function(gcc){
+ac_path_rtools <- function(gcc, intern = FALSE){
     
     message("Checking Rtools ... ", appendLF = FALSE)
     
@@ -115,18 +117,19 @@ ac_path_rtools <- function(gcc){
     }
     
     if( !length(path) ){ # not found
-        cat("")
+        if( !intern ) cat("")
         message("no")
     }else{ # found
-        cat(path)
+        if( !intern ) cat(path)
         message(path)
         invisible(path)
     }
 }
 
-ac_cc_compatible <- function(octave, rtools){
+#' Finds a gcc version in Rtools/ that is compatible with given gcc version 
+ac_cc_compatible <- function(target, rtools, absolute = TRUE){
     
-    path <- ac_path_prog('gcc[-0-9.]*.exe$', path = rtools, msg = "Rtools compiler(s)", mode = 'deep', intern = TRUE)
+    path <- ac_path_prog('gcc[-0-9.]*.exe$', path = rtools, msg = "all Rtools compiler(s)", mode = 'deep', intern = TRUE)
     
     .cc_spec <- function(cc){
         v <- shell(sprintf("\"%s\" -dumpversion", cc), intern = TRUE)
@@ -136,7 +139,7 @@ ac_cc_compatible <- function(octave, rtools){
     }
     
     message("Checking for compatible compiler ... ", appendLF = FALSE)
-    oct_spec <- .cc_spec(octave)
+    oct_spec <- .cc_spec(target)
     for( p in path ){
         spec <- .cc_spec(p)
         if( spec$full == oct_spec$full || 
@@ -157,11 +160,14 @@ ac_cc_compatible <- function(octave, rtools){
            message(alias)
            
             # g++
-           cxx <- ac_path_prog('g++.exe', bin, msg = "g++", intern = TRUE)
+           cxx <- ac_path_prog('g++.exe', path = bin, msg = "g++", intern = TRUE)
            if( !nzchar(cxx) ) break
            
            p <- gsub(rtools, '', bin, fixed = TRUE)
            cat(p)
+           
+           if( !absolute ) p <- gsub(rtools, "", p, fixed = TRUE)
+           
            return(invisible(p))
         }
     }
@@ -169,4 +175,13 @@ ac_cc_compatible <- function(octave, rtools){
     message('none')
     cat('')
     invisible()
+}
+
+ac_cc_compatible_octave <- function(dir, cc){
+    
+    r_gcc <- ac_path_prog(cc, strip.flags = TRUE, msg = 'current Rtools compiler', intern = TRUE)
+    rtools <- ac_path_rtools(r_gcc, intern = TRUE)
+    if( !length(rtools) ) return(invisible())
+    octave_gcc <- ac_path_prog('gcc.exe', path = dir, msg = 'Octave compiler', intern = TRUE)
+    ac_cc_compatible(octave_gcc, rtools)
 }

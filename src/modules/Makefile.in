@@ -13,12 +13,14 @@
 # 
 
 # Get flags for R
+R_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/R"
 R_CPPFLAGS=@R_CPPFLAGS@
 R_LDFLAGS=@R_LDFLAGS@
 
 # Octave make utility binary
-OCTAVE_BIN=@OCTAVE_BIN@
-MKOCT_CMD=@MKOCT_CMD@
+OCTAVE_BINDIR=@OCTAVE_BINDIR@
+OCTAVE_BIN=${OCTAVE_BINDIR}/octave
+MKOCT_CMD=${OCTAVE_BINDIR}/mkoctfile
 MKOCTFILE_CALL=${MKOCT_CMD} -v $<
 MKOCTFILE_R_CALL=${MKOCT_CMD} -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
 
@@ -29,13 +31,13 @@ OCT_OBJECTS = utils.oct $(OCT_SOURCES:.cc=.oct)
 
 all: $(OCT_OBJECTS)
 
-win-i386:
+win/i386:
 	@echo "# Building 32bit-Windows RcppOctave modules"
 	-@make \
-	MKOCTFILE_CALL="'$(OCTAVE_BIN)' --eval '${MKOCT_CMD} -v $$<'" \
-	MKOCTFILE_R_CALL="'$(OCTAVE_BIN)' --eval '${MKOCT_CMD} -v ${R_CPPFLAGS} ${R_LDFLAGS} $$<'" all
+	MKOCTFILE_CALL="'$(OCTAVE_BIN)' --eval 'mkoctfile -v $$<'" \
+	MKOCTFILE_R_CALL="'$(OCTAVE_BIN)' --eval 'mkoctfile -v ${R_CPPFLAGS} ${R_LDFLAGS} $$<'" all
 
-win-x64:
+win/x64:
 	@echo "# WARNING - Creating dummy 64bit-Windows RcppOctave modules [platform not supported]"
 	@touch $(OCT_OBJECTS)
 	

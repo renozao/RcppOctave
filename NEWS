@@ -1,4 +1,12 @@
 ********************
+Changes in 0.18
+********************
+FIXES
+	o Fixed installation problem on Windows for R >= 3.2, due to 
+	toolchain incompatiblity. Now requires that the 4.9.2 toolchain
+	available from CRAN is located under the Rtools directory. 
+
+********************
 Changes in 0.16
 ********************
 NEW FEATURES
