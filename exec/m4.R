@@ -12,10 +12,18 @@ Sys.path <- function(normalize = TRUE){
     path
 }
 
+ac_msg_checking <- function(..., appendLF = FALSE){
+    message("Checking ", ..., "... ", appendLF = appendLF)
+}
+
+ac_msg_result <- function(...) message(...)
+
+ac_msg_notice <- function(...) message("configure: ", ...)
+
 #' Retrieve a Program Configuration Variable
-ac_prog_var <- function(prog, varname, msg, intern = FALSE, slashes = FALSE){
+ac_prog_var <- function(prog, varname, msg = '', intern = FALSE, slashes = FALSE){
 	if( is.character(intern) ) intern <- nzchar(intern)
-	if( !nzchar(msg) ) msg <- varname
+	if( !nzchar(msg) ) msg <- paste(basename(prog), varname)
 	message(sprintf("Checking %s... ", msg), appendLF = FALSE)
     cmd <- sprintf('"%s" --print %s', prog, varname)
     value <- shell(cmd, intern = TRUE)
@@ -32,6 +40,18 @@ ac_prog_varpath <- function(...){
     ac_prog_var(..., slashes = TRUE)
 }
 
+ac_shell <- function(cmd, msg, intern = FALSE, slashes = TRUE){
+  if( is.character(intern) ) intern <- nzchar(intern)
+  message(sprintf("Checking %s... ", msg), appendLF = FALSE)
+  value <- shell(cmd, intern = TRUE, ignore.stderr = TRUE)
+  if( slashes ) value <- slashes(value)
+  if( !intern ){
+    message(value)
+    cat(value)
+  }
+  invisible(value)
+}
+
 #' Finds a Program Location 
 ac_path_prog <- function(prog, notfound = '', path = "", msg = "", mode = c('first', 'all', 'deep'), strip.flags = FALSE, intern = FALSE){
     
@@ -39,8 +59,10 @@ ac_path_prog <- function(prog, notfound = '', path = "", msg = "", mode = c('fir
     if( strip.flags ) prog <- strsplit(prog, ' -', fixed = TRUE)[[1L]][1L]
         
     if( !nzchar(msg) ) msg <- prog
-    if( !nzchar(path) ) path <- Sys.path()
+    path <- path[nzchar(path)]
+    if( !length(path) ) path <- Sys.path()
     
+    if( length(path) == 1L ) msg <- sprintf("%s [in %s]", msg, path)
     message(sprintf("Checking %s... ", msg), appendLF = FALSE)
     if( missing(mode) || !nzchar(mode) ) mode <- 'first'
     mode <- match.arg(mode)
@@ -117,9 +139,14 @@ ac_path_rtools <- function(gcc, intern = FALSE){
     }
     
     if( !length(path) ){ # not found
-        if( !intern ) cat("")
+        path <- slashes(normalizePath(file.path(dirname(gcc), "../..")))
+      
+        # if( !intern ) cat("")
         message("no")
-    }else{ # found
+        ac_msg_notice("using guessed Rtools path ", appendLF = FALSE)
+    }
+    # else
+    { # found
         if( !intern ) cat(path)
         message(path)
         invisible(path)
@@ -127,10 +154,22 @@ ac_path_rtools <- function(gcc, intern = FALSE){
 }
 
 #' Finds a gcc version in Rtools/ that is compatible with given gcc version 
-ac_cc_compatible <- function(target, rtools, absolute = TRUE){
+ac_cc_compatible <- function(target, rtools, absolute = TRUE, nolookup = TRUE){
     
-    path <- ac_path_prog('gcc[-0-9.]*.exe$', path = rtools, msg = "all Rtools compiler(s)", mode = 'deep', intern = TRUE)
+    r_gcc <- NULL
+    if( file_test("-f", rtools) ){
+      r_gcc <- rtools
+      rtools <- ac_path_rtools(rtools, intern = TRUE)
+    }
+    if( !length(rtools)){
+      message("none")
+      cat('')
+      return(invisible())
+    }
     
+    if( !nolookup ) path <- ac_path_prog('gcc[-0-9.]*.exe$', path = rtools, msg = "all Rtools compiler(s)", mode = 'deep', intern = TRUE)
+    else path <- r_gcc
+      
     .cc_spec <- function(cc){
         v <- shell(sprintf("\"%s\" -dumpversion", cc), intern = TRUE)
         m <- shell(sprintf("\"%s\" -dumpmachine", cc), intern = TRUE)
@@ -138,15 +177,24 @@ ac_cc_compatible <- function(target, rtools, absolute = TRUE){
 #        print(res)
     }
     
-    message("Checking for compatible compiler ... ", appendLF = FALSE)
+    ac_msg_checking("Octave compiler version")
     oct_spec <- .cc_spec(target)
+    ac_msg_result(oct_spec$full)
+    ac_msg_checking("compatible Rtools compiler")
+    
+    # give priority to current compiler if any
+    if( !is.null(r_gcc) ){
+      m <- match(normalizePath(path), normalizePath(r_gcc))
+      path <- path[order(m)]
+    }
+    
     for( p in path ){
         spec <- .cc_spec(p)
+
         if( spec$full == oct_spec$full || 
-                ((spec$machine == oct_spec$machine) && 
-                    spec$version$major ==  oct_spec$version$major &&
-                    spec$version$minor ==  oct_spec$version$minor)
-                ){
+              ( normalizePath(p) == normalizePath(r_gcc) && spec$version >= oct_spec$version) ||
+              ( spec$machine == oct_spec$machine && spec$version >= oct_spec$version)
+            ){
            bin <- dirname(p)
            message(sprintf("%s [%s]", basename(p), bin))
            
@@ -177,11 +225,28 @@ ac_cc_compatible <- function(target, rtools, absolute = TRUE){
     invisible()
 }
 
-ac_cc_compatible_octave <- function(dir, cc){
+ac_cc_compatible_octave <- function(dir, cc, nolookup = FALSE){
     
-    r_gcc <- ac_path_prog(cc, strip.flags = TRUE, msg = 'current Rtools compiler', intern = TRUE)
-    rtools <- ac_path_rtools(r_gcc, intern = TRUE)
-    if( !length(rtools) ) return(invisible())
-    octave_gcc <- ac_path_prog('gcc.exe', path = dir, msg = 'Octave compiler', intern = TRUE)
-    ac_cc_compatible(octave_gcc, rtools)
+  if( is.character(nolookup) ) nolookup <- nzchar(nolookup)
+  
+  r_gcc <- ac_path_prog(cc, strip.flags = TRUE, msg = 'current Rtools compiler', intern = TRUE)
+  
+  # check octave-config is in the directory
+  octave_config <- ac_path_prog('octave-config', path = dir, intern = TRUE)
+  if( !length(octave_config) ){
+      return(invisible())
+  }
+
+  # get Octave version
+  ac_msg_checking("Octave version")
+  ver <- shell(sprintf("%s -p VERSION", octave_config), intern = TRUE)
+  ac_msg_result(ver)
+  lookup_dir <- dir
+  if( compareVersion(ver, "3.6.4") <= 0 ){
+    lookup_dir <- c(lookup_dir, file.path(dir, "../mingw/bin"))
+  }
+  
+  octave_gcc <- ac_path_prog('gcc.exe', path = lookup_dir, msg = 'Octave compiler', intern = TRUE)
+  ac_cc_compatible(octave_gcc, r_gcc, nolookup = nolookup)
 }
+

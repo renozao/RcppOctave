@@ -115,41 +115,14 @@ if test "${OCTAVE_CONFIG}" != ""; then
 	AC_PATH_PROG OCTAVE_BIN octave "" "${OCTAVE_BINDIR}"
 	
 	## select the right R compiler
-	AC_PATH_PROG OCTAVE_CC gcc.exe "" "${OCTAVE_BINDIR}" "Octave compiler"
-	AC_MSG_CHECKING "Octave compiler version"
-	OCT_CC_VERSION=`${OCTAVE_CC} -dumpversion`
-	OCT_CC_MACHINE=`${OCTAVE_CC} -dumpmachine`
-	OCT_CC_SPECS="${OCT_CC_MACHINE}-${OCT_CC_VERSION}"
-	AC_MSG_RESULT "${OCT_CC_SPECS}"
-
-	AC_MSG_CHECKING "compilers compatibility"
-	if [ "x${OCT_CC_SPECS}" != "x${CC_SPECS}" ]; then
-		AC_MSG_RESULT "no [${OCT_CC_SPECS} vs ${CC_SPECS}]"
-		
-		if [ "x${RTOOLS_COMPILER_NO_LOOKUP}" = "" ]; then
-			# check path to Rtools
-			AC_PATH_RTOOLS "${R_CC_COMPILER}"
-			if [ -z "${RTOOLS_PATH}" ]; then
-			echo "RcppOctave configuration error:
-  Default R compiler must be located within Rtools installation directory.
-  -> Check that Rtools bin/ sub-directory appears at the beginning of Windows PATH, and, in particular, _before_ Octave binary path.
-"
-			exit 1
-			fi	
-	
-			AC_CC_COMPATIBLE CC_BIN_BASE "${OCTAVE_CC}" "${RTOOLS_PATH}"
-			SYSTEM_SPEC="ifneq \"\$(WIN)\" \"64\"\n  export PATH:=${CC_BIN_BASE}:\$(PATH)\nelse\n  OCT_LDFLAGS=\n  OCT_CPPFLAGS=\nendif"
-			AC_MSG_NOTICE "pre-pending '${CC_BIN_BASE}' to PATH"
-		else
-			echo "RcppOctave configuration error:
-  Rtools gcc version (${CC_SPECS}) is not compatible with Octave's version (${OCT_CC_SPECS}) 
-  -> Check that Rtools Windows native toolchain gcc-4.9.2 is located in a sub-directory of Rtools.
-  See https://rawgit.com/kevinushey/RToolsToolchainUpdate/master/mingwnotes.html
-"
-			exit 1
-		fi
-	else
-		AC_MSG_RESULT "yes"
+	AC_CC_COMPATIBLE_OCTAVE CC_BIN_BASE "${OCTAVE_BINDIR}" "${CC}" "${RTOOLS_COMPILER_NO_LOOKUP}"
+	if test -z "${CC_BIN_BASE}"; then
+		echo "RcppOctave configuration error:
+  Rtools gcc version is not compatible with Octave's version 
+  -> If using Octave >= 4.0.0, please check that Rtools Windows native toolchain gcc-4.9.2 
+  is located in a sub-directory of Rtools.
+  See https://rawgit.com/kevinushey/RToolsToolchainUpdate/master/mingwnotes.html"
+		exit 1
 	fi
 	
 	AC_MSG_CHECKING "RcppOctave system-specific cpp flags"

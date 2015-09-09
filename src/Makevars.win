@@ -10,15 +10,16 @@ PKG_CPPFLAGS_XTRA=-fmax-errors=10
 ifneq "$(WIN)" "64"
 
   	## Octave flags
-	export OCTAVE_BINDIR := $(shell $(OCTAVE_PATH)octave-config -p BINDIR | sed 's/\\/\//g')
-	OCTAVE_BIN := $(OCTAVE_BINDIR)/octave
+	export OCTAVE_BINDIR := $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_prog_varpath('$(OCTAVE_PATH)octave-config', 'BINDIR')")
+	#export OCTAVE_BINDIR := $(shell $(OCTAVE_PATH)octave-config -p BINDIR | sed 's/\\/\//g')
+	OCTAVE_BIN := $(OCTAVE_BINDIR)/octave --quiet --eval
 	# build Octave lib flags
-	OCT_LFLAGS = $(shell $(OCTAVE_BIN) --eval 'mkoctfile -p LFLAGS' | sed 's/\\/\//g')
-	OCT_LIBS = $(shell $(OCTAVE_BIN) --eval 'mkoctfile -p OCTAVE_LIBS' | sed 's/\\/\//g')
+        OCT_LFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p LFLAGS\"', 'mkoctfile LFLAGS')")
+	OCT_LIBS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p OCTAVE_LIBS\"', 'mkoctfile OCTAVE_LIBS')")
 	OCT_LDFLAGS := $(OCT_LFLAGS) $(OCT_LIBS)
 	# build Octave include flags 
-	OCT_CPPFLAGS = $(shell $(OCTAVE_BIN) --eval 'mkoctfile -p CPPFLAGS' | sed 's/\\/\//g')
-	OCT_INCFLAGS = $(shell $(OCTAVE_BIN) --eval 'mkoctfile -p INCFLAGS' | sed 's/\\/\//g')
+	OCT_CPPFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p CPPFLAGS\"', 'mkoctfile CPPFLAGS')")
+	OCT_INCFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p INCFLAGS\"', 'mkoctfile INCFLAGS')")
 	OCT_CPPFLAGS := $(OCT_CPPFLAGS) $(OCT_INCFLAGS)
 
   # TODO: dynamically get compatible compiler

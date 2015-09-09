@@ -36,6 +36,17 @@ AC_OCTAVE_CONFIG_PATH () {
 	AC_PROG_VARPATH "$1" "${OCTAVE_CONFIG}" "$2" "Octave path to $3"
 }
 
+
+AC_CC_COMPATIBLE_OCTAVE () {
+
+	outvar="$1"
+	if test -z "${outvar}"; then outvar="$3"; fi
+	eval "${outvar}=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_cc_compatible_octave, as.list(commandArgs(TRUE)))' \"$2\" \"$3\" \"$4\"`\""
+	AC_SUBST ${outvar}
+	
+}
+
+
 # Initialize Octave homes: necessary for subsequent calls to AC_OCTAVE_MKCONFIG
 # to return the correct results
 if [ "x{$OCTAVE_CONFIG}" != "x" ]; then
