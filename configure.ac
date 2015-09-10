@@ -324,6 +324,7 @@ AC_MSG_CHECKING([RcppOctave Octave module directory])
 OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules  
 AC_MSG_RESULT([${OCT_MODULES_PATH}])
 AC_SUBST(OCT_MODULES_PATH)
+AC_SUBST(OCT_SOURCES_DIR)
 
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])

@@ -223,6 +223,9 @@ AC_SUBST OCT_MODULES_PATH
 #AC_CONFIG_SUBDIRS([src/modules])
 
 R_ARCH0=`echo "${R_ARCH}" | sed 's/\///'`
+OCT_SOURCES_DIR=`${RSCRIPT} -e "cat(getwd())"`/src-${R_ARCH0}/modules
+AC_SUBST OCT_SOURCES_DIR
+
 AC_OUTPUT R/config-vars.R
 AC_OUTPUT src-${R_ARCH0}/Makevars
 AC_OUTPUT src-${R_ARCH0}/modules/Makefile

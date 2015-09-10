@@ -643,6 +643,7 @@ PACKAGE_URL=''
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+OCT_SOURCES_DIR
 OCT_MODULES_PATH
 OCT_LDFLAGS
 OCTAVE_VERSION
@@ -3823,6 +3824,7 @@ $as_echo_n "checking RcppOctave Octave module directory... " >&6; }
 OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${OCT_MODULES_PATH}" >&5
 $as_echo "${OCT_MODULES_PATH}" >&6; }
+
 
 
 # Configure libRrng
