@@ -93,6 +93,7 @@ o_eval <- function(..., CATCH, unlist=TRUE){
 #' 
 #' @templateVar name assignin
 #' @template OctaveDoc
+#' @importFrom stats setNames
 #' 
 #' @export 
 #' @examples 
