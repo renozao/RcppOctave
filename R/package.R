@@ -256,20 +256,64 @@ NULL
             })
 }
 
-.isPlatformCompatible <- function(){
-    .Platform$OS.type != 'windows' || .Platform$r_arch != 'x64' 
+#' Platform Compatibility Check for RcppOctave
+#' 
+#' Checks if the current platform supports RcppOctave.
+#' 
+#' The following checks are performed:
+#' \itemize{
+#' \item platform must be either non-Windows or Windows-i386;  
+#' \item The Octave version to be loaded is the same one as the one against
+#' which RcppOctave libraries and modules were compiled.
+#' }
+#' 
+#' @param details logical that indicates if the checks' details should be 
+#' returned as well, in which case, the result is a list. 
+#' 
+#' @export
+.isPlatformCompatible <- function(details = FALSE){
+    
+    res <- list(ok = TRUE, os.ok = TRUE, msg = NULL)
+    .result <- function(res){
+        if( details ) res
+        else res[['ok']]
+    }
+    # check compatibility of OS
+    res$os.ok <- .Platform$OS.type != 'windows' || .Platform$r_arch != 'x64'
+    res$ok <- res$os.ok
+
+    if( !res$ok && details ){
+        pversion <- utils::packageVersion('RcppOctave')
+        res$msg <- sprintf("RcppOctave [%s] - R platform %s is not supported", pversion, R.version$platform)
+    }
+    
+    if( !res$ok ) return( .result(res) )
+    
+    # check compatibility of Octave compilation and loading version
+    v <- octave_config('VERSION')
+    v0 <- Octave.version[['version']]
+    res$ok <- res$ok && utils::compareVersion(v0, v) == 0
+    
+    if( !res$ok && details ){
+        res$msg <- c(res$msg, sprintf("RcppOctave was built against Octave %s, but loaded with Octave %s", v0, v))
+    } 
+    res$msg <- paste("NOTE:", res$msg, collapse = "\n")
+    
+    .result(res)
 }
 
 .onLoad <- function(libname, pkgname){
 
-    # skip initialisation if not compatible platform 
-    if( !.isPlatformCompatible() ){
-        .debug(sprintf("RcppOctave - Platform %s is not compatible: Octave calls will discarded", R.version$platform))
-        .load.lib(pkgname = pkgname, libname = libname)
+    # skip initialisation if not compatible platform
+    compat <- .isPlatformCompatible(details = TRUE)
+    if( !compat$ok ){
+        .debug(compat$msg)
+        # the library should load fine if the OS is not compatible 
+        if( !compat$os.ok ) .load.lib(pkgname = pkgname, libname = libname)
         return()
     }
-    # setup finalizer
     
+    # setup finalizer
     reg.finalizer(.octave_end_trigger, .terminate_octave, TRUE)
     
     # save initial PATH state to enable restoration in .onUnload
@@ -289,9 +333,9 @@ NULL
     
     pversion <- utils::packageVersion('RcppOctave')
     
-    if( !.isPlatformCompatible() ){
-        msg <- sprintf("RcppOctave [%s] - R platform %s is not supported"
-                , pversion, R.version$platform)
+    compat <- .isPlatformCompatible(details = TRUE) 
+    if( !compat$ok ){
+        msg <- compat$msg
         packageStartupMessage(msg)
         if( interactive() ) warning(msg)
     
@@ -300,9 +344,7 @@ NULL
                 , "\nNOTE: Octave binaries were probably not found. See ?octave_config.")
     }else{
         # display info about config
-        packageStartupMessage("RcppOctave ", pversion, " [Octave "
-                , o_version()
-                , "]\nOctave path: ", Octave.home('bin'))
+        packageStartupMessage(sprintf("RcppOctave %s [Octave %s - path: %s]", pversion, o_version(), Octave.home('bin')))
     }
 }
 

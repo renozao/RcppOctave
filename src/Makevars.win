@@ -54,7 +54,7 @@ $(SHLIB): OctaveModule
  
 configure:
 ifneq "$(WIN)" "64"
-	cd .. && RTOOLS_COMPILER_NO_LOOKUP=1 . configure-win
+	cd .. && RTOOLS_COMPILER_NO_LOOKUP=1 . exec/configure-win
 	@echo ''
 endif
 
