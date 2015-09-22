@@ -9,6 +9,10 @@ You will need to have:
   See http://cran.r-project.org/bin/windows/Rtools/ for how to install the
   version of Rtools compatible with your R version;
   
+  For R >= 3.2, you need to download and extract the Windows native 
+  gcc 4.9.2 toolchain for your platform available from: 
+  https://rawgit.com/kevinushey/RToolsToolchainUpdate/master/mingwnotes.html
+  
   * Octave: development was performed using the mingw version of
   Octave, which can be installed as decribed in the Octave wiki:
 

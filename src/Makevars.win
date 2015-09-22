@@ -1,0 +1,76 @@
+# R binaries
+R_BIN:=$(R_HOME)/bin$(R_ARCH_BIN)/R
+RSCRIPT_ARG=
+RSCRIPT_BIN:=$(R_BIN)script$(RSCRIPT_ARG)
+
+# To avoid warnings with Octave C99 syntax
+CXX_STD = CXX11
+
+PKG_CPPFLAGS_XTRA=-fmax-errors=10
+ifneq "$(WIN)" "64"
+
+  	## Octave flags
+	export OCTAVE_BINDIR := $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_prog_varpath('$(OCTAVE_PATH)octave-config', 'BINDIR')")
+	#export OCTAVE_BINDIR := $(shell $(OCTAVE_PATH)octave-config -p BINDIR | sed 's/\\/\//g')
+	OCTAVE_BIN := $(OCTAVE_BINDIR)/octave --quiet --eval
+	# build Octave lib flags
+        OCT_LFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p LFLAGS\"', 'mkoctfile LFLAGS')")
+	OCT_LIBS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p OCTAVE_LIBS\"', 'mkoctfile OCTAVE_LIBS')")
+	OCT_LDFLAGS := $(OCT_LFLAGS) $(OCT_LIBS)
+	# build Octave include flags 
+	OCT_CPPFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p CPPFLAGS\"', 'mkoctfile CPPFLAGS')")
+	OCT_INCFLAGS = $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_shell('$(OCTAVE_BIN) \"mkoctfile -p INCFLAGS\"', 'mkoctfile INCFLAGS')")
+	OCT_CPPFLAGS := $(OCT_CPPFLAGS) $(OCT_INCFLAGS)
+
+  # TODO: dynamically get compatible compiler
+  GCC_COMPAT_PATH := $(shell $(RSCRIPT_BIN) -e "source('../exec/m4.R'); ac_cc_compatible_octave('$(OCTAVE_BINDIR)', '$(CC)')")
+  ifneq "$(GCC_COMPAT_PATH)" ""
+  	export PATH := $(GCC_COMPAT_PATH):$(PATH)
+  endif
+else
+	# Generate modules Makefile
+	AC_MODULES := $(shell . ../exec/m4.win; AC_OUTPUT modules/Makefile all)
+	
+endif
+
+
+# installation path for the Octave modules
+OCT_MODULES_PATH=${R_PACKAGE_DIR}/modules
+OCT_MODULES_DEST=$(OCT_MODULES_PATH)$(R_ARCH)
+OCTAVE_CUSTOMED=FALSE
+
+# Octave module target
+OCT_TARGET=win${R_ARCH}
+
+## Use the R_HOME indirection to support installations of multiple R version
+PKG_LIBS := `$(RSCRIPT_BIN) -e "Rcpp:::LdFlags()"` $(OCT_LDFLAGS)
+PKG_CPPFLAGS := `$(RSCRIPT_BIN) -e "Rcpp:::CxxFlags()"` $(OCT_CPPFLAGS) $(PKG_CPPFLAGS_XTRA)
+
+.PHONY: all 
+.PHONY: OctaveModule
+
+all: OctaveModule $(SHLIB)
+$(SHLIB): OctaveModule
+ 
+configure:
+ifneq "$(WIN)" "64"
+	cd .. && RTOOLS_COMPILER_NO_LOOKUP=1 . exec/configure-win
+	@echo ''
+endif
+
+OctaveModule: configure
+	@echo "# Making Octave module [r_arch: $(OCT_TARGET)]"
+	@cd modules && \
+	$(MAKE) CC="$(CC)" CXX="$(CXX)" AR="$(AR)" RANLIB="$(RANLIB)" $(OCT_TARGET) && \
+	echo "# Copying Octave modules to directory '$(OCT_MODULES_DEST)'" && \
+	mkdir -p "$(OCT_MODULES_DEST)" && \
+	cp -f PKG_ADD *.oct "$(OCT_MODULES_DEST)"
+
+clean:
+	rm *.o;
+	cd modules && $(MAKE) clean;
+
+clean-all: clean
+	rm $(SHLIB);
+	cd modules && $(MAKE) clean-all;
+

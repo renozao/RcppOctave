@@ -4,4 +4,5 @@
 # Creation: 26 Oct 2011
 ###############################################################################
 
-pkgmaker::utest('package:RcppOctave', quiet=FALSE)
+if( RcppOctave:::.isPlatformCompatible() )
+    pkgmaker::utest('package:RcppOctave', quiet=FALSE)

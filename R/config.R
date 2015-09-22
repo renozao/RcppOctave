@@ -16,38 +16,36 @@ NULL
 #' about the Octave installation used at installation or runtime
 #' -- which should normally be the same.
 #' 
-#' \code{Octave.version} is list that contains version information as determined
+#' @details \code{Octave.config} is a list that extends \code{Octave.version} with 
+#' extra information about compilers and compilation flags. 
+#' @rdname Octave.config
+#' @export
+#' 
+#' @examples
+#' Octave.config
+Octave.config <- local({
+    
+    config <- setNames(.OCTAVE_CONFIG, tolower(names(.OCTAVE_CONFIG)))
+    config$version.string = sprintf("Octave version %s (%s)", config$version, config$api_version)
+    config$home <- dirname(config$bindir)
+    config$libdir <- unique(c(config$libdir, Filter(nchar, gsub(" ", "", strsplit(config$lflags, "-L", fixed = TRUE)[[1L]]))))
+    config$libs <- paste0('lib', Filter(nchar, gsub(" ", "", strsplit(config$libs, "-l", fixed = TRUE)[[1L]])))
+    structure(config, class = 'simple.list')
+
+})
+
+#' @details \code{Octave.version} is list that contains version information as determined
 #' by the configure script at installation time.
 #'  
 #' @rdname Octave.config
 #' @family Octave.info
 #' @export
+#' 
 #' @examples
 #' Octave.version
-#' Octave.config
-Octave.version <- structure(list(
-            platform = .OCTAVE_PLATFORM,
-            version = .OCTAVE_VERSION,
-            api = .OCTAVE_API_VERSION,
-            version.string = sprintf("Octave version %s (%s)", .OCTAVE_VERSION, .OCTAVE_API_VERSION)            
-        ), class = 'simple.list')
-
-#' @details \code{Octave.config} is a list that extends \code{Octave.version} with 
-#' extra information about compilers and compilation flags. 
-#' @rdname Octave.config
-#' @export
-Octave.config <- structure(c(Octave.version, list(
-                home = dirname(.OCTAVE_BINDIR),
-                bindir = .OCTAVE_BINDIR,
-                libdir = unique(c(.OCTAVE_LIBDIR, Filter(nchar, gsub(" ", "", strsplit(.OCTAVE_LFLAGS, "-L", fixed = TRUE)[[1L]])))),
-                modules = .OCT_MODULES_PATH,
-                cc = .OCTAVE_CC,
-                cppflags = .OCT_CPPFLAGS,
-                ldflags = .OCT_LDFLAGS,
-                libs = paste0('lib', Filter(nchar, gsub(" ", "", strsplit(.OCTAVE_LIBS, "-l", fixed = TRUE)[[1L]]))),
-                customed = .OCTAVE_CUSTOMED,
-                f77 = .OCTAVE_F77
-                )), class = 'simple.list')
+Octave.version <- local({
+    Octave.config[c('platform', grep('version', names(Octave.config), fixed = TRUE, value = TRUE))]
+})
 
 #' Octave Home Directory
 #' 
@@ -99,7 +97,8 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
         # check environment variable OCTAVE_HOME
         if( !nzchar(path <- Sys.getenv('OCTAVE_HOME')) ){
             # check existence of path resolved at configure time
-            if( !file_test('-d', path <- .config.path) && use.system ){
+            path <- if( Octave.config[['customed']] ) .config.path else ''
+            if( (nzchar(path) || !file_test('-d', path)) && use.system ){
                 # last resort: retrieve path from octave-config
                 path <- dirname(octave_config('BINDIR', mustWork = FALSE, warn = FALSE, bindir = NA))
             }
@@ -107,6 +106,17 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
     }
     
     if( length(path) && nzchar(path) ) file.path(path, ...) 
+}
+
+
+modules.path <- function(){
+    
+    modpath <- packagePath('modules')
+    # fix module path due changes in devtools compilation step
+    if( isDevNamespace() ) modpath <- file.path(tempdir(), packageName(), 'modules')
+    # append architecture sub-directory if necessary
+    if( nzchar(.Platform$r_arch) ) modpath <- file.path(modpath, .Platform$r_arch)
+    modpath
 }
 
 #' Octave Session Details
@@ -126,9 +136,8 @@ Octave.home <- function(..., configure = FALSE, use.system = TRUE){
 Octave.info <- function(name){
     
     # special handling of module path
-    modpath <- packagePath('modules')
-    if( isDevNamespace() ){ # fix module path due changes in devtools compilation step
-        modpath <- file.path(tempdir(), packageName(), 'modules')
+    modpath <- modules.path()
+    if( isDevNamespace() ){
         # create module directory
         if( !file.exists(modpath) ){
             message("Faking devtools compilation directory '", modpath, "'")					

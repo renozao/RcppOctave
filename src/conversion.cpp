@@ -1,3 +1,7 @@
+#ifdef _WIN64
+
+#else
+
 #include "rcpp_octave.h"
 
 #define R_NO_REMAP
@@ -617,3 +621,5 @@ toOctaveValue(USER_OBJECT_ robj)
     return(val);
 }
 */
+
+#endif // END not _WIN64

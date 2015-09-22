@@ -7,14 +7,24 @@
 # Copyright (C) 2011 Renaud Gaujoux
 #
 # Released under the GNU General Public License just like Octave
+# On Windows, Octave modules must be compiled with mkoctfile 
+# from within an Octave session to ensure that the correct lib 
+# and include paths are used.
+# 
 
 # Get flags for R
-R_CPPFLAGS = @R_CPPFLAGS@
-R_LDFLAGS = @R_LDFLAGS@
+R_BIN="$(R_HOME)/bin$(R_ARCH_BIN)/R"
+R_CPPFLAGS=@R_CPPFLAGS@
+R_LDFLAGS=@R_LDFLAGS@
 
 # Octave make utility binary
-MKOCTFILE = @OCTAVE_MKOCTFILE@
+OCTAVE_BINDIR=@OCTAVE_BINDIR@
+OCTAVE_BIN=${OCTAVE_BINDIR}/octave
+MKOCT_CMD=${OCTAVE_BINDIR}/mkoctfile
+MKOCTFILE_CALL=${MKOCT_CMD} -v $<
+MKOCTFILE_R_CALL=${MKOCT_CMD} -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
 
+OCT_SOURCES_DIR=@OCT_SOURCES_DIR@
 OCT_SOURCES = Rrng.cc
 OCT_OBJECTS = utils.oct $(OCT_SOURCES:.cc=.oct)
 
@@ -22,11 +32,23 @@ OCT_OBJECTS = utils.oct $(OCT_SOURCES:.cc=.oct)
 
 all: $(OCT_OBJECTS)
 
-utils.oct: utils.cc
-	"$(MKOCTFILE)" -v utils.cc
+win/i386:
+	@echo "# Building 32bit-Windows RcppOctave modules in ${OCT_SOURCES_DIR}/"
+	-@make \
+	MKOCTFILE_CALL="'$(OCTAVE_BIN)' --quiet --eval 'cd(\"${OCT_SOURCES_DIR}\"); mkoctfile -v $$<'" \
+	MKOCTFILE_R_CALL="'$(OCTAVE_BIN)' --quiet --eval 'cd(\"${OCT_SOURCES_DIR}\"); mkoctfile -v ${R_CPPFLAGS} ${R_LDFLAGS} $$<'" all
 
+win/x64:
+	@echo "# WARNING - Creating dummy 64bit-Windows RcppOctave modules [platform not supported]"
+	@touch $(OCT_OBJECTS)
+	
+utils.oct: utils.cc
+	@echo "*** Building octave module: $@"
+	$(MKOCTFILE_CALL)
+	
 .cc.oct:
-	"$(MKOCTFILE)" -v ${R_CPPFLAGS} ${R_LDFLAGS} $<
+	@echo "*** Building octave module: $@"
+	$(MKOCTFILE_R_CALL)
 	
 clean:
 	rm -vf *.o *~

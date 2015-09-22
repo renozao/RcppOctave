@@ -1,33 +1,74 @@
-# Autoconf macro definitions for Windows configure scripts
+# Emulation of generic autoconf macro definitions for Windows configure scripts
 ## Copyright (C) 2013 Renaud Gaujoux
 
 # START
-echo -n "Loading autoconf-like macros for Windows... "
+echo -n "Loading Windows autoconf-like macros ... "
+
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "error"
+  echo "autoconf could not determine R_HOME"
+  exit 1
+fi
+
+if test -z "${RSCRIPT}"; then 
+	RSCRIPT=${R_HOME}/bin${R_ARCH_BIN}/Rscript
+fi
 
 AC_INIT () {
-	echo "Package $1 - version $2"
+	echo "Auto-configure - `date`"
+	echo "Package $1 - version $2" 
 	# some cleanup
-	rm -f config.status.win
+	rm -f config.status.win*
 }
 
 # define substitution function
 AC_SUBST () {
 	if [ ! -z "$2" ]; then eval "$1=\"$2\""; fi
-	echo "$1" >> config.status.win
+	#echo "$1" >> config.status.win
+	eval "echo $1=\"\$$1\"" >> config.status.win
 	export $1
 }
 
 AC_OUTPUT () {
-	"${RSCRIPT}" -e "
+	${RSCRIPT} -e "
+	# template file
 	out <- '$1'
+	# replace all AC variables in template?
+	all <- '$2' == 'all'
+	ifnotfound <- ''
+	
+	# load template file
 	tmpl <- paste0(out, '.in')
-	conf <- 'config.status.win'
 	l <- readLines(tmpl)
-	varList <- readLines(conf)
-	cat('Substituting configure variables (', length(varList), ') in ', out, '\n', sep = '')
-	dummy <- lapply(varList, function(var){
+	
+	# read and process configure variables
+	conf <- 'config.status.win'
+	varList <- list()
+	if( file.exists(conf) ){
+		varList <- unique(readLines(conf))
+		varList <- strsplit(varList, '=', fixed = TRUE)
+		varnames <- sapply(varList, head, 1L)
+		varList <- setNames(sapply(varList, function(x) paste0(tail(x, -1L), collapse = '=')), varnames)
+		varList <- varList[!duplicated(names(varList), fromLast = TRUE)]
+	}
+	
+	# force substitution of all un-resolved template variables
+	if( all ){
+		tmpl_vars <- unique(gsub('@', '', unlist(stringr::str_extract_all(l, '@[a-zA-Z_]+@'))))
+		tmpl_vars <- setdiff(tmpl_vars, names(varList))
+		if( length(tmpl_vars) )
+			varList <- c(varList, as.list(setNames(rep('', length(tmpl_vars)), tmpl_vars)))
+	}
+	
+	# substitute variables in template
+	message(sprintf('config.status: creating %s (%i variables)', out, length(varList)))
+	dummy <- lapply(names(varList), function(var){
+		val <- varList[[var]]
+		if( !length(val) || !nzchar(val)  ) val <- Sys.getenv(var, unset = ifnotfound) 
 		# substitute backslash with forward slashes
-		val <- gsub('\\\\', '/', Sys.getenv(var), fixed = TRUE)
+		val <- gsub('\\\\n', '\n', val, fixed = TRUE)
+		val <- gsub('\\\\', '/', val, fixed = TRUE)
 		#cat(sprintf('%s=%s\n', var, val))
 		l <<- gsub(paste0('@', var, '@'), val, l, fixed = TRUE)
 	})
@@ -43,9 +84,59 @@ AC_MSG_RESULT () {
 	echo "$1"
 }
 
+AC_MSG_NOTICE () {
+	echo "configure: $1"
+}
+
 AS_VERSION_COMPARE () {
 	eval "$1=`\"${RSCRIPT}\" -e \"cat(utils::compareVersion('$2', '$3'))\"`"
 }    
+
+
+AC_SYS_PATH () {
+	`${RSCRIPT} -e 'source("exec/m4.R"); a <- sapply(paste(" *", Sys.path()), message)`
+}
+
+AC_PATH_PROG () {
+
+	outvar="$1"
+	if test -z "${outvar}"; then outvar="$2"; fi
+	eval "${outvar}=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_path_prog, as.list(commandArgs(TRUE)))' \"$2\" \"$3\" \"$4\" \"$5\" \"$6\"`\""
+	AC_SUBST ${outvar}
+}
+
+AC_PATH_RTOOLS () {
+
+	eval "RTOOLS_PATH=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_path_rtools, as.list(commandArgs(TRUE)))' \"$1\"`\""
+	AC_SUBST RTOOLS_PATH
+}
+
+# return config variable for a given program that handles the --print argument 
+AC_PROG_VAR () {
+
+	outvar="$1"
+	if test -z "${outvar}"; then outvar="$3"; fi
+	eval "${outvar}=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_prog_var, as.list(commandArgs(TRUE)))' \"$2\" \"$3\" \"$4\"`\""
+	AC_SUBST ${outvar}
+}
+
+# return config path variable for a given program that handles the --print argument
+AC_PROG_VARPATH () {
+
+	outvar="$1"
+	if test -z "${outvar}"; then outvar="$3"; fi
+	eval "${outvar}=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_prog_varpath, as.list(commandArgs(TRUE)))' \"$2\" \"$3\" \"$4\"`\""
+	AC_SUBST ${outvar}
+}
+
+AC_CC_COMPATIBLE () {
+
+	outvar="$1"
+	if test -z "${outvar}"; then outvar="$3"; fi
+	eval "${outvar}=\"`\"${RSCRIPT}\" -e 'source(\"exec/m4.R\"); do.call(ac_cc_compatible, as.list(commandArgs(TRUE)))' \"$2\" \"$3\"`\""
+	AC_SUBST ${outvar}
+	
+}
 
 # DONE
 echo "OK"
