@@ -20,7 +20,7 @@
 \arguments{
   \item{x}{an \code{OctaveInterface} object. Essentially used with \code{x = .O}.}
 
-  \item{name}{name of the Octave object to retrieve or assign.}
+  \item{name}{name of the Octave obj	ect to retrieve or assign.}
 
   \item{value}{value to assign to the Octave object.}
 
