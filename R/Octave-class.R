@@ -23,6 +23,7 @@ setClass("Octave", contains='character')
 #' 
 #' 
 #' @rdname OctaveInterface
+#' @aliases show,Octave-method
 #' @format \code{.O} is an object of class \code{\linkS4class{Octave}}.
 #' @export
 #' @examples
@@ -37,6 +38,7 @@ setClass("Octave", contains='character')
 #' 
 .O <- new("Octave")
 
+#' @noRd 
 #' @export
 setMethod('show', 'Octave',
 		function(object){
@@ -83,11 +85,18 @@ o_exist <- function(NAME, ...){
 	
 }
 
+#' Auto-completion for Octave Interface Object
+#' 
+#' Auto-completion for \code{\linkS4class{Octave}} objects
+#' 
+#' @inheritParams utils::.DollarNames
 #' @S3method .DollarNames Octave
+#' @rdname autocomplete
+#' @keywords internal
 .DollarNames.Octave <- function(x, pattern = "") o_completion_matches(pattern)
 
-#' Auto-completion for \code{\linkS4class{Octave}} objects
 #' @export
+#' @rdname autocomplete
 setMethod('.DollarNames', 'Octave', .DollarNames.Octave)
 
 #' The method \code{$} provides a direct way of calling Octave functions or 
@@ -95,25 +104,20 @@ setMethod('.DollarNames', 'Octave', .DollarNames.Octave)
 #' or \code{.O$a}.
 #' It is equivalent to \code{o_get(name)}. 
 #'  
+#' 
+#' @param x an \code{OctaveInterface} object. Essentially used with \code{x = .O}.
+#' @param name name of the Octave object to retrieve or assign.
+#' 
 #' @rdname OctaveInterface
 #' @seealso \code{\link{o_get}}
 #' @export
 setMethod('$', 'Octave', function(x, name)	o_get(name))
 
-#' The method \code{[[} provides an alternative way of retrieving Octave objects,
-#' and is equivalent to \code{o_get(name)}.
-#' 
-#' @param exact logical not used.
-#'  
-#' @rdname OctaveInterface
-#' @seealso \code{\link{o_get}}
-#' @export
-setMethod('[[', 'Octave', function(x, i, exact=TRUE)	o_get(i))
-
 
 #' The method \code{$<-} allow to directly assign/set Octave variables via e.g.
 #' \code{.O$a <- 10}. 
 #' 
+#' @param value value to assign to the Octave object.
 #' @rdname OctaveInterface
 #' @export 
 setReplaceMethod('$', 'Octave',
@@ -130,4 +134,16 @@ setReplaceMethod('$', 'Octave',
 		x
 	}
 )
+
+#' The method \code{[[} provides an alternative way of retrieving Octave objects,
+#' and is equivalent to \code{o_get(name)}.
+#' 
+#' @param i name of the Octave object to retrieve.
+#' @param exact logical not used.
+#'  
+#' @rdname OctaveInterface
+#' @seealso \code{\link{o_get}}
+#' @export
+setMethod('[[', 'Octave', function(x, i, exact=TRUE)	o_get(i))
+
 

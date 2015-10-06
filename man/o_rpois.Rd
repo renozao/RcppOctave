@@ -28,7 +28,7 @@ The result is converted into integer to match the behaviour of
 }
 \section{Octave Documentation for \emph{randp}}{
 
-\Sexpr[results=rd,stage=render]{RcppOctave::o_help(randp, format='rd')}
+\Sexpr[results=rd,stage=render]{if( .Platform$OS.type != 'windows' || .Platform$r_arch != 'x64' ) RcppOctave::o_help(randp, format='rd')}
 
 \emph{[Generated from Octave-\Sexpr{RcppOctave::o_version()} on \Sexpr{Sys.time()}]}
 }
@@ -49,5 +49,9 @@ o_rpois(2, 5, lambda = 4)
 }
 \seealso{
   rpois
+
+Other orandom: \code{\link{o_rexp}};
+  \code{\link{o_rgamma}}; \code{\link{o_rnorm}};
+  \code{\link{o_runif}}
 }
 

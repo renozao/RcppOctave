@@ -238,8 +238,10 @@ o_help <- function(NAME, character.only = FALSE, show = interactive(), format = 
 	
 	# get the help page from Octave
     hlp <- ''
-    if( .isPlatformCompatible() ) hlp <- .Call('oct_help', NAME, PACKAGE='RcppOctave')
+    compat <- .isPlatformCompatible(details = TRUE)
+    if( compat$ok ) hlp <- .Call('oct_help', NAME, PACKAGE='RcppOctave')
     else{
+        return(compat$msg)
         # call on platform i386
         libpath <- dirname(path.package('RcppOctave'))
         cmd <- sprintf("Rscript --arch i386 -e \"suppressWarnings(suppressMessages(library(RcppOctave, lib = '%s'))); cat(o_help('%s', TRUE, FALSE, '%s'))\""

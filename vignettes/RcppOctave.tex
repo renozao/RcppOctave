@@ -127,7 +127,7 @@
 \usepackage[minnames=1,maxnames=2,backend=bibtex]{biblatex}
 \AtEveryCitekey{\clearfield{url}}
 \bibliography{Rpackages}
-\bibliography{/tmp/Rpkglib_321c69f62ced/RcppOctave/REFERENCES}
+\bibliography{/tmp/Rpkglib_5913c3bd56a/RcppOctave/REFERENCES}
 
 \newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
 %%
@@ -144,8 +144,8 @@
 
 \author{Renaud Gaujoux}
 \title{\pkgname{RcppOctave}: Seamless Interface to Octave -- And Matlab}
-\date{\Rpkg{RcppOctave} -- Version 0.18
-[September 22, 2015]\footnote{This vignette was built using \octave
+\date{\Rpkg{RcppOctave} -- Version 0.18.1
+[October  6, 2015]\footnote{This vignette was built using \octave
 3.8.1}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -495,7 +495,7 @@ functionalities:
 \hlkwd{.CallOctave}\hlstd{(}\hlstr{'fun1'}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5248665 0.7954813 0.4733140 0.2194512
+## [1] 0.6776693 0.7570356 0.6148638 0.3308931
 \end{verbatim}
 \begin{alltt}
 \hlcom{# 3 output values }
@@ -503,12 +503,12 @@ functionalities:
 \end{alltt}
 \begin{verbatim}
 ## $a
-## [1] 0.5317587 0.3948886 0.2662999 0.6851940
+## [1] 0.8452558 0.4754382 0.4435868 0.2553756
 ## 
 ## $b
-##           [,1]      [,2]       [,3]
-## [1,] 0.4749580 0.1345959 0.16971859
-## [2,] 0.6520429 0.5632771 0.02142945
+##           [,1]      [,2]      [,3]
+## [1,] 0.4847515 0.9711548 0.7379941
+## [2,] 0.4536776 0.9089370 0.9022478
 ## 
 ## $c
 ## [1] "some text"
@@ -919,18 +919,18 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ##           [,1]
-## [1,] 1.9828208
-## [2,] 0.6281783
-## [3,] 0.1619600
+## [1,] 1.0439442
+## [2,] 0.4677600
+## [3,] 0.1736197
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
 ##           [,1]
-## [1,] 1.9828208
-## [2,] 0.6281783
-## [3,] 0.1619600
+## [1,] 1.0439442
+## [2,] 0.4677600
+## [3,] 0.1736197
 \end{verbatim}
 \begin{alltt}
 \hlcom{# eval a list of statements}
@@ -939,13 +939,13 @@ can also evaluate a list of statements sequentially:
 \end{alltt}
 \begin{verbatim}
 ## [[1]]
-## [1] 0.4476274 0.8918643
+## [1] 0.4794507 0.5119345
 ## 
 ## [[2]]
-## [1] -0.1507461 -0.2190965
+## [1] -1.043102 -1.678494
 ## 
 ## [[3]]
-## [1] 0.4051404 0.2886485 0.7735971
+## [1] 0.8126957 0.9962844 0.1317312
 \end{verbatim}
 \begin{alltt}
 \hlcom{# variables 'a' and 'b' were assigned the new values}
@@ -964,7 +964,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.4476274 0.8918643
+## [1] 0.4794507 0.5119345
 \end{verbatim}
 \begin{alltt}
 \hlcom{# argument CATCH allows for recovering from errors in statement}
@@ -977,7 +977,7 @@ can also evaluate a list of statements sequentially:
 \hlstd{.O}\hlopt{$}\hlstd{a}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.4476274 0.8918643
+## [1] 0.4794507 0.5119345
 \end{verbatim}
 \begin{alltt}
 \hlstd{.O}\hlopt{$}\hlstd{c}
@@ -1237,9 +1237,9 @@ following code, which defines a wrapper functions to format the output of
 \end{alltt}
 \begin{verbatim}
 ## List of 3
-##  $ d: num [1:5] 2.6679 0.927 0.5 0.2543 0.0007
-##  $ u: num [1:5, 1:5] -0.573 -0.533 -0.278 -0.365 -0.42 ...
-##  $ v: num [1:5, 1:5] -0.447 -0.431 -0.42 -0.583 -0.313 ...
+##  $ d: num [1:5] 2.6127 0.7663 0.439 0.1784 0.0403
+##  $ u: num [1:5, 1:5] -0.526 -0.51 -0.303 -0.552 -0.258 ...
+##  $ v: num [1:5, 1:5] -0.516 -0.563 -0.369 -0.459 -0.265 ...
 \end{verbatim}
 \begin{alltt}
 \hlcom{# check results}
@@ -1253,8 +1253,8 @@ following code, which defines a wrapper functions to format the output of
 \hlkwd{all.equal}\hlstd{(svd.R, svd.O,} \hlkwc{tol}\hlstd{=}\hlnum{10}\hlopt{^-}\hlnum{16}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Component \"u\": Mean relative difference: 2.939525e-16"
-## [2] "Component \"v\": Mean relative difference: 3.443515e-16"
+## [1] "Component \"u\": Mean relative difference: 4.093149e-16"
+## [2] "Component \"v\": Mean relative difference: 4.084112e-16"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1456,13 +1456,13 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] knitr_1.10.5     RcppOctave_0.18  pkgmaker_0.25.10 registry_0.3    
-[5] Rcpp_0.12.1     
+[1] knitr_1.11        RcppOctave_0.18.1 pkgmaker_0.25.10  registry_0.3     
+[5] Rcpp_0.12.1      
 
 loaded via a namespace (and not attached):
- [1] magrittr_1.5     formatR_1.2      tools_3.2.2      stringi_0.5-5   
- [5] codetools_0.2-14 highr_0.5        stringr_1.0.0    digest_0.6.8    
- [9] xtable_1.7-4     evaluate_0.7.2  
+ [1] magrittr_1.5     formatR_1.2.1    tools_3.2.2      stringi_0.5-5   
+ [5] codetools_0.2-14 highr_0.5.1      stringr_1.0.0    digest_0.6.8    
+ [9] xtable_1.7-4     evaluate_0.8    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

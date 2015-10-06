@@ -84,7 +84,7 @@ Octave.version <- local({
 #' @examples 
 #' Octave.home()
 #' 
-Octave.home <- function(..., configure = FALSE, use.system = TRUE){
+Octave.home <- function(..., configure = Octave.config[['customed']], use.system = TRUE){
     .octave_home_confvar <- sprintf('@%s@', 'OCTAVE_BINDIR')
 
     # default is to use the path used at installation
