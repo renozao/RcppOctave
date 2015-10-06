@@ -20,7 +20,7 @@ fi
 
 # load m4 Windows macros
 . exec/m4.win
-AC_INIT RcppOctave 0.18
+AC_INIT RcppOctave 0.18.1
 
 AC_MSG_CHECKING "R architecture"
 AC_MSG_RESULT ${R_ARCH}
