@@ -307,7 +307,8 @@ NULL
     # skip initialisation if not compatible platform
     compat <- .isPlatformCompatible(details = TRUE)
     if( !compat$ok ){
-        .debug(compat$msg)
+        .m <- message
+        .m(compat$msg)
         # the library should load fine if the OS is not compatible 
         if( !compat$os.ok ) .load.lib(pkgname = pkgname, libname = libname)
         return()
