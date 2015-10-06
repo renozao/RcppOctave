@@ -7,8 +7,6 @@
 \title{Wrapping and Defining Octave Functions from R}
 \usage{
 OctaveFunction(fun, check = TRUE)
-
-\S4method{show}{OctaveFunction}(object)
 }
 \arguments{
   \item{fun}{the name of an existing Octave function or, Octave code that

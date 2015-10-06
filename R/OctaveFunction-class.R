@@ -30,6 +30,8 @@ setClass("OctaveFunction", contains="function"
 #' The existence check can be completly disabled with \code{check=NA}.   
 #'
 #' @rdname OctaveFunction-class
+#' @aliases show,OctaveFunction-method
+#' 
 #' @export
 #' @examples
 #' 
@@ -83,7 +85,7 @@ is_mdef <- function(x){
 	setNames(!is.na(m[,1]), m[,10])
 }
 
-#' @rdname OctaveFunction-class
+#' @noRd
 #' @export
 setMethod('show', 'OctaveFunction', function(object){
 	cat("<OctaveFunction::`", object@name, "`>\n", sep='')	

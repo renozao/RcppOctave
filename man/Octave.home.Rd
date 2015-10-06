@@ -3,7 +3,7 @@
 \alias{Octave.home}
 \title{Octave Home Directory}
 \usage{
-Octave.home(..., configure = FALSE, use.system = TRUE)
+Octave.home(..., configure = Octave.config[["customed"]], use.system = TRUE)
 }
 \arguments{
   \item{...}{character strings that are appended to Octave path

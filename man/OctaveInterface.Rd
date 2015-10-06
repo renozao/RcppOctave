@@ -5,18 +5,27 @@
 \alias{$<-,Octave-method}
 \alias{.O}
 \alias{[[,Octave-method}
+\alias{show,Octave-method}
 \title{Direct Interface to Octave}
 \format{\code{.O} is an object of class \code{\linkS4class{Octave}}.}
 \usage{
 .O
 
-\\S4method{$}{Octave}(x, name)
+\S4method{$}{Octave}(x, name)
 
-\\S4method{[[}{Octave}(x, i, exact = TRUE)
+\S4method{$}{Octave}(x, name) <- value
 
-\\S4method{$}{Octave}(x, name) <- value
+\S4method{[[}{Octave}(x, i, exact = TRUE)
 }
 \arguments{
+  \item{x}{an \code{OctaveInterface} object. Essentially used with \code{x = .O}.}
+
+  \item{name}{name of the Octave object to retrieve or assign.}
+
+  \item{value}{value to assign to the Octave object.}
+
+  \item{i}{name of the Octave object to retrieve.}
+
   \item{exact}{logical not used.}
 }
 \description{
@@ -29,11 +38,11 @@ retrieving variables from Octave base context, via e.g. \code{.O$svd(x)}
 or \code{.O$a}.
 It is equivalent to \code{o_get(name)}.
 
-The method \code{[[} provides an alternative way of retrieving Octave objects,
-and is equivalent to \code{o_get(name)}.
-
 The method \code{$<-} allow to directly assign/set Octave variables via e.g.
 \code{.O$a <- 10}.
+
+The method \code{[[} provides an alternative way of retrieving Octave objects,
+and is equivalent to \code{o_get(name)}.
 }
 \examples{
 \dontshow{# roxygen generated flag
