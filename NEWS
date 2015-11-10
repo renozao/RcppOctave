@@ -1,4 +1,11 @@
 ********************
+Changes in 0.19
+********************
+FIXES
+	o .CallOctave gains an argument plot (default to TRUE), to ensure force
+	plot windows to be drawn after Octave calls (issue #).
+
+********************
 Changes in 0.18
 ********************
 FIXES

@@ -4,7 +4,7 @@
 \title{Calling an Octave Function}
 \usage{
 .CallOctave(.NAME, ..., argout = -1, unlist = !is.character(argout),
-  buffer.std = -1L, verbose = NULL)
+  buffer.std = -1L, verbose = NULL, plot = TRUE)
 }
 \arguments{
   \item{.NAME}{an Octave function name. The function must be a valid function
@@ -47,6 +47,9 @@ as they are never output directly, except when \code{buffer.std = 0}.}
   \item{verbose}{logical that toggles verbosity (i.e. debug) messages.
 If \code{NULL}, then the current verbosity level is used
 (see \code{\link{octave_verbose}}).}
+
+  \item{plot}{logical that indicates if the plotting window should be
+refreshed.}
 }
 \value{
   the value returned by the Octave function -- converted into standard

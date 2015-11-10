@@ -48,6 +48,9 @@ NULL
 #' If \code{NULL}, then the current verbosity level is used 
 #' (see \code{\link{octave_verbose}}).
 #' 
+#' @param plot logical that indicates if the plotting window should be 
+#' refreshed. 
+#' 
 #' @return the value returned by the Octave function -- converted into standard 
 #' R objects.
 #' 
@@ -66,7 +69,7 @@ NULL
 #' # call Octave function 'svd' asking for 3 named output values: [U, S, V] = svd(x)
 #' .CallOctave('svd', x, argout=c('U', 'S', 'V'))
 #' 
-.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL){
+.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL, plot = TRUE){
 	
     if( !is.null(verbose) ){
         ov <- octave_verbose(verbose)
@@ -74,6 +77,10 @@ NULL
     }
     if( isTRUE(buffer.std) ) buffer.std <- 7L
     res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, PACKAGE='RcppOctave')
+    # force drawing of plot
+    if( plot ){
+        .Call("octave_feval", "drawnow", list(), -1, TRUE, -1L, PACKAGE='RcppOctave')   
+    }
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()
 	else if( is.null(res) && argout <= 1L ) invisible()
 	else res
