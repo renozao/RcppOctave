@@ -8,15 +8,6 @@ NULL
 #' their documentation, passing variables between R and Octave, using R core RNGs 
 #' in Octave, which ensure stochastic computations are also reproducible.
 #'
-#' \tabular{ll}{
-#' Package: \tab RcppOctave\cr
-#' Type: \tab Package\cr
-#' Version: \tab 1.0\cr
-#' Date: \tab 2011-11-01\cr
-#' License: \tab GPL (>= 2)\cr
-#' LazyLoad: \tab yes\cr
-#' }
-#'
 #' @author
 #' Renaud Gaujoux \email{renaud@@tx.technion.ac.il}
 #'

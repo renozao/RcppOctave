@@ -20,18 +20,9 @@ in Octave, which ensure stochastic computations are also reproducible.
   \tabular{ll}{
 Package: \tab RcppOctave\cr
 Type: \tab Package\cr
-Version: \tab 0.18\cr
-Date: \tab 2013-11-07\cr
+Version: \tab 0.18.3\cr
+Date: \tab 2015-11-10\cr
 License: \tab GPL (>=2)\cr
-LazyLoad: \tab yes\cr
-}
-
-\tabular{ll}{
-Package: \tab RcppOctave\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2011-11-01\cr
-License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
 }
