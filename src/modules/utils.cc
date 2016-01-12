@@ -45,3 +45,28 @@ DEFUN_DLD (identity, args, nargout,
 
   return args(0);
 }
+
+static octave_value _RCPPOCTAVE_UUID("");
+/** Get/Sets RcppOctave Call UUID
+ *
+ */
+DEFUN_DLD (octave_uuid, args, nargout,
+"USAGE: obj = octave_uuid(value)\n\n"
+"Sets octave call uuid returning old value, or get current value if called with no arguments.\n")
+{
+  // list of return values
+  octave_value_list retval;
+
+  // number of arguments supplied
+  int nargs = args.length ();
+
+  // if wrong arguments, show message
+  if ( !nargs ) {
+    // and return empty
+    return _RCPPOCTAVE_UUID;
+  }else{
+	  octave_value old(_RCPPOCTAVE_UUID);
+	  _RCPPOCTAVE_UUID = args(0);
+	  return old;
+  }
+}

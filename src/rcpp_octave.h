@@ -62,9 +62,10 @@ RcppExport SEXP octave_verbose(SEXP value);
  * @param buffer logical that indicates if stdout and stderr should be buffered and
  * displayed at the end of the computation: 0 not buffered, 1 stdout buffered, 2, stderr buffered,
  * 3 both stdout and stderr buffered.
+ * @param uuid unique call identifier
  *
  */
-RcppExport SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist, SEXP buffer);
+RcppExport SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist, SEXP buffer, SEXP uuid);
 
 /**
  * Start an Octave session from R.

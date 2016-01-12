@@ -295,6 +295,9 @@ NULL
 
 .onLoad <- function(libname, pkgname){
 
+    opts <- options(Octave.UUID = "")
+    on.exit( options(opts) )
+    
     # skip initialisation if not compatible platform
     compat <- .isPlatformCompatible(details = TRUE)
     if( !compat$ok ){

@@ -72,7 +72,7 @@ static bool OCTAVE_INITIALIZED = false;
  * Global variable to hold verbosity status.
  */
 bool RCPP_OCTAVE_VERBOSE = false;
-
+static std::string _UUID("");
 
 /* Octave embedded interpreter.
  * This is a mix between embedded versions of Octave from:
@@ -85,8 +85,6 @@ bool RCPP_OCTAVE_VERBOSE = false;
  * 2) SHOGUN
  * (source: http://shogun-toolbox.org/trac/browser/src/octave/)
  */
-
-
 octave_value octave_feval(const string& fname, const octave_value_list& args, int nres=-1
 						, const std::vector<string>* output_names=NULL
 						, int buffer = 3);
@@ -233,7 +231,7 @@ extern void recover_from_exception(void)
 }
 
 typedef std::vector<string> std_vector;
-SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SEXP buffer = R_NilValue){
+SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SEXP buffer = R_NilValue, SEXP uuid = R_NilValue){
 
 	using namespace Rcpp;
 	BEGIN_RCPP
@@ -242,6 +240,15 @@ SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SE
 	bool do_unlist = Rf_isNull(unlist) ? true : as<bool>(unlist);
 	// buffer stdout/stderr?
 	int buffer_std = Rf_isNull(buffer) ? -1 : as<int>(buffer);
+	// update static UUID if necessary
+	if( !Rf_isNull(uuid) ){
+		string newUUID = Rcpp::as<string>(uuid);
+		if( _UUID != newUUID ){
+			_UUID = Rcpp::as<string>(uuid);
+			octave_feval("octave_uuid", Rcpp::as<octave_value>(uuid));
+		}
+	}
+	VERBOSE_LOG("octave_feval - UUID: %s\n", _UUID.c_str());
 
 	octave_value out;
 	if( TYPEOF(output) == STRSXP ){

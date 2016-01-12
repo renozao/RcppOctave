@@ -9,3 +9,4 @@ autoload('getseed', which('Rrng.oct'));
 
 % utility functions
 autoload('identity', which('utils.oct'));
+autoload('octave_uuid', which('utils.oct'));

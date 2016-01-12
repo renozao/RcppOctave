@@ -71,15 +71,24 @@ NULL
 #' 
 .CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL, plot = TRUE){
 	
+    # generate UUID
+    uuid <- getOption('Octave.UUID', basename(tempfile("OctaveCall_")))
+    
     if( !is.null(verbose) ){
         ov <- octave_verbose(verbose)
         on.exit( octave_verbose(ov), add = TRUE)
     }
     if( isTRUE(buffer.std) ) buffer.std <- 7L
-    res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, PACKAGE='RcppOctave')
+    
+    .CallOctave0 <- function(.NAME, ...){
+        .Call("octave_feval", .NAME, list(...), -1, TRUE, buffer.std, uuid, PACKAGE='RcppOctave')
+    }
+    
+    res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, uuid, PACKAGE='RcppOctave')
+    
     # force drawing of plot
     if( plot ){
-        .Call("octave_feval", "drawnow", list(), -1, TRUE, -1L, PACKAGE='RcppOctave')   
+        .CallOctave0("drawnow")
     }
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()
 	else if( is.null(res) && argout <= 1L ) invisible()
