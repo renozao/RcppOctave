@@ -19,6 +19,7 @@
 #' @param sep single character string added as suffix to each element of 
 #' \code{text}. The concatenation of all suffixed element should form a valid 
 #' \emph{Octave} block.
+#' @param ... other arguments passed to \code{\link{.CallOctave}}.
 #' 
 #' @templateVar name source
 #' @template OctaveDoc
@@ -44,7 +45,7 @@
 #' o_source(text=c("a=10;b=30;", "c=randn(1,5)", "d=4"))
 #' o_get('a','b','c', 'd')
 #' 
-o_source <- function(file = "", text=NULL, sep=";\n"){
+o_source <- function(file = "", text=NULL, sep=";\n", ...){
 	
 	# create temporary file with provided text
 	if( !missing(text) ){
@@ -58,7 +59,7 @@ o_source <- function(file = "", text=NULL, sep=";\n"){
 	if( !file.exists(file) )
 		stop("File `", file, "` does not exist.")
 	
-	.CallOctave('source', file)
+	.CallOctave('source', file, ...)
 	invisible()
 }
 

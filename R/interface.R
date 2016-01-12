@@ -48,8 +48,12 @@ NULL
 #' If \code{NULL}, then the current verbosity level is used 
 #' (see \code{\link{octave_verbose}}).
 #' 
-#' @param plot logical that indicates if the plotting window should be 
-#' refreshed. 
+#' @param plot indicates if the plotting window should be redrawn after executing the command.
+#' 
+#' If \code{TRUE}, then the Octave function \code{drawnow} is called.
+#' If a character string, then it specifies a path where to save the plot, using the Octave function \code{print}.
+#' If a \code{list}, then the first element is assumed to be a path where to save the plot, 
+#' and the second element options passed to Octave function \code{print}.
 #' 
 #' @return the value returned by the Octave function -- converted into standard 
 #' R objects.
@@ -69,7 +73,7 @@ NULL
 #' # call Octave function 'svd' asking for 3 named output values: [U, S, V] = svd(x)
 #' .CallOctave('svd', x, argout=c('U', 'S', 'V'))
 #' 
-.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL, plot = TRUE){
+.CallOctave <- function(.NAME, ..., argout=-1, unlist=!is.character(argout), buffer.std = -1L, verbose = NULL, plot = getOption('Octave.plot', TRUE)){
 	
     # generate UUID
     uuid <- getOption('Octave.UUID', basename(tempfile("OctaveCall_")))
@@ -87,9 +91,19 @@ NULL
     res <- .Call("octave_feval", .NAME, list(...), argout, unlist, buffer.std, uuid, PACKAGE='RcppOctave')
     
     # force drawing of plot
-    if( plot ){
+    if( isTRUE(plot) ){
         .CallOctave0("drawnow")
+        
+    }else if( isString(plot) ){ # plot to file
+        .CallOctave0("print", plot)
+        
+    }else if( is.list(plot) ){ # plot to file with device options
+        .CallOctave0("print", plot[[1]], plot[[2]])
     }
+#    else{
+#        .CallOctave0("set", 'visible', 'off', buffer.std = buffer.std, uuid = uuid)
+#        on.exit( .CallOctave0("set", 'visible', 'on', buffer.std = buffer.std, uuid = uuid), add = TRUE)
+#    }
 	if( identical(argout, 0) || identical(argout, 0L) )	invisible()
 	else if( is.null(res) && argout <= 1L ) invisible()
 	else res
