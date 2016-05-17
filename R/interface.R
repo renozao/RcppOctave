@@ -261,3 +261,49 @@ sourceExamples <- function(file){
 }
 
 
+#' inline C++ Function with Octave Integration
+#' 
+#' @param ... arguments passed to \code{\link[inline]{rcpp}}
+#' @inheritParams inline::rcpp
+#' 
+#' @export
+#' @examples
+#' 
+#' 
+#' # call from R
+#' set.seed(1)
+#' res1 <- .O$rand(10)
+#' 
+#' # call from c++
+#' feval <- RcppOctave:::rcppoctave(signature(), '
+#' Rcpp::List args = Rcpp::List::create(10);
+#'   SEXP result = CallOctave("rand", args);
+#'   return(result);
+#' ')
+#' 
+#' set.seed(1)
+#' res2 <- feval()
+#' stopifnot( identical(res1, res2) ) 
+#' 
+rcppoctave <- function(..., plugin = 'RcppOctave'){
+	if( !requireNamespace('inline') )
+		stop("Package 'inline' is required to define RcppOctave functions.")
+	qlibrary(inline)
+	rcpp(..., plugin = plugin)
+}
+
+
+inlineCxxPlugin <- function(){
+	
+	if( !requireNamespace('inline') )
+		stop("Package 'inline' is required to define RcppOctave functions.")
+	qlibrary(inline)
+	p <- getPlugin('Rcpp')
+	p0 <- list(includes = '\n#include <RcppOctave.h>\n'
+		, LinkingTo = c('Rcpp', 'RcppOctave')
+		, Depends = c('Rcpp', 'RcppOctave')
+	)
+	for(n in names(p0)) p[[n]] <- c(p[[n]], p0[[n]])
+	p
+	
+}

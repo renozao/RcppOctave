@@ -188,6 +188,10 @@ SEXP octave_end(SEXP verbose = R_NilValue){
 void R_init_RcppOctave(DllInfo *info)
 {
 	/* Register routines, allocate resources. */
+
+	/* used by external packages linking to internal xts code from C */
+	R_RegisterCCallable(R_PACKAGE_NAME, "octave_feval",(DL_FUNC) (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))&octave_feval);
+
 	// set verbosity from environment variable
 	RCPP_OCTAVE_VERBOSE = getenv("R_RCPPOCTAVE_VERBOSE") != NULL;
 	// start octave session
@@ -231,7 +235,7 @@ extern void recover_from_exception(void)
 }
 
 typedef std::vector<string> std_vector;
-SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SEXP buffer = R_NilValue, SEXP uuid = R_NilValue){
+SEXP octave_feval(SEXP fname, SEXP args, SEXP output = R_NilValue, SEXP unlist = R_NilValue, SEXP buffer = R_NilValue, SEXP uuid = R_NilValue){
 
 	using namespace Rcpp;
 	BEGIN_RCPP
@@ -250,16 +254,17 @@ SEXP octave_feval(SEXP fname, SEXP args, SEXP output, SEXP unlist=R_NilValue, SE
 	}
 	VERBOSE_LOG("octave_feval - UUID: %s\n", _UUID.c_str());
 
+	SEXP argout = Rf_isNull(output) ? wrap<int>(1) : output;
 	octave_value out;
-	if( TYPEOF(output) == STRSXP ){
+	if( TYPEOF(argout) == STRSXP ){
 		out = octave_feval(Rcpp::as<string>(fname)
 						, Rcpp::as<octave_value_list>(args)
-						, Rcpp::as<std_vector>(output)
+						, Rcpp::as<std_vector>(argout)
 						, buffer_std);
 	}else{
 		out = octave_feval(Rcpp::as<string>(fname)
 						, Rcpp::as<octave_value_list>(args)
-						, Rcpp::as<int>(output)
+						, Rcpp::as<int>(argout)
 						, NULL
 						, buffer_std);
 	}

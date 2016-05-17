@@ -162,3 +162,21 @@ test.redirection <- function(){
     checkIdentical(capture.output(dummy <- .CallOctave('warning', 'aaaa')), character(), "Octave warning printed directly (not in stdout) if buffering is disabled (buffer.std=0)")
     
 }
+
+# Test export of DLL functions for linking with other packages
+test.cppAPI <- function(){
+
+	feval <- RcppOctave:::rcppoctave(signature(), '
+  Rcpp::List args = Rcpp::List::create(10);
+  SEXP result = CallOctave("rand", args);
+  return(result);
+')
+
+
+	set.seed(1)
+	res1 <- .O$rand(10)
+	set.seed(1)
+	res2 <- feval()
+	checkIdentical(res1, res2)
+	
+}
