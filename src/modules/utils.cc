@@ -18,10 +18,16 @@
 //	You should have received a copy of the GNU General Public License
 //	along with RcppOctave.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <octave/config.h>
-#include <octave/oct-obj.h>
+#include "../compatibility.h"
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
+	#include <octave/config.h>
+	#include <octave/oct-obj.h>
+#else
+	#include <octave/ovl.h>
+#endif
 #include <octave/defun-dld.h>
 #include <octave/ov-null-mat.h>
+
 
 /**
  * Simply returns its argument unchanged
@@ -38,7 +44,7 @@ DEFUN_DLD (identity, args, nargout,
 
   // if wrong arguments, show message
   if (nargs != 1) {
-    usage("Wrong number of argument: expecting a single argument.\nTry 'help identity' for info.");
+    usage_error("Wrong number of argument: expecting a single argument.\nTry 'help identity' for info.");
     // and return empty
     return retval;
   }

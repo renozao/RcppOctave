@@ -127,7 +127,7 @@ inline SEXP wrap(const NDArray& x){
 SEXP wrap(const Cell& x, bool simplify = true){
 
 	// get array length
-	int n = x.length();
+	int n = x.NUMEL();
 	VERBOSE_LOG("wrap<Cell[%i]>", n);
 
 	// treat string Cell objects differently
@@ -193,7 +193,7 @@ template <> SEXP Rcpp::wrap( const octave_value& val){
 			VERBOSE_LOG("(CellStr) -> CharacterVector");
 			//const string_vector s(val.cellstr_value()); // works >= 3.4.3
 			const Cell& s = val.cellstr_value();
-			int n = s.length();
+			int n = s.NUMEL();
 			if( n == 0 )
 				return CharacterVector(val.string_value());
 
@@ -273,9 +273,9 @@ template <> SEXP Rcpp::wrap( const octave_value& val){
 
 		OCTAVE_MAP m = val.map_value();
 		const string_vector& keys = m.keys();
-		int n = keys.length();
+		int n = keys.NUMEL();
 		Rcpp::List res;
-		if (keys.length () == 0){
+		if (keys.NUMEL() == 0){
 			VERBOSE_LOG("List[0] (no names)\n");
 			return res;
 		}else{
@@ -289,7 +289,7 @@ template <> SEXP Rcpp::wrap( const octave_value& val){
 						WRAP_ERROR("<NamedList> - More than one empty name in Octave map");
 				}
 				const Cell& cell = m.contents(k);
-				if( cell.length() == 0 ){
+				if( cell.NUMEL() == 0 ){
 					VERBOSE_LOG("empty\n");
 					res[k] = R_NilValue;
 					continue;

@@ -21,12 +21,17 @@ namespace Rcpp {
 
 // OCTAVE STUFF
 
-// Octave libraries
-#include <octave/config.h>
-#include <octave/oct-obj.h>
-
 // define version-specific macros
 #include "compatibility.h"
+
+// Octave libraries
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
+	#include <octave/config.h>
+	#include <octave/oct-obj.h>
+#else
+	#include <octave/ovl.h>
+#endif
+
 
 #define VERBOSE_LOG if( RCPP_OCTAVE_VERBOSE ) Rprintf
 

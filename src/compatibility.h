@@ -34,9 +34,15 @@
 
 // Octave 4.0.0
 #if SWIG_OCTAVE_PREREQ(4,0,0)
-#define usage print_usage
+#define usage_error print_usage
 #else
-#define usage usage
+#define usage_error usage
+#endif
+
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
+#define NUMEL length
+#else
+#define NUMEL numel
 #endif
 
 #endif

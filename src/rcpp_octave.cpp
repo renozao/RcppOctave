@@ -43,7 +43,6 @@ extern "C" {
 // Octave includes
 #include <octave/oct.h>
 #include <octave/octave.h>
-#include <octave/config.h>
 #include <octave/input.h>
 
 #include <octave/pt-all.h>
@@ -53,9 +52,18 @@ extern "C" {
 #if !SWIG_OCTAVE_PREREQ(3,4,0)
 #include <octave/unwind-prot.h>
 #endif
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
 #include <octave/toplev.h>
+#else
+#include <octave/interpreter.h>
+#endif
 #include <octave/error.h>
 #include <octave/quit.h>
+#if SWIG_OCTAVE_PREREQ(4,1,0) // version >= 4.1.0
+// Must handles issue #14 here
+// see: http://octave.org/doxygen/4.1/da/d0d/signal-wrappers_8h.html
+//#include <octave/signal-wrappers.h>
+#endif
 #include <octave/variables.h>
 #include <octave/sighandlers.h>
 #include <octave/sysdep.h>
@@ -223,7 +231,11 @@ extern void recover_from_exception(void)
   unwind_protect::run_all ();
 #endif
 
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
   can_interrupt = true;
+#else
+  octave::can_interrupt = true;
+#endif
   octave_interrupt_immediately = 0;
   octave_interrupt_state = 0;
   octave_signal_caught = 0;
@@ -231,7 +243,11 @@ extern void recover_from_exception(void)
   // prior to 3.2.0
   // octave_allocation_error = 0;
   octave_restore_signal_mask ();
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
   octave_catch_interrupts ();
+#else
+    octave::catch_interrupts ();
+#endif
 }
 
 typedef std::vector<string> std_vector;
@@ -397,8 +413,13 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #endif
 	}
 
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
 	can_interrupt = true;
 	octave_catch_interrupts();
+#else
+	octave::can_interrupt = true;
+	octave::catch_interrupts();
+#endif
 	octave_initialized = true;
 
 	// setup catching of stderr to use R stderr own functions
@@ -477,8 +498,13 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 			VERBOSE_LOG("ERROR\n");
 			VERBOSE_LOG(R_PACKAGE_NAME" - error in Octave function `%s`.\n", fname.c_str());
 		}
-
-	} catch	(octave_interrupt_exception){
+	} catch	(
+#if !SWIG_OCTAVE_PREREQ(4,2,0) // version < 4.2.0
+			octave_interrupt_exception
+#else
+			octave::interrupt_exception
+#endif
+	){
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: interrupt\n");
 		recover_from_exception();
 		REprintf("\n");

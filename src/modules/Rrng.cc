@@ -28,6 +28,7 @@
 //	You should have received a copy of the GNU General Public License
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "../compatibility.h"
 // Octave includes
 #include <octave/oct.h>
 #include <octave/defun-dld.h>
@@ -66,7 +67,7 @@ Sets the seed for the current RNG.\n")
   int nargs = args.length ();	// number of arguments supplied
 
   if (nargs != 1) {		// if wrong arguments, show message
-    usage("Wrong number of argument: expecting a single integer value.\nTry 'help setseed' for info");
+    usage_error("Wrong number of argument: expecting a single integer value.\nTry 'help setseed' for info");
     return retval;		// and return empty
   }
 
@@ -88,7 +89,7 @@ Sets the seed for the current RNG.\n")
 //  int nargs = args.length ();	// number of arguments supplied
 //
 //  if (nargs != 1) {		// if wrong arguments, show message
-//    usage("Wrong number of argument: expecting a single integer value.\nTry 'help setseed' for info");
+//    usage_error("Wrong number of argument: expecting a single integer value.\nTry 'help setseed' for info");
 //    return retval;		// and return empty
 //  }
 //
@@ -110,7 +111,7 @@ See ?.Random.seed in an R session.")
   int nargs = args.length ();	// number of arguments supplied
 
   if (nargs != 0) {		// if wrong arguments, show message
-    usage("Wrong number of argument: expecting no arguments.\nTry 'help getseed' for info");
+    usage_error("Wrong number of argument: expecting no arguments.\nTry 'help getseed' for info");
     return retval;		// and return empty
   }
 
@@ -144,7 +145,7 @@ err << "Invalid call to '" << octave_fun << "': ";\
 if( nargs<min_arg ) err << "at least " << min_arg << " argument(s) required.";\
 else err << "too many arguments.";\
 err << std::endl << "See 'help " << octave_fun << "' for more details.";\
-usage(err.str().c_str());\
+usage_error(err.str().c_str());\
 return retval;\
 }\
 \
