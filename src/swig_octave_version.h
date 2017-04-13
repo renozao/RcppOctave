@@ -5,6 +5,7 @@
 #ifndef _RcppOctave_OCTAVE_VERSION_H
 #define _RcppOctave_OCTAVE_VERSION_H
 
+#include <octave/config.h>
 #include <octave/version.h>
 
 // Macro for enabling features which require Octave version >= major.minor.patch
