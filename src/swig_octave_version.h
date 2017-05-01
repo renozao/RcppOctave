@@ -5,12 +5,16 @@
 #ifndef _RcppOctave_OCTAVE_VERSION_H
 #define _RcppOctave_OCTAVE_VERSION_H
 
-#include <octave/config.h>
 #include <octave/version.h>
+
+// The macro below cannot handle the 0+ patch version, workaround:
+//#undef OCTAVE_PATCH_VERSION
+//#define OCTAVE_PATCH_VERSION 0
 
 // Macro for enabling features which require Octave version >= major.minor.patch
 #define SWIG_OCTAVE_PREREQ(major, minor, patch) \
-  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + OCTAVE_PATCH_VERSION >= ((major)<<16) + ((minor)<<8) + (patch) )
+  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) >= ((major)<<16) + ((minor)<<8) )
+//  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + OCTAVE_PATCH_VERSION >= ((major)<<16) + ((minor)<<8) + (patch) )
 
 // Reconstruct Octave major, minor, and patch versions for releases prior to 3.8.1
 #if !defined(OCTAVE_MAJOR_VERSION)

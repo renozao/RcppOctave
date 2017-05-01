@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 #include <Rcpp.h>
-#include "pager.h"
+#include "octave/pager.h"
 
 template <bool OUTPUT>
 class Octave_Rstreambuf : public Rcpp::Rstreambuf<OUTPUT> {

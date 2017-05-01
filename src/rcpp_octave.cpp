@@ -59,10 +59,13 @@ extern "C" {
 #endif
 #include <octave/error.h>
 #include <octave/quit.h>
+
+#include <octave/octave-gui.h>
+
 #if SWIG_OCTAVE_PREREQ(4,1,0) // version >= 4.1.0
 // Must handles issue #14 here
 // see: http://octave.org/doxygen/4.1/da/d0d/signal-wrappers_8h.html
-//#include <octave/signal-wrappers.h>
+#include "signal-wrappers.h"
 #endif
 #include <octave/variables.h>
 #include <octave/sighandlers.h>
@@ -79,7 +82,7 @@ static bool OCTAVE_INITIALIZED = false;
 /**
  * Global variable to hold verbosity status.
  */
-bool RCPP_OCTAVE_VERBOSE = false;
+bool RCPP_OCTAVE_VERBOSE = true;
 static std::string _UUID("");
 
 /* Octave embedded interpreter.
@@ -122,7 +125,7 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
 	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
 	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
-
+	octave::application *the_app = NULL;
 	if( start ){
 		if( verbose ) REprintf("Starting Octave interpreter ... ");
 
@@ -145,7 +148,9 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		Redirect redirect(7);
 
 		// try starting Octave
-		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+		the_app = new octave::gui_application(narg, cmd_args.c_str_vec());
+		bool started_ok = the_app->execute();
+		//bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
 		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
 		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
@@ -166,11 +171,16 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// terminate interpreter
 #if SWIG_OCTAVE_PREREQ(3,8,0)
-		octave_exit = 0;
+		// octave_exit = 0;
 		clean_up_and_exit(0, true);
 #else
 		do_octave_atexit();
 #endif
+		if( the_app ) {
+		  delete the_app;
+		  the_app = NULL;
+		}
+
 		if( verbose )
 			REprintf("[OK]\n");
 		OCTAVE_INITIALIZED = false;
@@ -219,7 +229,7 @@ void R_unload_RcppOctave(DllInfo *info)
  * @note OCTAVE_API_VERSION_NUMBER is 47 for 3.4.0 but 45 for 3.4.2
  * see: http://octave.1599824.n4.nabble.com/API-version-going-backwards-td3722496.html
  */
-extern void recover_from_exception(void)
+extern void recover_from_exception_rcppoct(void)
 {
 //#if OCTAVE_API_VERSION_NUMBER >= 45
 #if SWIG_OCTAVE_PREREQ(3,4,0)
@@ -353,7 +363,7 @@ int getOutnames(const string& fname, std::vector<string>& onames){
 		VERBOSE_LOG("NO\n");
 		return -1;
 	}
-	tree_parameter_list *rl = f->return_list ();
+	octave::tree_parameter_list *rl = f->return_list ();
 	if( rl == NULL ){
 		VERBOSE_LOG("NO\n");
 		return -1;
@@ -367,7 +377,7 @@ int getOutnames(const string& fname, std::vector<string>& onames){
 
 	VERBOSE_LOG("octave_feval - Output name(s):");
 	onames.reserve(nres);
-	tree_parameter_list::iterator rlp = rl->begin();
+	octave::tree_parameter_list::iterator rlp = rl->begin();
 	for(int i=0; rlp != rl->end(); rlp++)
 	{
 		tree_identifier *rid = (*rlp)->ident();
@@ -506,14 +516,14 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #endif
 	){
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: interrupt\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -2;
 	}
 	catch (std::bad_alloc)
 	{
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: bad_alloc\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -3;
 	}
