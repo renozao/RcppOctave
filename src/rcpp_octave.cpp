@@ -60,8 +60,6 @@ extern "C" {
 #include <octave/error.h>
 #include <octave/quit.h>
 
-#include <octave/octave-gui.h>
-
 #if SWIG_OCTAVE_PREREQ(4,1,0) // version >= 4.1.0
 // Must handles issue #14 here
 // see: http://octave.org/doxygen/4.1/da/d0d/signal-wrappers_8h.html
@@ -82,7 +80,7 @@ static bool OCTAVE_INITIALIZED = false;
 /**
  * Global variable to hold verbosity status.
  */
-bool RCPP_OCTAVE_VERBOSE = true;
+bool RCPP_OCTAVE_VERBOSE = false;
 static std::string _UUID("");
 
 /* Octave embedded interpreter.
@@ -148,14 +146,16 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		Redirect redirect(7);
 
 		// try starting Octave
-		the_app = new octave::gui_application(narg, cmd_args.c_str_vec());
-		bool started_ok = the_app->execute();
-		//bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
-		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
-		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
-		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
-
-		OCTAVE_INITIALIZED = true;
+		the_app = new octave::cli_application(); // (narg, cmd_args.c_str_vec());
+		//int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+		int return_code = octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
+		if( return_code ) {
+		  if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
+		  int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
+		  redirect.flush("Failed to start Octave interpreter", !return_code, warn);
+		} else {
+		  OCTAVE_INITIALIZED = true;
+		}
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
 #endif
