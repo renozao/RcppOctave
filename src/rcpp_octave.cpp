@@ -45,7 +45,12 @@ extern "C" {
 #include <octave/octave.h>
 #include <octave/input.h>
 
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
 #include <octave/pt-all.h>
+#include <octave/str-vec.h>
+#else
+#include <pt-all.h>
+#endif
 #include <octave/symtab.h>
 #include <octave/parse.h>
 //#if OCTAVE_API_VERSION_NUMBER < 45
@@ -68,7 +73,7 @@ extern "C" {
 #include <octave/variables.h>
 #include <octave/sighandlers.h>
 #include <octave/sysdep.h>
-#include <octave/str-vec.h>
+#include <ov-usr-fcn.h>
 
 // STD includes
 #include <iostream>
@@ -117,6 +122,15 @@ SEXP octave_verbose(SEXP value){
 	return( Rcpp::wrap(res) );
 }
 
+
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
+typedef octave::tree_parameter_list tree_parameter_list;
+#else
+namespace octave {
+  typedef void application;
+}
+#endif
+
 bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	// use global verbose state if set
@@ -146,9 +160,12 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		Redirect redirect(7);
 
 		// try starting Octave
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
 		the_app = new octave::cli_application(); // (narg, cmd_args.c_str_vec());
-		//int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
 		int return_code = octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
+#else
+		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+#endif
 		if( return_code ) {
 		  if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
 		  int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
@@ -363,7 +380,7 @@ int getOutnames(const string& fname, std::vector<string>& onames){
 		VERBOSE_LOG("NO\n");
 		return -1;
 	}
-	octave::tree_parameter_list *rl = f->return_list ();
+	tree_parameter_list *rl = f->return_list ();
 	if( rl == NULL ){
 		VERBOSE_LOG("NO\n");
 		return -1;
@@ -377,7 +394,7 @@ int getOutnames(const string& fname, std::vector<string>& onames){
 
 	VERBOSE_LOG("octave_feval - Output name(s):");
 	onames.reserve(nres);
-	octave::tree_parameter_list::iterator rlp = rl->begin();
+	tree_parameter_list::iterator rlp = rl->begin();
 	for(int i=0; rlp != rl->end(); rlp++)
 	{
 		tree_identifier *rid = (*rlp)->ident();
