@@ -137,7 +137,9 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
 	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
 	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
 	octave::application *the_app = NULL;
+#endif
 	if( start ){
 		if( verbose ) REprintf("Starting Octave interpreter ... ");
 
@@ -162,17 +164,14 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		// try starting Octave
 #if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
 		the_app = new octave::cli_application(); // (narg, cmd_args.c_str_vec());
-		int return_code = octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
+		/*int return_code =*/ octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
 #else
 		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+		if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
+		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
+		redirect.flush("Failed to start Octave interpreter", !return_code, warn);
 #endif
-		if( return_code ) {
-		  if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
-		  int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
-		  redirect.flush("Failed to start Octave interpreter", !return_code, warn);
-		} else {
-		  OCTAVE_INITIALIZED = true;
-		}
+		OCTAVE_INITIALIZED = true;
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
 #endif
@@ -195,11 +194,12 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 #else
 		do_octave_atexit();
 #endif
+#if SWIG_OCTAVE_PREREQ(4,3,0)
 		if( the_app ) {
 		  delete the_app;
 		  the_app = NULL;
 		}
-
+#endif
 		if( verbose )
 			REprintf("[OK]\n");
 		OCTAVE_INITIALIZED = false;
