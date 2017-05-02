@@ -163,7 +163,11 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// try starting Octave
 #if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
-		the_app = new octave::cli_application(); // (narg, cmd_args.c_str_vec());
+		the_app = new octave::cli_application(narg, cmd_args.c_str_vec());
+		the_app->create_interpreter();
+		the_app->interactive(false);
+		//int return_code = the_app->execute_interpreter();
+		int return_code = the_app->initialize_interpreter();
 		/*int return_code =*/ octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
 #else
 		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
