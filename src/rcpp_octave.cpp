@@ -188,7 +188,9 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// terminate interpreter
 #if SWIG_OCTAVE_PREREQ(3,8,0)
-		// octave_exit = 0;
+#if !SWIG_OCTAVE_PREREQ(4,2,0)
+		octave_exit = 0;
+#endif
 		clean_up_and_exit(0, true);
 #else
 		do_octave_atexit();
