@@ -15,5 +15,5 @@ apt_packages:
   - liboctave-dev
   - texlive-bibtex-extra
 cache: packages
-r: bioc-release
+r: release
 warnings_are_errors: false
