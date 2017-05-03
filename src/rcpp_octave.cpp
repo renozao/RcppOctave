@@ -45,7 +45,12 @@ extern "C" {
 #include <octave/octave.h>
 #include <octave/input.h>
 
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
 #include <octave/pt-all.h>
+#include <octave/str-vec.h>
+#else
+#include <pt-all.h>
+#endif
 #include <octave/symtab.h>
 #include <octave/parse.h>
 //#if OCTAVE_API_VERSION_NUMBER < 45
@@ -59,15 +64,16 @@ extern "C" {
 #endif
 #include <octave/error.h>
 #include <octave/quit.h>
+
 #if SWIG_OCTAVE_PREREQ(4,1,0) // version >= 4.1.0
 // Must handles issue #14 here
 // see: http://octave.org/doxygen/4.1/da/d0d/signal-wrappers_8h.html
-//#include <octave/signal-wrappers.h>
+#include "signal-wrappers.h"
 #endif
 #include <octave/variables.h>
 #include <octave/sighandlers.h>
 #include <octave/sysdep.h>
-#include <octave/str-vec.h>
+#include <ov-usr-fcn.h>
 
 // STD includes
 #include <iostream>
@@ -116,13 +122,24 @@ SEXP octave_verbose(SEXP value){
 	return( Rcpp::wrap(res) );
 }
 
+
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
+typedef octave::tree_parameter_list tree_parameter_list;
+#else
+namespace octave {
+  typedef void application;
+}
+#endif
+
 bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	// use global verbose state if set
 	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
 	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
 	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
-
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
+	octave::application *the_app = NULL;
+#endif
 	if( start ){
 		if( verbose ) REprintf("Starting Octave interpreter ... ");
 
@@ -145,11 +162,19 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		Redirect redirect(7);
 
 		// try starting Octave
-		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
+		the_app = new octave::cli_application(narg, cmd_args.c_str_vec());
+		the_app->create_interpreter();
+		the_app->interactive(false);
+		//int return_code = the_app->execute_interpreter();
+		int return_code = the_app->initialize_interpreter();
+		/*int return_code =*/ octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
+#else
+		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+		if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
 		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
-		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
-		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
-
+		redirect.flush("Failed to start Octave interpreter", !return_code, warn);
+#endif
 		OCTAVE_INITIALIZED = true;
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
 		bind_internal_variable("crash_dumps_octave_core", false);
@@ -166,10 +191,18 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// terminate interpreter
 #if SWIG_OCTAVE_PREREQ(3,8,0)
+#if !SWIG_OCTAVE_PREREQ(4,2,0)
 		octave_exit = 0;
+#endif
 		clean_up_and_exit(0, true);
 #else
 		do_octave_atexit();
+#endif
+#if SWIG_OCTAVE_PREREQ(4,3,0)
+		if( the_app ) {
+		  delete the_app;
+		  the_app = NULL;
+		}
 #endif
 		if( verbose )
 			REprintf("[OK]\n");
@@ -219,7 +252,7 @@ void R_unload_RcppOctave(DllInfo *info)
  * @note OCTAVE_API_VERSION_NUMBER is 47 for 3.4.0 but 45 for 3.4.2
  * see: http://octave.1599824.n4.nabble.com/API-version-going-backwards-td3722496.html
  */
-extern void recover_from_exception(void)
+extern void recover_from_exception_rcppoct(void)
 {
 //#if OCTAVE_API_VERSION_NUMBER >= 45
 #if SWIG_OCTAVE_PREREQ(3,4,0)
@@ -506,14 +539,14 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #endif
 	){
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: interrupt\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -2;
 	}
 	catch (std::bad_alloc)
 	{
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: bad_alloc\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -3;
 	}

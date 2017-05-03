@@ -125,6 +125,7 @@ o_rmpath <- function(DIR1, ...){
 #' 
 o_version <- function(version){
 	v <- .CallOctave('version')
+	if( is.list(v) ) v <- v["v"]
 	if( !missing(version) ) compareVersion(v, version)
 	else v
 }
@@ -161,7 +162,10 @@ o_config_info <- function(var = c('CC', 'CC_VERSION', 'FC')){
         var[ var == "FC" ] <- "F77"
         names(var) <- var0
     }
-    sapply(var, .CallOctave, .NAME = 'octave_config_info')
+    if( o_version("4.2.0") >= 0 )
+        sapply(var, .CallOctave, .NAME = '__octave_config_info__')
+    else
+        sapply(var, .CallOctave, .NAME = 'octave_config_info')
 }
 
 o_builtin <- function(name, ...){

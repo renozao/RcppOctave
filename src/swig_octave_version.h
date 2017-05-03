@@ -5,11 +5,18 @@
 #ifndef _RcppOctave_OCTAVE_VERSION_H
 #define _RcppOctave_OCTAVE_VERSION_H
 
+
+#define octave_config_h
+// The above define disables this header in octave >= v4.3.0+
+#include <octave/config.h>
+#undef octave_config_h
+
 #include <octave/version.h>
 
 // Macro for enabling features which require Octave version >= major.minor.patch
 #define SWIG_OCTAVE_PREREQ(major, minor, patch) \
-  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + OCTAVE_PATCH_VERSION >= ((major)<<16) + ((minor)<<8) + (patch) )
+  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) >= ((major)<<16) + ((minor)<<8) )
+//  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + OCTAVE_PATCH_VERSION >= ((major)<<16) + ((minor)<<8) + (patch) )
 
 // Reconstruct Octave major, minor, and patch versions for releases prior to 3.8.1
 #if !defined(OCTAVE_MAJOR_VERSION)

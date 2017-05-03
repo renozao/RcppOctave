@@ -44,3 +44,4 @@ Collate:
     'package.R'
     'random.R'
 VignetteBuilder: knitr
+RoxygenNote: 6.0.1
