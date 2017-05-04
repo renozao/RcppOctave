@@ -20,6 +20,8 @@ addons:
   apt:
     sources:
       - sourceline: 'ppa:kwwette/octaves'
+before_install:
+  - sudo apt-get -qq update
 matrix:
   include:
     - apt_packages: # Travis version
