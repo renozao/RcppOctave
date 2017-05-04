@@ -11,9 +11,21 @@ r_binary_packages:
   - stringr
   - devtools
 apt_packages:
-  - octave 
-  - liboctave-dev
   - texlive-bibtex-extra
 cache: packages
 r: release
 warnings_are_errors: false
+# Add PPA for testing on multiple octave versions
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:kwwette/octaves'
+matrix:
+  include:
+    - apt_packages: # Travis version
+      - liboctave-dev
+    - apt_packages: # 4.0
+      - liboctave4.0-dev
+    - apt_packages: # 4.2
+      - liboctave4.2-dev
+    
