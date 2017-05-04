@@ -30,7 +30,8 @@ Imports:
 Suggests:
     RUnit,
     knitr,
-    bibtex
+    bibtex,
+    inline
 LinkingTo: Rcpp
 Collate:
     'Octave-class.R'
