@@ -10,8 +10,6 @@ sudo: required
 r_binary_packages:
   - stringr
   - devtools
-apt_packages:
-  - texlive-bibtex-extra
 cache: packages
 r: release
 warnings_are_errors: false
@@ -22,12 +20,20 @@ addons:
       - sourceline: 'ppa:kwwette/octaves'
 before_install:
   - sudo apt-get -qq update
+
 matrix:
   include:
-    - apt_packages: # Travis version
-      - liboctave-dev
-    - apt_packages: # 4.0
-      - liboctave4.0-dev
-    - apt_packages: # 4.2
-      - liboctave4.2-dev
+    - os: linux
+      apt_packages: # Travis version
+        - liboctave-dev
+        - texlive-bibtex-extra
+    - os: linux
+      apt_packages: # 4.0
+        - liboctave4.0-dev
+        - texlive-bibtex-extra
+    - os: linux
+      apt_packages: # 4.2
+        - liboctave4.2-dev
+        - texlive-bibtex-extra
+
     
