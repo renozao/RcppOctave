@@ -14,9 +14,9 @@
 #include <octave/version.h>
 
 // Macro for enabling features which require Octave version >= major.minor.patch
+// - Use (OCTAVE_PATCH_VERSION + 0) to handle both '<digit>' (released) and '<digit>+' (in development) patch numbers
 #define SWIG_OCTAVE_PREREQ(major, minor, patch) \
-  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) >= ((major)<<16) + ((minor)<<8) )
-//  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + OCTAVE_PATCH_VERSION >= ((major)<<16) + ((minor)<<8) + (patch) )
+  ( (OCTAVE_MAJOR_VERSION<<16) + (OCTAVE_MINOR_VERSION<<8) + (OCTAVE_PATCH_VERSION + 0) >= ((major)<<16) + ((minor)<<8) + (patch) )
 
 // Reconstruct Octave major, minor, and patch versions for releases prior to 3.8.1
 #if !defined(OCTAVE_MAJOR_VERSION)
