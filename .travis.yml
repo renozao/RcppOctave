@@ -4,12 +4,17 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
+os: linux
 dist: trusty
 language: r
 sudo: required
 r_binary_packages:
   - stringr
   - devtools
+# Travis Octave version
+env: OVERSION="Travis (3.8)"
+apt_packages: 
+  - liboctave-dev
 cache: packages
 r: release
 warnings_are_errors: false
@@ -19,21 +24,15 @@ addons:
     sources:
       - sourceline: 'ppa:kwwette/octaves'
 before_install:
+  - sudo apt-get install -y texlive-bibtex-extra
   - sudo apt-get -qq update
-
+  
+# multi-version check
 matrix:
   include:
-    - os: linux
-      apt_packages: # Travis version
-        - liboctave-dev
-        - texlive-bibtex-extra
-    - os: linux
-      apt_packages: # 4.0
+    - env: OVERSION="4.0" # 4.0
+      apt_packages:
         - liboctave4.0-dev
-        - texlive-bibtex-extra
-    - os: linux
-      apt_packages: # 4.2
+    - env: OVERSION="4.2" # 4.2
+      apt_packages:
         - liboctave4.2-dev
-        - texlive-bibtex-extra
-
-    
