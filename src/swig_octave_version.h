@@ -5,6 +5,11 @@
 #ifndef _RcppOctave_OCTAVE_VERSION_H
 #define _RcppOctave_OCTAVE_VERSION_H
 
+#define octave_config_h
+// The above define disables this header in octave >= v4.3.0+
+#include <octave/config.h>
+#undef octave_config_h
+
 #include <octave/version.h>
 
 // Macro for enabling features which require Octave version >= major.minor.patch

@@ -46,6 +46,9 @@ extern "C" {
 #include <octave/input.h>
 
 #include <octave/pt-all.h>
+#if SWIG_OCTAVE_PREREQ(4,3,0) // version >= 4.3.0
+#include <octave/str-vec.h>
+#endif
 #include <octave/symtab.h>
 #include <octave/parse.h>
 //#if OCTAVE_API_VERSION_NUMBER < 45
@@ -59,15 +62,18 @@ extern "C" {
 #endif
 #include <octave/error.h>
 #include <octave/quit.h>
+#include <getopt.h>
+
 #if SWIG_OCTAVE_PREREQ(4,1,0) // version >= 4.1.0
 // Must handles issue #14 here
 // see: http://octave.org/doxygen/4.1/da/d0d/signal-wrappers_8h.html
-//#include <octave/signal-wrappers.h>
+#include "signal-wrappers.h"
 #endif
 #include <octave/variables.h>
 #include <octave/sighandlers.h>
 #include <octave/sysdep.h>
-#include <octave/str-vec.h>
+
+#include <ov-usr-fcn.h>
 
 // STD includes
 #include <iostream>
@@ -99,7 +105,7 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 inline octave_value octave_feval(const string& fname, const octave_value_list& args
 								, const std::vector<string>& output_names
 								, int buffer = 3){
-	return octave_feval(fname, args, output_names.size(), &output_names, buffer);
+		return octave_feval(fname, args, output_names.size(), &output_names, buffer);
 }
 
 /**
@@ -116,12 +122,20 @@ SEXP octave_verbose(SEXP value){
 	return( Rcpp::wrap(res) );
 }
 
+#if SWIG_OCTAVE_PREREQ(4,3,0)
+typedef octave::tree_parameter_list tree_parameter_list;
+#endif
+
 bool octave_session(bool start=true, bool with_warnings = true, bool verbose = false){
 
 	// use global verbose state if set
 	bool R_RCPPOCTAVE_DEBUG = getenv("R_RCPPOCTAVE_DEBUG") != NULL;
 	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
 	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
+#if SWIG_OCTAVE_PREREQ(4,2,0)
+	static octave::embedded_application *the_app = NULL;
+	static octave::interpreter *embedded_interpreter = NULL; //(&the_app, true);
+#endif
 
 	if( start ){
 		if( verbose ) REprintf("Starting Octave interpreter ... ");
@@ -133,22 +147,35 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// instantiate the Octave interpreter
 		int narg = 4;
-		string_vector cmd_args(narg);
+		int narg_overflow = optind + 1; // workaround for bug in Octave 4.2 and later:
+		// octave.cc (v4.2, 4.3+) cmdline_options::cmdline_options() uses
+		// argv + octave_optind_wrapper (), where argv is the char** produced below
+		// and optind is the number of arguments getopt.h reports for the executable,
+		// having nothing to do with the args produced here. If the executable
+		// was called with more than narg arguments, this gives a SEGFAULT.
+		string_vector cmd_args(narg + narg_overflow);
 		cmd_args(0) = std::string("RcppOctave");
 		cmd_args(1) = std::string("--quiet");
 		// Try avoid corruption of R console with Octave console outputs
 		// [suggested by Albert Graef]
 		cmd_args(2) = std::string("--no-line-editing");
 		cmd_args(3) = std::string("--no-history");
+		//static octave::cmdline_options opts(narg, cmd_args.c_str_vec());
+		octave::cmdline_options opts(narg, cmd_args.c_str_vec());
 
 		// redirect both stderr and stdout
 		Redirect redirect(7);
 
 		// try starting Octave
-		bool started_ok = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+#if SWIG_OCTAVE_PREREQ(4,2,0)
+		the_app = new octave::embedded_application(opts);
+		int return_code = the_app->execute();
+#else
+		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
+#endif
+		if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
 		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
-		if( verbose ) REprintf(started_ok ? "[OK]\n" : "[ERROR]\n");
-		redirect.flush("Failed to start Octave interpreter", !started_ok, warn);
+		redirect.flush("Failed to start Octave interpreter", !return_code, warn);
 
 		OCTAVE_INITIALIZED = true;
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
@@ -166,11 +193,32 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 
 		// terminate interpreter
 #if SWIG_OCTAVE_PREREQ(3,8,0)
+#if !SWIG_OCTAVE_PREREQ(4,2,0)
 		octave_exit = 0;
-		clean_up_and_exit(0, true);
+#endif
+		try {
+			clean_up_and_exit(0, true);
+		} catch (const octave::exit_exception& ex) {
+			if(ex.exit_status() != 0) {
+				std::ostringstream err;
+				err << R_PACKAGE_NAME" - error exiting Octave.";
+				throw std::string(err.str());
+			}
+		}
 #else
 		do_octave_atexit();
 #endif
+#if SWIG_OCTAVE_PREREQ(4,2,0)
+		if( the_app ) {
+#if !SWIG_OCTAVE_PREREQ(4,3,0)
+			// workaround for Bus Error upon exit in 4.2
+			symbol_table::clear_all(true);
+#endif
+			delete the_app;
+			the_app = NULL;
+		}
+#endif
+
 		if( verbose )
 			REprintf("[OK]\n");
 		OCTAVE_INITIALIZED = false;
@@ -219,7 +267,7 @@ void R_unload_RcppOctave(DllInfo *info)
  * @note OCTAVE_API_VERSION_NUMBER is 47 for 3.4.0 but 45 for 3.4.2
  * see: http://octave.1599824.n4.nabble.com/API-version-going-backwards-td3722496.html
  */
-extern void recover_from_exception(void)
+extern void recover_from_exception_rcppoct(void)
 {
 //#if OCTAVE_API_VERSION_NUMBER >= 45
 #if SWIG_OCTAVE_PREREQ(3,4,0)
@@ -506,18 +554,23 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 #endif
 	){
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: interrupt\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -2;
 	}
 	catch (std::bad_alloc)
 	{
 		REprintf(R_PACKAGE_NAME" - Caught Octave exception: bad_alloc\n");
-		recover_from_exception();
+		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -3;
+	} catch(const octave::execution_exception& e) {
+			std::ostringstream err;
+			err << R_PACKAGE_NAME" - Octave error: execution_exception";
+			if(!e.info().empty()) err << "(" << e.info() << ")";
+			recover_from_exception_rcppoct();
+			throw std::string(err.str());
 	}
-
 	octave_restore_signal_mask();
 	octave_initialized = false;
 
