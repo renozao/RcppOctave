@@ -184,6 +184,7 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
 #else
 		// v4.2.1
+		octave::cmdline_options opts(narg, cmd_args.c_str_vec());
 		the_app = new octave::embedded_application(opts);
 		int return_code = the_app->execute();
 #endif
