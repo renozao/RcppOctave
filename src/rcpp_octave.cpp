@@ -133,8 +133,10 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 	with_warnings = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || with_warnings;
 	verbose = R_RCPPOCTAVE_DEBUG || RCPP_OCTAVE_VERBOSE || verbose;
 #if SWIG_OCTAVE_PREREQ(4,2,0)
-	static octave::embedded_application *the_app = NULL;
-	static octave::interpreter *embedded_interpreter = NULL; //(&the_app, true);
+	static octave::application *the_app = NULL;
+#if SWIG_OCTAVE_PREREQ(4,3,0)
+	static octave::interpreter *embedded_interpreter = NULL;
+#endif
 #endif
 
 	if( start ){
@@ -160,22 +162,37 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 		// [suggested by Albert Graef]
 		cmd_args(2) = std::string("--no-line-editing");
 		cmd_args(3) = std::string("--no-history");
-		//static octave::cmdline_options opts(narg, cmd_args.c_str_vec());
-		octave::cmdline_options opts(narg, cmd_args.c_str_vec());
 
 		// redirect both stderr and stdout
 		Redirect redirect(7);
 
 		// try starting Octave
 #if SWIG_OCTAVE_PREREQ(4,2,0)
+#if SWIG_OCTAVE_PREREQ(4,3,0)
+		// v4.3.0+
+		// the_app setup here is just to get a valid load path for octave
+		the_app = new octave::cli_application(narg, cmd_args.c_str_vec());
+		the_app->create_interpreter();
+		the_app->interactive(false);
+		int return_code = the_app->initialize_interpreter(); // setup, but don't execute
+
+		// The following is performed in octave_main for a static variable that resides in
+		// liboctinterp.so. The same setup with a pointer here does not work, yet.
+		// embedded_interpreter = new octave::interpreter(the_app);
+		// embedded_interpreter->interactive(false);
+	        // embedded_interpreter->execute ();
+		octave_main(0, string_vector().c_str_vec(), true /*embedded*/);
+#else
+		// v4.2.1
 		the_app = new octave::embedded_application(opts);
 		int return_code = the_app->execute();
+#endif
 #else
 		int return_code = octave_main(narg, cmd_args.c_str_vec(), true /*embedded*/);
-#endif
 		if( verbose ) REprintf(!return_code ? "[OK]\n" : "[ERROR]\n");
 		int warn = (with_warnings ? 1 : 0) * (verbose ? 2 : 1);
 		redirect.flush("Failed to start Octave interpreter", !return_code, warn);
+#endif
 
 		OCTAVE_INITIALIZED = true;
 #if !SWIG_OCTAVE_PREREQ(3,8,0)
@@ -198,7 +215,10 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 #endif
 		try {
 			clean_up_and_exit(0, true);
-		} catch (const octave::exit_exception& ex) {
+		}
+#if SWIG_OCTAVE_PREREQ(4,2,0)
+		catch (const octave::exit_exception& ex)
+		{
 			if(ex.exit_status() != 0) {
 				std::ostringstream err;
 				err << R_PACKAGE_NAME" - error exiting Octave.";
@@ -206,13 +226,21 @@ bool octave_session(bool start=true, bool with_warnings = true, bool verbose = f
 			}
 		}
 #else
+		catch(std::exception& e) { throw e; }
+#endif
+
+#else
 		do_octave_atexit();
 #endif
 #if SWIG_OCTAVE_PREREQ(4,2,0)
 		if( the_app ) {
 #if !SWIG_OCTAVE_PREREQ(4,3,0)
-			// workaround for Bus Error upon exit in 4.2
+			// workaround for Bus Error upon exit in v4.2.1
 			symbol_table::clear_all(true);
+#else
+			// v4.3.0+
+			delete embedded_interpreter;
+			embedded_interpreter = NULL;
 #endif
 			delete the_app;
 			the_app = NULL;
@@ -564,13 +592,17 @@ octave_value octave_feval(const string& fname, const octave_value_list& args, in
 		recover_from_exception_rcppoct();
 		REprintf("\n");
 		//error_state = -3;
-	} catch(const octave::execution_exception& e) {
+	}
+#if SWIG_OCTAVE_PREREQ(4,2,0)
+	catch(const octave::execution_exception& e)
+	{
 			std::ostringstream err;
 			err << R_PACKAGE_NAME" - Octave error: execution_exception";
 			if(!e.info().empty()) err << "(" << e.info() << ")";
 			recover_from_exception_rcppoct();
 			throw std::string(err.str());
 	}
+#endif
 	octave_restore_signal_mask();
 	octave_initialized = false;
 
