@@ -25,6 +25,7 @@ addons:
       - sourceline: 'ppa:kwwette/octaves'
 before_install:
   - sudo apt-get install -y texlive-bibtex-extra
+  - sudo add-apt-repository -r ppa:rwky/ppa
   - sudo apt-get -qq update
   
 # multi-version check
