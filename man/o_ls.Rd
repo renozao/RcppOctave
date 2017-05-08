@@ -39,6 +39,10 @@ Octave function \code{completion_matches} does not return the names of
 user-defined functions).
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 \dontshow{ o_clear(all=TRUE) }
 

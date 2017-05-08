@@ -40,6 +40,10 @@ The files are watched and automatically reloaded in case modification.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 # call an undefined function
 try(.CallOctave('fun1'))

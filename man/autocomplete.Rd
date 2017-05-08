@@ -6,7 +6,7 @@
 \alias{.DollarNames,Octave-method}
 \title{Auto-completion for Octave Interface Object}
 \usage{
-.DollarNames.Octave(x, pattern = "")
+\method{.DollarNames}{Octave}(x, pattern = "")
 
 \S4method{.DollarNames}{Octave}(x, pattern = "")
 }

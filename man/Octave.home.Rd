@@ -43,6 +43,10 @@ If set, the global option or environment variable should contain
 the \strong{absolute} path to Octave root directory.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 Octave.home()
 
 }

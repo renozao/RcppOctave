@@ -19,6 +19,10 @@ RcppOctave. It Returns its arguments unchanged, and is mainly used to test
 and check the effect of object conversions between R and Octave.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 o_identity(1L)
 o_identity(1:10)

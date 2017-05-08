@@ -31,6 +31,10 @@ See \code{\link{o_runif}} for more details.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 # Draw random gamma values (in vector form)
 set.seed(123)

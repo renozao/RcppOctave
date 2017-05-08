@@ -62,6 +62,10 @@ graphics' properties.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 \dontshow{o_clear()}
 

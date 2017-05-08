@@ -12,10 +12,17 @@ their documentation, passing variables between R and Octave, using R core RNGs
 in Octave, which ensure stochastic computations are also reproducible.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 .CallOctave('svd', matrix(1:9, 3))
 o_help('svd')
 
+}
+\references{
+Eaton JW (2002). _GNU Octave Manual_. Network Theory Limited. ISBN 0-9541617-2-6, <URL: http://www.octave.org/>.
 }
 \seealso{
 See \code{\link{.CallOctave}}, \code{\link{o_source}}, \code{\link{o_help}}

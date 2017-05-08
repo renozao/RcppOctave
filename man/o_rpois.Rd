@@ -35,6 +35,10 @@ The result is converted into integer to match the behaviour of
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 # Draw random poisson values (in vector form)
 set.seed(123)

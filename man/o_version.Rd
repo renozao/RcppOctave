@@ -17,6 +17,10 @@ Octave version as a single character string or the result of
 Returns the version of Octave currently used by \code{RcppOctave}.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 o_version()
 o_version("3.6.2")

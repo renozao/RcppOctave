@@ -25,6 +25,10 @@ Loads variables from a file, a list or an environment.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 # Loading from a MATLAB/Octave file
 #o_load

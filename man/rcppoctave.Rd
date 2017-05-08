@@ -7,14 +7,19 @@
 rcppoctave(..., plugin = "RcppOctave")
 }
 \arguments{
-\item{...}{arguments passed to \code{\link[inline]{rcpp}}}
+\item{...}{arguments passed to \code{\link[inline]{cxxfunction}}}
 
-\item{plugin}{Name of the plugin to use. See \code{\link{getPlugin}} for details about plugins. }
+\item{plugin}{Name of the plugin to use. See \code{\link[inline]{getPlugin}} for 
+details about plugins.}
 }
 \description{
 inline C++ Function with Octave Integration
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 
 # call from R

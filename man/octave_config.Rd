@@ -40,6 +40,10 @@ By default, it is looked up in the \code{bin/} sub-directory of the path
 returned by \code{\link{Octave.home}()}.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 octave_config('VERSION') 
 octave_config('BINDIR')
 

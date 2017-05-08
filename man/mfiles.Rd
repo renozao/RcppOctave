@@ -23,6 +23,10 @@ the plain code elements of \var{x}.}
 that can be sourced with \code{\link[RcppOctave]{o_source}}.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 f <- as.mfile('test.m')
 f

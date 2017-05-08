@@ -34,6 +34,10 @@ function defined therein.
 }}
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 osvd <- OctaveFunction('svd')
 osvd

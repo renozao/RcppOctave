@@ -34,6 +34,10 @@ extra information about compilers and compilation flags.
 by the configure script at installation time.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 Octave.config
 Octave.version
 Octave.info()

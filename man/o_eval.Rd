@@ -31,6 +31,10 @@ subsequent \code{o_eval} calls.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 # assign some variable 
 o_eval("a=10")

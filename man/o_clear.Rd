@@ -34,6 +34,10 @@ The function \code{o_rm} is an alias to \code{o_clear}.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 \dontshow{ o_clear() }
 # Assign a variable in Octave
 o_assign('a', 10)

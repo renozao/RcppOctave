@@ -46,6 +46,10 @@ The method \code{[[} provides an alternative way of retrieving Octave objects,
 and is equivalent to \code{o_get(name)}.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 .O
 # assign/get Octave variables
 .O$a <- 10

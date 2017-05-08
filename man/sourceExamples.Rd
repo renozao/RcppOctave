@@ -15,6 +15,10 @@ Source an example M-file in the sub-directory \dQuote{scripts/} of RcppOctave
 installation.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 sourceExamples()
 sourceExamples('ex_source.m')

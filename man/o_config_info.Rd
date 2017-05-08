@@ -22,9 +22,14 @@ depending on the linked Octave version.
 See \url{http://www.gnu.org/software/octave/NEWS-4.0.html}
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 o_config_info()
-o_config_info('USE_64_BIT_IDX_T')
+# NB: some config variables are not available on all versions
+try( o_config_info('USE_64_BIT_IDX_T') )
 
 }
 \seealso{

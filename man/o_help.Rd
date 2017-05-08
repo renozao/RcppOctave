@@ -62,6 +62,10 @@ Type `q` to quit the browser.
 }
 
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 \dontshow{
 	if( interactive() ){

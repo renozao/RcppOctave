@@ -28,6 +28,10 @@ This function compares two lists or environments.
 It is useful for comparing results obtained in R and Octave.
 }
 \examples{
+\dontshow{
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE) ## roxygen generated flag
+}
+
 
 X <- matrix(1:64, 8)
 ref <- svd(X)
