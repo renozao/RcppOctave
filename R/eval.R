@@ -543,7 +543,7 @@ o_whos <- function(..., options, rm.ans=FALSE){
 	w
 }
 
-#' @S3method print Octave_whos
+#' @export
 #' @noRd 
 print.Octave_whos <- function(x, ...){
 	# reformat some of the data

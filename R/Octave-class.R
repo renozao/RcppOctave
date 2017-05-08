@@ -90,7 +90,9 @@ o_exist <- function(NAME, ...){
 #' Auto-completion for \code{\linkS4class{Octave}} objects
 #' 
 #' @inheritParams utils::.DollarNames
-#' @S3method .DollarNames Octave
+#' @importFrom utils .DollarNames
+#' @method .DollarNames Octave
+#' @rawNamespace S3method(.DollarNames, Octave)
 #' @rdname autocomplete
 #' @keywords internal
 .DollarNames.Octave <- function(x, pattern = "") o_completion_matches(pattern)

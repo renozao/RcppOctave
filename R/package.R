@@ -25,8 +25,9 @@ NULL
 #' o_help('svd')
 #' 
 #' @import pkgmaker
-#' @import Rcpp
 #' @importFrom utils file_test
+#' @import Rcpp
+#' @include utils.R
 #' @seealso See \code{\link{.CallOctave}}, \code{\link{o_source}}, \code{\link{o_help}}
 NULL
 
