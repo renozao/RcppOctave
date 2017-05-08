@@ -25,7 +25,6 @@ addons:
       - sourceline: 'ppa:kwwette/octaves'
 before_install:
   - sudo apt-get install -y texlive-bibtex-extra
-  - sudo add-apt-repository -r ppa:rwky/ppa -y
   - sudo apt-get -qq update
   
 # multi-version check
@@ -35,5 +34,10 @@ matrix:
       apt_packages:
         - liboctave4.0-dev
     - env: OVERSION="4.2" # 4.2
+      before_install:
+        - sudo apt-get install -y texlive-bibtex-extra
+        - sudo add-apt-repository -r ppa:rwky/ppa -y # to avoid conflict with libgraphicsmagick3 (see https://github.com/swig/swig/issues/909)
+        - sudo rm /etc/apt/sources.list.d/rwky*.list* # force complete deletion 
+        - sudo apt-get -qq update
       apt_packages:
         - liboctave4.2-dev
