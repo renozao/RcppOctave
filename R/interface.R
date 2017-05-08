@@ -263,8 +263,9 @@ sourceExamples <- function(file){
 
 #' inline C++ Function with Octave Integration
 #' 
-#' @param ... arguments passed to \code{\link[inline]{rcpp}}
-#' @inheritParams inline::rcpp
+#' @param ... arguments passed to \code{\link[inline]{cxxfunction}}
+#' @param plugin Name of the plugin to use. See \code{\link[inline]{getPlugin}} for 
+#' details about plugins.
 #' 
 #' @export
 #' @examples
@@ -288,9 +289,16 @@ sourceExamples <- function(file){
 rcppoctave <- function(..., plugin = 'RcppOctave'){
 	if( !requireNamespace('inline') )
 		stop("Package 'inline' is required to define RcppOctave functions.")
-	#qlibrary(inline)
-	#rcpp(..., plugin = plugin)
-	cxxfunction(..., plugin = plugin)
+	qlibrary('inline')
+  # Fix issue when runnin in unit tests
+  # See: https://github.com/hadley/testthat/issues/144
+  oval <- Sys.getenv('R_TESTS')
+  if( nzchar(oval) ){
+    on.exit( Sys.setenv("R_TESTS" = oval) )
+    Sys.setenv("R_TESTS" = "")
+  }
+  
+  inline::cxxfunction(..., plugin = plugin)
 }
 
 
@@ -298,8 +306,8 @@ inlineCxxPlugin <- function(){
 	
 	if( !requireNamespace('inline') )
 		stop("Package 'inline' is required to define RcppOctave functions.")
-	#qlibrary(inline)
-	p <- getPlugin('Rcpp')
+	qlibrary('inline')
+	p <- inline::getPlugin('Rcpp')
 	p0 <- list(includes = '\n#include <RcppOctave.h>\n'
 		, LinkingTo = c('Rcpp', 'RcppOctave')
 		, Depends = c('Rcpp', 'RcppOctave')
