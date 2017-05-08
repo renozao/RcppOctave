@@ -8,6 +8,8 @@ rcppoctave(..., plugin = "RcppOctave")
 }
 \arguments{
 \item{...}{arguments passed to \code{\link[inline]{rcpp}}}
+
+\item{plugin}{Name of the plugin to use. See \code{\link{getPlugin}} for details about plugins. }
 }
 \description{
 inline C++ Function with Octave Integration

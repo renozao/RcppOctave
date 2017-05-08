@@ -5,7 +5,6 @@
 #ifndef _RcppOctave_OCTAVE_VERSION_H
 #define _RcppOctave_OCTAVE_VERSION_H
 
-
 #define octave_config_h
 // The above define disables this header in octave >= v4.3.0+
 #include <octave/config.h>
