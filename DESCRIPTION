@@ -21,6 +21,7 @@ Depends:
     methods,
     utils,
     stats,
+    inline,
     Rcpp (>= 0.10.1),
     pkgmaker (>= 0.20)
 Imports:
