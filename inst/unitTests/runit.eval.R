@@ -145,20 +145,19 @@ test.redirection <- function(){
     checkTrue(identical(capture.output(dummy <- .CallOctave('printf', out, buffer.std = -1)), out), "Octave output is still captured if stdout is not buffered")
     
     # Errors
-    #oerr <- 'This is an Octave error indeed!!!'
-
-    oerr <- "Error : RcppOctave::o_get - Could not find an Octave object named 'aaa'.\n       Match(es): aaaa\n\n"
-    #print('======================================================================')
-    #print(geterrmessage())
-    #print('======================================================================')
+    oerr <- 'This is an Octave error indeed!!!'
+    checkException(.CallOctave('error', oerr), "R error is raised by Octave error")
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R")
-    checkException(.CallOctave('error', oerr), "R error is raised by Octave error (buffer.std = 2)")
-    oerr2 <- 'Error in .CallOctave(\"error\", oerr) : \n  RcppOctave - Octave error: execution_exception\n'
-    checkTrue(grepl(oerr2, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R (buffer.std = 2)")
+    checkException(.CallOctave('error', oerr, buffer.std = 2), "R error is raised by Octave error (buffer.std = 2)")
+    checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R (buffer.std = 2)")
+    # details are passed
+    oerr <- 'This is an Octave error indeed!!!'
+    checkException(o_eval('aaaa'), "R error is raised by Octave error (access undefined variable)")
+    checkTrue(grepl("'aaaa' undefined", geterrmessage(), fixed = TRUE), "Octave error details are correctly passed to R")
+    
     # no buffering
     checkException(.CallOctave('error', oerr, buffer.std = -2), "R error is raised by Octave error even when stderr is not buffered")
-    oerr3 <- 'Error in .CallOctave(\"error\", oerr, buffer.std = -2) : \n  RcppOctave - Octave error: execution_exception\n'    
-    checkTrue(grepl(oerr3, geterrmessage(), fixed = TRUE), "Octave error message is still passed to R if stderr is not buffered")
+    checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is still passed to R if stderr is not buffered")
     
     # Warnings
     checkWarning(.CallOctave('warning', 'aaaa'), "aaaa", "Default call buffer warnings")
