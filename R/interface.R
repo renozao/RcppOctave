@@ -290,6 +290,14 @@ rcppoctave <- function(..., plugin = 'RcppOctave'){
 	if( !requireNamespace('inline') )
 		stop("Package 'inline' is required to define RcppOctave functions.")
 	qlibrary('inline')
+  # Fix issue when runnin in unit tests
+  # See: https://github.com/hadley/testthat/issues/144
+  oval <- Sys.getenv('R_TESTS')
+  if( nzchar(oval) ){
+    on.exit( Sys.setenv("R_TESTS" = oval) )
+    Sys.setenv("R_TESTS" = "")
+  }
+  
   inline::cxxfunction(..., plugin = plugin)
 }
 
