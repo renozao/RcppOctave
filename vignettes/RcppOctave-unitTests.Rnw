@@ -17,7 +17,7 @@ authors <- packageDescription(pkg)$Author
 
 \usepackage[colorlinks]{hyperref}
 \author{\Sexpr{authors}}
-\title{\texttt{\Sexpr{pkg}}: Unit testing results\footnote{Vignette computed  on Tue Oct  6 13:29:34 2015}}
+\title{\texttt{\Sexpr{pkg}}: Unit testing results\footnote{Vignette computed  on Fri Jun 23 09:44:17 2017}}
 \date{\texttt{\Sexpr{pkg}} version \Sexpr{prettyVersion} as of \Sexpr{prettyDate}}
 \begin{document}
 \maketitle
@@ -25,15 +25,15 @@ authors <- packageDescription(pkg)$Author
 \section{Details}
 \begin{verbatim}
 
-RUNIT TEST PROTOCOL -- Tue Oct  6 13:29:34 2015 
+RUNIT TEST PROTOCOL -- Fri Jun 23 09:44:17 2017 
 *********************************************** 
-Number of test functions: 16 
+Number of test functions: 17 
 Number of errors: 0 
 Number of failures: 0 
 
  
 1 Test Suite : 
-package:RcppOctave - 16 test functions, 0 errors, 0 failures
+package:RcppOctave - 17 test functions, 0 errors, 0 failures
 
 
 
@@ -43,27 +43,28 @@ Test Suite: package:RcppOctave
 Test function regexp: ^test. 
 Test file regexp: ^runit.*.[rR]$ 
 Involved directory: 
-/tmp/Rpkglib_5913c3bd56a/RcppOctave/unitTests 
+/tmp/Rpkglib_67ca3955ce3d/RcppOctave/unitTests 
 --------------------------- 
-Test file: /tmp/Rpkglib_5913c3bd56a/RcppOctave/unitTests/runit.conversions.R 
+Test file: /tmp/Rpkglib_67ca3955ce3d/RcppOctave/unitTests/runit.conversions.R 
 test.bool: (7 checks) ... OK (0 seconds)
 test.char: (7 checks) ... OK (0 seconds)
 test.double: (9 checks) ... OK (0 seconds)
 test.int: (9 checks) ... OK (0 seconds)
 test.list: (37 checks) ... OK (0.01 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_5913c3bd56a/RcppOctave/unitTests/runit.eval.R 
-test.assign: (4 checks) ... OK (0.02 seconds)
-test.o_eval: (11 checks) ... OK (0.04 seconds)
-test.o_get: (25 checks) ... OK (0.06 seconds)
-test.o_source: (2 checks) ... OK (0 seconds)
-test.redirection: (10 checks) ... OK (0 seconds)
+Test file: /tmp/Rpkglib_67ca3955ce3d/RcppOctave/unitTests/runit.eval.R 
+test.assign: (4 checks) ... OK (0.04 seconds)
+test.cppAPI: (1 checks) ... OK (2.44 seconds)
+test.o_eval: (11 checks) ... OK (0.02 seconds)
+test.o_get: (25 checks) ... OK (0.04 seconds)
+test.o_source: (2 checks) ... OK (0.01 seconds)
+test.redirection: (12 checks) ... OK (0.04 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_5913c3bd56a/RcppOctave/unitTests/runit.OctaveFunction.R 
-test.definition: (36 checks) ... OK (0.03 seconds)
+Test file: /tmp/Rpkglib_67ca3955ce3d/RcppOctave/unitTests/runit.OctaveFunction.R 
+test.definition: (36 checks) ... OK (0.06 seconds)
 --------------------------- 
-Test file: /tmp/Rpkglib_5913c3bd56a/RcppOctave/unitTests/runit.stats.R 
-test.o_rexp: (24 checks) ... OK (0.01 seconds)
+Test file: /tmp/Rpkglib_67ca3955ce3d/RcppOctave/unitTests/runit.stats.R 
+test.o_rexp: (24 checks) ... OK (0.04 seconds)
 test.o_rgamma: (48 checks) ... OK (0 seconds)
 test.o_rnorm: (24 checks) ... OK (0 seconds)
 test.o_rpois: (12 checks) ... OK (0 seconds)
@@ -72,21 +73,25 @@ test.o_runif: (24 checks) ... OK (0 seconds)
 Total execution time
 ***************************
    user  system elapsed 
-  0.754   0.008   0.791 
+  3.204   0.368   3.329 
 
 \end{verbatim}
 
 \section*{Session Information}
 \begin{itemize}\raggedright
-  \item R version 3.2.2 (2015-08-14), \verb|x86_64-pc-linux-gnu|
-  \item Locale: \verb|LC_CTYPE=en_US.UTF-8|, \verb|LC_NUMERIC=C|, \verb|LC_TIME=C|, \verb|LC_COLLATE=en_US.UTF-8|, \verb|LC_MONETARY=en_ZA.UTF-8|, \verb|LC_MESSAGES=en_US.UTF-8|, \verb|LC_PAPER=en_ZA.UTF-8|, \verb|LC_NAME=C|, \verb|LC_ADDRESS=C|, \verb|LC_TELEPHONE=C|, \verb|LC_MEASUREMENT=en_ZA.UTF-8|, \verb|LC_IDENTIFICATION=C|
+  \item R version 3.4.0 (2017-04-21), \verb|x86_64-pc-linux-gnu|
+  \item Locale: \verb|LC_CTYPE=en_ZA.UTF-8|, \verb|LC_NUMERIC=C|, \verb|LC_TIME=C|, \verb|LC_COLLATE=en_ZA.UTF-8|, \verb|LC_MONETARY=en_ZA.UTF-8|, \verb|LC_MESSAGES=en_ZA.UTF-8|, \verb|LC_PAPER=en_ZA.UTF-8|, \verb|LC_NAME=C|, \verb|LC_ADDRESS=C|, \verb|LC_TELEPHONE=C|, \verb|LC_MEASUREMENT=en_ZA.UTF-8|, \verb|LC_IDENTIFICATION=C|
+  \item Running under: \verb|Ubuntu 16.04.2 LTS|
+  \item Matrix products: default
+  \item BLAS: \verb|/usr/lib/openblas-base/libblas.so.3|
+  \item LAPACK: \verb|/usr/lib/libopenblasp-r0.2.18.so|
   \item Base packages: base, datasets, graphics, grDevices, methods,
     stats, utils
-  \item Other packages: pkgmaker~0.25.10, Rcpp~0.12.1,
-    RcppOctave~0.18.1, registry~0.3, RUnit~0.4.29, stringr~1.0.0
-  \item Loaded via a namespace (and not attached): codetools~0.2-14,
-    digest~0.6.8, magrittr~1.5, stringi~0.5-5, tools~3.2.2,
-    xtable~1.7-4
+  \item Other packages: inline~0.3.14, pkgmaker~0.26.7, Rcpp~0.12.11,
+    RcppOctave~0.19, registry~0.3, RUnit~0.4.31, stringr~1.2.0
+  \item Loaded via a namespace (and not attached): codetools~0.2-15,
+    compiler~3.4.0, digest~0.6.12, magrittr~1.5, stringi~1.1.5,
+    tools~3.4.0, withr~1.0.2, xtable~1.8-2
 \end{itemize}
 
 \end{document}
