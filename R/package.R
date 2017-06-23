@@ -284,7 +284,7 @@ NULL
     # check compatibility of Octave compilation and loading version
     v <- octave_config('VERSION')
     v0 <- Octave.version[['version']]
-    res$ok <- res$ok && utils::compareVersion(v0, v) == 0
+    res$ok <- res$ok && compareVersion(v0, v) == 0
     
     if( !res$ok && details ){
         res$msg <- c(res$msg, sprintf("RcppOctave was built against Octave %s, but loaded with Octave %s", v0, v))

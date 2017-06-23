@@ -1,8 +1,8 @@
 Package: RcppOctave
 Type: Package
 Title: Seamless Interface to Octave -- And Matlab
-Version: 0.18.3
-Date: 2015-11-10
+Version: 0.19
+Date: 2017-06-23
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@tx.technion.ac.il>
 Description: Direct interface to Octave. The primary goal is to facilitate the
@@ -45,3 +45,5 @@ Collate:
     'package.R'
     'random.R'
 VignetteBuilder: knitr
+RoxygenNote: 6.0.1.9000
+Roxygen: list(namespace_unsorted = TRUE, roclets = c('collate', 'namespace', 'roclets::rd2_roclet'))

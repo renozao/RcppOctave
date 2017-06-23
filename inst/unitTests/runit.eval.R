@@ -148,8 +148,13 @@ test.redirection <- function(){
     oerr <- 'This is an Octave error indeed!!!'
     checkException(.CallOctave('error', oerr), "R error is raised by Octave error")
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R")
-    checkException(.CallOctave('error', oerr), "R error is raised by Octave error (buffer.std = 2)")
+    checkException(.CallOctave('error', oerr, buffer.std = 2), "R error is raised by Octave error (buffer.std = 2)")
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is correctly passed to R (buffer.std = 2)")
+    # details are passed
+    oerr <- 'This is an Octave error indeed!!!'
+    checkException(o_eval('aaaa'), "R error is raised by Octave error (access undefined variable)")
+    checkTrue(grepl("'aaaa' undefined", geterrmessage(), fixed = TRUE), "Octave error details are correctly passed to R")
+    
     # no buffering
     checkException(.CallOctave('error', oerr, buffer.std = -2), "R error is raised by Octave error even when stderr is not buffered")
     checkTrue(grepl(oerr, geterrmessage(), fixed = TRUE), "Octave error message is still passed to R if stderr is not buffered")

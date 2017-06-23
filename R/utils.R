@@ -178,3 +178,7 @@ file.first.path <- function(dir, ...){
     
 }
 
+# local enhancement of utils::compareVersion to support version of the form "1.2.3+"
+compareVersion <- function(a, b) { 
+  utils::compareVersion(sub('[+]$', '', a), sub('[+]$', '', b))
+}

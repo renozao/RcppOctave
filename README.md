@@ -1,1 +1,2 @@
 [![Build Status](https://travis-ci.org/renozao/RcppOctave.png?branch=develop)](https://travis-ci.org/renozao/RcppOctave)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/RcppOctave)](https://cran.r-project.org/package=RcppOctave)
