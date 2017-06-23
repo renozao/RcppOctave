@@ -1,9 +1,14 @@
 ********************
 Changes in 0.19
 ********************
+NEW FEATURES
+    o Added a plugin for inline::cxxfunction to call Octave functions within
+    C++ code. 
 FIXES
 	o .CallOctave gains an argument plot (default to TRUE), to ensure force
 	plot windows to be drawn after Octave calls (issue #).
+	o Fixed compatibility issues with Octave versions 3.8, 4.0 ad 4.2, 
+	thanks to work by Steven Bergner (pull request #17).
 
 ********************
 Changes in 0.18
