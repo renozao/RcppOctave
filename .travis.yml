@@ -6,6 +6,7 @@
 
 os: linux
 dist: trusty
+group: deprecated-2017Q2
 language: r
 sudo: required
 r_binary_packages:
