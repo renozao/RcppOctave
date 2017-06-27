@@ -6,7 +6,6 @@
 
 os: linux
 dist: trusty
-group: deprecated-2017Q2
 language: r
 sudo: required
 r_binary_packages:
@@ -31,6 +30,7 @@ before_install:
 # multi-version check
 matrix:
   include:
+    - env: OVERSION="Travis (3.8)"
     - env: OVERSION="4.0" # 4.0
       apt_packages:
         - liboctave4.0-dev
@@ -42,3 +42,4 @@ matrix:
         - sudo apt-get -qq update
       apt_packages:
         - liboctave4.2-dev
+        - libsuitesparse-dev
