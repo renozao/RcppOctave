@@ -43,8 +43,8 @@ matrix:
       apt_packages:
         - liboctave4.2-dev
         - libsuitesparse-dev
-        - libarpack2
-        - libqrupdate1
-        - libgl2ps0
+        - libarpack2-dev
+        - libqrupdate-dev
+        - libgl2ps-dev
         - libgraphicsmagick++1-dev
 
