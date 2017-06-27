@@ -42,8 +42,9 @@ matrix:
         - sudo apt-get -qq update
       apt_packages:
         - liboctave4.2-dev
-        - science-mathematics
+        - libsuitesparse-dev
+        - libarpack2
         - libqrupdate1
         - libgl2ps0
-        - libgraphicsmagick++1
+        - libgraphicsmagick++1-dev
 
