@@ -28,6 +28,6 @@ Rscript -e "install.packages('RcppOctave')"
 Otherwise the latest version on R-forge (>= 0.8.17) should work out of the box in Octave 3.2.4:
 
 ```{r rforge, eval=FALSE}
-install.pacakges('RcppOctave', repos=c(getOption('repos'), 'http://r-forge.r-project.org'))
+install.packages('RcppOctave', repos=c(getOption('repos'), 'http://r-forge.r-project.org'))
 ```
 
